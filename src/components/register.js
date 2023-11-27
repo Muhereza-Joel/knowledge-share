@@ -21,8 +21,8 @@ class Register extends Component {
     render() { 
         return (
            <div style={this.style}>
-                     <Form className='card p-3 w-25'>
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
+                     <Form className='card p-3'>
+                    <Form.Group className="mb-3" controlId="formBasicUsername">
                         <Form.Label className='text-dark'>Username</Form.Label>
                         <Form.Control type="email" placeholder="Enter your username" required/>
                         
@@ -43,9 +43,9 @@ class Register extends Component {
                     </Button>
 
                     <Nav.Item className='d-flex align-items-center mt-3'>
-                        You have an account click!
+                        You have an account click
                     <small>
-                        <Nav.Link href="/auth/login" className='text-info px-2'>Login</Nav.Link>
+                        <Nav.Link href="/auth/login" className='text-info px-2'>here to login</Nav.Link>
                     </small>
                     </Nav.Item>
                     </Form>

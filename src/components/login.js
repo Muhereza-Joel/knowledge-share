@@ -1,18 +1,32 @@
 import React, { Component } from "react";
+import { Routes, Route, Navigate } from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.css";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { Nav } from "react-bootstrap";
 
 class Login extends Component {
+  style = {
+    backgroundColor: "#f6f9ff",
+    minHeight: "100vh",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "calc(10px + 1vmin)",
+    color: "white",
+  };
+
   state = {
     email: "",
     password: "",
+    username: "",
     rememberMe: false,
     errors: {
       email: "",
       password: "",
     },
+    redirectToDashboard: false,
   };
 
   componentDidMount() {
@@ -26,7 +40,7 @@ class Login extends Component {
   }
 
   componentDidUpdate() {
-    const { errors, ...valuesToStore } = this.state; // Exclude errors from values to store
+    const { errors, redirectToDashboard, ...valuesToStore } = this.state; // Exclude errors from values to store
     localStorage.setItem("loginFormValues", JSON.stringify(valuesToStore));
   }
 
@@ -87,7 +101,13 @@ class Login extends Component {
 
           if (result.success) {
             this.setState({ isLoggedIn: true });
-            alert("Login successful!");
+            setTimeout(() => {
+              this.setState({
+                redirectToDashboard: true,
+                username: result.username,
+              });
+            }, 2000)
+          
           } 
         } else {
           alert("Login failed. Invalid credentials.");
@@ -102,10 +122,14 @@ class Login extends Component {
   };
 
   render() {
-    const { errors } = this.state;
+    const { errors, redirectToDashboard, username } = this.state;
+
+    if (redirectToDashboard) {
+      return <Navigate to={`/dashboard/${username}`} />;
+    }
 
     return (
-      <div>
+      <div style={this.style}>
         <div className="d-flex flex-column align-items-center justify-content-center">
           <div className="d-flex mb-4">
             <h1 className="text-success">K</h1>
@@ -174,6 +198,7 @@ class Login extends Component {
               </Nav.Link>
             </small>
           </Nav.Item>
+
         </Form>
       </div>
     );

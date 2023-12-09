@@ -6,6 +6,17 @@ import Form from "react-bootstrap/Form";
 import { Nav } from "react-bootstrap";
 
 class Register extends Component {
+  style = {
+    backgroundColor: "#f6f9ff",
+    minHeight: "100vh",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "calc(10px + 1vmin)",
+    color: "white",
+  };
+
   state = {
     username: "",
     email: "",
@@ -102,7 +113,7 @@ class Register extends Component {
 
     if (Object.keys(errors).length === 0) {
       try {
-        const response = await fetch("http://localhost:3001/api/auth/register/", {
+        const response = await fetch("http://localhost:3001/api/auth/register", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -161,7 +172,7 @@ class Register extends Component {
     }
 
     return (
-      <div>
+      <div style={this.style}>
         <div className="d-flex flex-column align-items-center justify-content-center">
           <div className="d-flex mb-4">
             <h1 className="text-success">K</h1>

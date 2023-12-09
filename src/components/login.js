@@ -72,7 +72,7 @@ class Login extends Component {
 
     if (Object.keys(errors).length === 0) {
       try {
-        const response = await fetch("http://localhost:3001/api/login/", {
+        const response = await fetch("http://localhost:3001/api/auth/login/", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -81,17 +81,16 @@ class Login extends Component {
           mode: "cors",
         });
 
+        const result = await response.json();
+
         if (response.ok) {
-          const result = await response.json();
 
           if (result.success) {
             this.setState({ isLoggedIn: true });
             alert("Login successful!");
-          } else {
-            alert("Login failed. Invalid credentials.");
-          }
+          } 
         } else {
-          alert("Error in backend authentication.");
+          alert("Login failed. Invalid credentials.");
         }
       } catch (error) {
         console.error("Error:", error);

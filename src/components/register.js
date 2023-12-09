@@ -28,14 +28,14 @@ class Register extends Component {
   componentDidMount() {
     const storedFormValues =
       JSON.parse(localStorage.getItem("RegistrationFormValues")) || {};
-    const { errors, ...rest } = storedFormValues;
+    const { errors, redirectToLogin, ...rest } = storedFormValues;
     this.setState({
       ...rest,
     });
   }
 
   componentDidUpdate() {
-    const { errors, ...valuesToStore } = this.state; 
+    const { alert, ...valuesToStore } = this.state; 
     localStorage.setItem("RegistrationFormValues", JSON.stringify(valuesToStore));
   }
 
@@ -102,7 +102,7 @@ class Register extends Component {
 
     if (Object.keys(errors).length === 0) {
       try {
-        const response = await fetch("http://localhost:3001/api/register/", {
+        const response = await fetch("http://localhost:3001/api/auth/register/", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

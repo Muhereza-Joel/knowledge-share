@@ -16,16 +16,25 @@ class Dashboard extends Component {
 
   style = {
     backgroundColor: "#f6f9ff",
-    overflowX: "hidden",
+    position: 'relative',
   };
 
   panelStyle = {
     minHeight: "90vh",
   };
 
+  leftPanelStyle = {
+    ...this.panelStyle,
+    position: 'sticky',
+    top: 60,
+  }
+
   topPaneStyle = {
     width: "100%",
     height: "7vh",
+    zIndex: '3',
+    position: 'sticky',
+    top: 0,
   };
 
   // Function to handle NavLink click and update the selected component
@@ -74,7 +83,7 @@ class Dashboard extends Component {
         </div>
         <div className="row g-0">
           <div className="col-lg-2">
-            <div className="d-flex flex-column p-2 m-2" style={this.panelStyle}>
+            <div className="d-flex flex-column p-2 m-2" style={this.leftPanelStyle}>
               <Nav.Item className="d-flex align-items-center mt-3">
                 <Nav.Link
                   href={`/dashboard/${this.state.username}/`}
@@ -112,17 +121,7 @@ class Dashboard extends Component {
               {/* Render the selected component */}
               {this.renderSelectedComponent()}
 
-              {/* Use Switch and Route to render components based on the URL */}
-              {/* <Routes>
-                <Route exact path={`/dashboard/${username}/`} component={Home} />
-
-                <Route
-                  path={`/dashboard/${username}/questions/`}
-                  component={Questions}
-                />
-
-                <Route path={`/dashboard/${username}/tags/`} component={Tags} />
-              </Routes> */}
+              
             </div>
           </div>
         </div>

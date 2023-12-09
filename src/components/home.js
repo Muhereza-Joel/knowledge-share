@@ -17,14 +17,46 @@ class Home extends Component {
         <div className="row g-0">
 
           <div className="col-lg-12">
-            <div id="content-section" className="row g-3">
+            <div id="content-section" className="row g-0">
               <div className="col-lg-10">
                 <div
                   id="middle-panel"
                   className="card p-2 m-2"
                   style={this.panelStyle}
                 >
-                  Home middle panel
+
+                  <div className="p-3">
+                    <div>Ask Any Question</div>
+                    <form>
+                        <div className="form-group">
+                            <textarea className="form-control" rows={10} cols={50}></textarea>
+                        </div>
+                    </form>
+                  </div>
+                  <div className="p-3">
+                    <div>Ask Any Question</div>
+                    <form>
+                        <div className="form-group">
+                            <textarea className="form-control" rows={10} cols={50}></textarea>
+                        </div>
+                    </form>
+                  </div>
+                  <div className="p-3">
+                    <div>Ask Any Question</div>
+                    <form>
+                        <div className="form-group">
+                            <textarea className="form-control" rows={10} cols={50}></textarea>
+                        </div>
+                    </form>
+                  </div>
+                  <div className="p-3">
+                    <div>Ask Any Question</div>
+                    <form>
+                        <div className="form-group">
+                            <textarea className="form-control" rows={10} cols={50}></textarea>
+                        </div>
+                    </form>
+                  </div>
                 </div>
               </div>
 

@@ -1,61 +1,47 @@
-import React, { Component } from 'react';
-import 'bootstrap/dist/css/bootstrap.css';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import { Nav } from 'react-bootstrap';
+import React, { Component } from "react";
+import "bootstrap/dist/css/bootstrap.css";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import { Nav } from "react-bootstrap";
 
 class Login extends Component {
   state = {
-    email: '',
-    password: '',
+    email: "",
+    password: "",
     rememberMe: false,
     errors: {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
     },
   };
 
-  style = {
-    backgroundColor: '#f6f9ff',
-    minHeight: '100vh',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize: 'calc(10px + 1vmin)',
-    color: 'white',
-  };
-
   componentDidMount() {
-    const storedFormValues = JSON.parse(localStorage.getItem('loginFormValues')) || {};
+    const storedFormValues =
+      JSON.parse(localStorage.getItem("loginFormValues")) || {};
     const { errors, rememberMe, ...rest } = storedFormValues;
     this.setState({
       ...rest,
-      rememberMe: Boolean(rememberMe), 
+      rememberMe: Boolean(rememberMe),
     });
   }
-  
-  
+
   componentDidUpdate() {
     const { errors, ...valuesToStore } = this.state; // Exclude errors from values to store
-    localStorage.setItem('loginFormValues', JSON.stringify(valuesToStore));
+    localStorage.setItem("loginFormValues", JSON.stringify(valuesToStore));
   }
-  
-  
 
   handleChange = (e) => {
     const { name, type, checked } = e.target;
-    const value = type === 'checkbox' ? checked : e.target.value;
-  
+    const value = type === "checkbox" ? checked : e.target.value;
+
     this.setState((prevState) => ({
-        [name]: value,
-        errors: {
-          ...prevState.errors,
-          [name]: '',
-        },
-      }));
+      [name]: value,
+      errors: {
+        ...prevState.errors,
+        [name]: "",
+      },
+    }));
   };
-  
 
   handleBlur = (e) => {
     const { name, value } = e.target;
@@ -71,65 +57,72 @@ class Login extends Component {
   };
 
   handleSubmit = async (e) => {
-    e.preventDefault(); 
+    e.preventDefault();
 
     const errors = {};
     if (!this.state.email.trim()) {
-      errors.email = 'Email is required';
-
+      errors.email = "Email is required";
     }
-    
+
     if (!this.state.password.trim()) {
-      errors.password = 'Password is required';
-
+      errors.password = "Password is required";
     }
 
-    
     const { email, password } = this.state;
 
     if (Object.keys(errors).length === 0) {
+      try {
+        const response = await fetch("http://localhost:3001/api/login/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+          mode: "cors",
+        });
 
-        try {
-            const response = await fetch('http://localhost:3001/api/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email, password }),
-            mode: 'cors'
+        if (response.ok) {
+          const result = await response.json();
 
-            });
-
-            if (response.ok) {
-            const result = await response.json();
-
-            if (result.success) {
-                this.setState({ isLoggedIn: true });
-                alert('Login successful!');
-            } else {
-                alert('Login failed. Invalid credentials.');
-            }
-            } else {
-               alert('Error in backend authentication.');
-            }
-        } catch (error) {
-            console.error('Error:', error);
+          if (result.success) {
+            this.setState({ isLoggedIn: true });
+            alert("Login successful!");
+          } else {
+            alert("Login failed. Invalid credentials.");
+          }
+        } else {
+          alert("Error in backend authentication.");
         }
+      } catch (error) {
+        console.error("Error:", error);
+      }
     }
 
-     // Update the state with errors
-     this.setState({ errors });
-
+    // Update the state with errors
+    this.setState({ errors });
   };
 
   render() {
     const { errors } = this.state;
 
     return (
-      <div style={this.style}>
-        <Form className='card p-3' onSubmit={this.handleSubmit} noValidate>
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label className='text-dark'>Username or Email address</Form.Label>
+      <div>
+        <div className="d-flex flex-column align-items-center justify-content-center">
+          <div className="d-flex mb-4">
+            <h1 className="text-success">K</h1>
+            <h1 className="text-info">S</h1>
+          </div>
+          <h3 className="text-dark mb-1"> KnowledgeShare</h3>
+          <span className="text-dark mb-3">
+            Uganda's Number One Agricultural Resource Center
+          </span>
+        </div>
+        <Form className="card p-3" onSubmit={this.handleSubmit} noValidate>
+          <h5 className="text-dark text-center mb-4">Login To Your Account</h5>
+          <Form.Group className="mb-3 mt-3" controlId="formBasicEmail">
+            <Form.Label className="text-dark">
+              Username or Email address
+            </Form.Label>
             <Form.Control
               type="email"
               name="email"
@@ -139,11 +132,13 @@ class Login extends Component {
               value={this.state.email}
               required
             />
-            {errors.email && <small className="text-danger">{errors.email}</small>}
+            {errors.email && (
+              <small className="text-danger">{errors.email}</small>
+            )}
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formBasicPassword">
-            <Form.Label className='text-dark'>Password</Form.Label>
+            <Form.Label className="text-dark">Password</Form.Label>
             <Form.Control
               type="password"
               name="password"
@@ -153,7 +148,9 @@ class Login extends Component {
               value={this.state.password}
               required
             />
-            {errors.password && <small className="text-danger">{errors.password}</small>}
+            {errors.password && (
+              <small className="text-danger">{errors.password}</small>
+            )}
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formBasicCheckbox">
@@ -166,14 +163,14 @@ class Login extends Component {
             />
           </Form.Group>
 
-          <Button variant="secondary" type="submit" className='btn-sm'>
+          <Button variant="secondary" type="submit" className="btn-sm">
             Login
           </Button>
 
-          <Nav.Item className='d-flex align-items-center mt-3'>
+          <Nav.Item className="d-flex align-items-center mt-3">
             If you don't have an account click
             <small>
-              <Nav.Link href="/auth/register" className='text-info px-2'>
+              <Nav.Link href="/auth/register/" className="text-info px-2">
                 here
               </Nav.Link>
             </small>

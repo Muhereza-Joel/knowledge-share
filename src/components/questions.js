@@ -17,8 +17,8 @@ class Questions extends Component {
         <div className="row g-0">
 
           <div className="col-lg-12">
-            <div id="content-section" className="row g-3">
-              <div className="col-lg-10">
+            <div id="content-section" className="row g-0">
+              <div className="col-lg-8">
                 <div
                   id="middle-panel"
                   className="card p-2 m-2"
@@ -28,7 +28,7 @@ class Questions extends Component {
                 </div>
               </div>
 
-              <div className="col-lg-2">
+              <div className="col-lg-4">
                 <div
                   id="right-panel"
                   className="d-flex flex-column p-2 m-2"

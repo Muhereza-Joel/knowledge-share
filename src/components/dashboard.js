@@ -10,7 +10,6 @@ class Dashboard extends Component {
     super(props);
     this.state = {
       selectedComponent: localStorage.getItem("selectedComponent") || "home",
-      username: "Muhereza-Joel",
     };
   }
 
@@ -59,7 +58,7 @@ class Dashboard extends Component {
   };
 
   render() {
-    const username = this.state.username;
+    const username = this.props.username;
 
     return (
       <div style={this.style}>
@@ -86,7 +85,7 @@ class Dashboard extends Component {
             <div className="d-flex flex-column p-2 m-2" style={this.leftPanelStyle}>
               <Nav.Item className="d-flex align-items-center mt-3">
                 <Nav.Link
-                  href={`/dashboard/${this.state.username}/`}
+                  href={`/knowledge-share/${username}/`}
                   className="text-info px-2 fw-bold"
                   onClick={() => this.handleNavLinkClick("home")}
                 >
@@ -96,7 +95,7 @@ class Dashboard extends Component {
 
               <Nav.Item className="d-flex align-items-center mt-3">
                 <Nav.Link
-                  href={`/dashboard/${this.state.username}/questions/`}
+                  href={`/knowledge-share/${username}/questions/`}
                   className="text-info px-2 fw-bold"
                   onClick={() => this.handleNavLinkClick("questions")}
                 >
@@ -106,7 +105,7 @@ class Dashboard extends Component {
 
               <Nav.Item className="d-flex align-items-center mt-3">
                 <Nav.Link
-                  href={`/dashboard/${this.state.username}/tags/`}
+                  href={`/knowledge-share/${username}/tags/`}
                   className="text-info px-2 fw-bold"
                   onClick={() => this.handleNavLinkClick("tags")}
                 >
@@ -116,8 +115,8 @@ class Dashboard extends Component {
             </div>
           </div>
 
-          <div className="col-lg-8">
-            <div id="content-section" className="row g-3">
+          <div className="col-lg-10">
+            <div id="content-section" className="row g-0">
               {/* Render the selected component */}
               {this.renderSelectedComponent()}
 

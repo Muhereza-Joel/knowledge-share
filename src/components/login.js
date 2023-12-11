@@ -125,7 +125,7 @@ class Login extends Component {
     const { errors, redirectToDashboard, username } = this.state;
 
     if (redirectToDashboard) {
-      return <Navigate to={`/dashboard/${username}`} />;
+      return <Navigate to={`/knowledge-share/${username}`} />;
     }
 
     return (

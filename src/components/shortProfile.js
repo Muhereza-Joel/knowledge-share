@@ -4,23 +4,30 @@ import Avator from "../assets/images/MyImage.jpg";
 import { Nav } from "react-bootstrap";
 
 class ShortProfile extends Component {
-  state = {
-    username: "Muhereza-Joel",
-  };
+  constructor(props){
+      super(props);
+      this.state = {
+        
+      };
+  }
+
   style = {
     width: "100% !important",
   };
 
   avatorStyle = {
-    width: "100%",
-    height: "100%",
+    width: "80%",
+    height: "80%",
     objectFit: "cover",
     border: "10px solid #fafcfd",
+    marginTop: "2rem",
   };
 
   render() {
+    const username = this.props.username;
+
     return (
-      <div className="mt-2 mx-3" style={this.style}>
+      <div className="mt-4 mx-3 text-center" style={this.style}>
         <img
           src={Avator}
           style={this.avatorStyle}
@@ -31,7 +38,7 @@ class ShortProfile extends Component {
         <div className="d-flex justify-content-center">
           <span className="text-center" >  
             Signed In As
-            <div className="h4 text-center">Muhereza Joel</div>
+            <div className="h4 text-center">{username}</div>
           </span>
         </div>
 
@@ -41,7 +48,7 @@ class ShortProfile extends Component {
         </div>
         <Nav.Item className="mt-3 text-center">
           <Nav.Link
-            href={`/knowledge-share/${this.state.username}/edit-profile/`}
+            href={`/knowledge-share/${username}/edit-profile/`}
             className="text-info px-2 fw-bold"
           >
             <button className="btn btn-sm btn-secondary">

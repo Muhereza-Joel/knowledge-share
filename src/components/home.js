@@ -76,7 +76,7 @@ class Home extends Component {
 
                 {/* {questionData && <QuestionCard {...questionData} />} */}
                 {questionData.map((question, index) => (
-                  <QuestionCard key={index} {...question} />
+                  <QuestionCard key={index} {...question} username={`${this.props.username}`}/>
                 ))}
               </div>
             </div>
@@ -84,7 +84,7 @@ class Home extends Component {
 
           <div className="col-lg-3">
             <div id="right-panel" style={this.panelStyle}>
-              <ShortProfile />
+              <ShortProfile username={`${this.props.username}`}/>
             </div>
           </div>
         </div>

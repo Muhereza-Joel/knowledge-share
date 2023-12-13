@@ -47,9 +47,9 @@ class Dashboard extends Component {
     // Determine which component to render based on the selectedComponent state
     switch (this.state.selectedComponent) {
       case "home":
-        return <Home />;
+        return <Home username={`${this.props.username}`}/>;
       case "questions":
-        return <Questions />;
+        return <Questions username={`${this.props.username}`}/>;
       case "tags":
         return <Tags />;
       default:

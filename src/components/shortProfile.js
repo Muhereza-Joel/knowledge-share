@@ -20,14 +20,14 @@ class ShortProfile extends Component {
     height: "80%",
     objectFit: "cover",
     border: "10px solid #fafcfd",
-    marginTop: "2rem",
+    marginTop: "1rem",
   };
 
   render() {
     const username = this.props.username;
 
     return (
-      <div className="mt-4 mx-3 text-center" style={this.style}>
+      <div className="mt-0 mx-3 text-center" style={this.style}>
         <img
           src={Avator}
           style={this.avatorStyle}
@@ -46,16 +46,7 @@ class ShortProfile extends Component {
           <div className="mx-2">0 Followers</div>
           <div className="mx-2">0 Following</div>
         </div>
-        <Nav.Item className="mt-3 text-center">
-          <Nav.Link
-            href={`/knowledge-share/${username}/edit-profile/`}
-            className="text-info px-2 fw-bold"
-          >
-            <button className="btn btn-sm btn-secondary">
-              Edit Profile
-            </button>
-          </Nav.Link>
-        </Nav.Item>
+        
       </div>
     );
   }

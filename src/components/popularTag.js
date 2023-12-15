@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.css";
+import { Nav } from "react-bootstrap";
 
-const PopularTag = ({ title, description }) => {
+const PopularTag = ({ id, title, description, username }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   const handleMouseEnter = () => {
@@ -60,7 +61,19 @@ const PopularTag = ({ title, description }) => {
         </div>
         <div className="col-sm-10">
           <div className="d-flex flex-column">
-            <span className="fw-bold">{truncateText(title, 15)}</span>
+            <Nav.Item>
+              <Nav.Link href={`/knowledge-share/${username}/tags/${id}`}>
+                <span
+                  className="fw-bold"
+                  style={{
+                    textDecoration: isHovered ? "underline" : "none",
+                    transition: "border 0.3s ease",
+                  }}
+                >
+                  {truncateText(title, 15)}
+                </span>
+              </Nav.Link>
+            </Nav.Item>
             <p className="text-secondary">{truncateText(description, 50)}</p>
           </div>
         </div>

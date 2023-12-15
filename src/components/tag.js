@@ -1,24 +1,40 @@
-import React, {Component} from "react";
+import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import { Nav } from "react-bootstrap";
 
-class Tag extends Component{
+const Tag = ({ text, tagId, username }) => {
+  const [isHovered, setIsHovered] = useState(false);
 
-    render(){
-        const {text, tagId, username} = this.props;
+  useEffect(() => {
+    // Clean up the hover state when unmounting
+    return () => setIsHovered(false);
+  }, []);
 
-        return(
-            <div>
-                <Nav.Item>
-                <Nav.Link
-                href={`/knowledge-share/${username}/tags/${tagId}`}
-                >
-                  <span className="badge bg-dark mx-1">{text}</span>
-                </Nav.Link>
-              </Nav.Item>
-            </div>
-        );
-    }
-}
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
+
+  return (
+    <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+      <Nav.Item>
+        <Nav.Link href={`/knowledge-share/${username}/tags/${tagId}`}>
+          <span
+            className="badge mx-1"
+            style={{
+              backgroundColor: isHovered ? "#888" : "#444",
+              transition: "border 0.3s ease",
+            }}
+          >
+            {text}
+          </span>
+        </Nav.Link>
+      </Nav.Item>
+    </div>
+  );
+};
 
 export default Tag;

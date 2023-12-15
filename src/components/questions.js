@@ -1,8 +1,5 @@
-import React, { Component } from "react";
+import React, { Component, memo } from "react";
 import "bootstrap/dist/css/bootstrap.css";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import { Nav } from "react-bootstrap";
 import QuestionCard from "./questionCard";
 import PopularTag from "./popularTag";
 
@@ -13,6 +10,7 @@ class Questions extends Component {
     this.state = {
       userId: 123,
       questionData: [],
+      popularTagsData: [],
       loading: true,
       error: null,
     };
@@ -41,6 +39,25 @@ class Questions extends Component {
           error: error.message,
         });
       });
+
+      fetch("http://localhost:3001/api/tags/popular-tags/")
+        .then((response) => {
+          if(!response.ok){
+            throw new Error(`HTTP error! Status: ${response.status}`)
+          }
+
+          return response.json();
+        })
+        .then((data) => {
+          this.setState({
+            popularTagsData: data,
+          })
+        })
+        .catch((error) => {
+          this.setState({
+            error: error.message,
+          })
+        })
   }
 
   panelStyle = {
@@ -48,7 +65,7 @@ class Questions extends Component {
   };
 
   render() {
-    const { questionData, loading, error } = this.state;
+    const { questionData, popularTagsData, loading, error } = this.state;
 
     return (
       <div>
@@ -84,17 +101,10 @@ class Questions extends Component {
                 >
                   <div className="card-title h6 mb-3">Popular Tags</div>
 
-                  <PopularTag title="Gardening" description="This tag has all questions about gardening and tools"/>
-                  <PopularTag title="Tomatoes" description="This tag has all questions about gardening and tools"/>
-                  <PopularTag title="Maize" description="This tag has all questions about gardening and tools"/>
-                  <PopularTag title="Herbicides" description="This tag has all questions about gardening and tools"/>
-                  <PopularTag title="Harvesting" description="This tag has all questions about gardening and tools"/>
-                  <PopularTag title="Mulching" description="This tag has all questions about gardening and tools"/>
-                  <PopularTag title="Prunning" description="This tag has all questions about gardening and tools"/>
-                  <PopularTag title="Weeding" description="This tag has all questions about gardening and tools"/>
-                  <PopularTag title="Planting" description="This tag has all questions about gardening and tools"/>
-                  <PopularTag title="Marketing" description="This tag has all questions about gardening and tools"/>
-                  
+                  {popularTagsData.map((tag, index) => (
+                    <PopularTag key={index} id={tag.id} title={tag.name} description={tag.description} username={`${this.props.username}`}/>
+                  ))}
+
 
                 </div>
               </div>
@@ -106,4 +116,4 @@ class Questions extends Component {
   }
 }
 
-export default Questions;
+export default memo(Questions);

@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import { Nav } from "react-bootstrap";
 import QuestionCard from "./questionCard";
 import ShortProfile from "./shortProfile";
+import PopularTag from "./popularTag";
 
 class Home extends Component {
   constructor(props) {
@@ -10,6 +11,7 @@ class Home extends Component {
     this.state = {
       userId: 123,
       questionData: [],
+      lastUsedTagsData: [],
       loading: true,
       error: null,
     };
@@ -38,16 +40,35 @@ class Home extends Component {
           error: error.message,
         });
       });
+
+      fetch("http://localhost:3001/api/tags/most-used-tags/")
+      .then((response) => {
+        if(!response.ok){
+          throw new Error(`HTTP error! Status: ${response.status}`)
+        }
+
+        return response.json();
+      })
+      .then((data) => {
+        this.setState({
+          lastUsedTagsData: data,
+        })
+      })
+      .catch((error) => {
+        this.setState({
+          error: error.message,
+        })
+      })
   }
 
   panelStyle = {
     minHeight: "90vh",
     position: "sticky",
-    top: 60,
+    top: 0,
   };
 
   render() {
-    const { questionData, loading, error } = this.state;
+    const { questionData, lastUsedTagsData, loading, error } = this.state;
 
     return (
       <div>
@@ -76,7 +97,11 @@ class Home extends Component {
 
                 {/* {questionData && <QuestionCard {...questionData} />} */}
                 {questionData.map((question, index) => (
-                  <QuestionCard key={index} {...question} username={`${this.props.username}`}/>
+                  <QuestionCard
+                    key={index}
+                    {...question}
+                    username={`${this.props.username}`}
+                  />
                 ))}
               </div>
             </div>
@@ -84,7 +109,22 @@ class Home extends Component {
 
           <div className="col-lg-3">
             <div id="right-panel" style={this.panelStyle}>
-              <ShortProfile username={`${this.props.username}`}/>
+              <ShortProfile username={`${this.props.username}`} />
+
+              <div className="p-2 mt-0 mx-2">
+                <hr/>
+                <h6 className="fw-bold text-center text-secondary p-1">Last Used Tags</h6>
+
+                {lastUsedTagsData.map((tag, index) => (
+                  <PopularTag
+                    key={index}
+                    id={tag.id}
+                    title={tag.name}
+                    description={tag.description}
+                    username={`${this.props.username}`}
+                  />
+                ))}
+              </div>
             </div>
           </div>
         </div>

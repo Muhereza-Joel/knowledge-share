@@ -76,7 +76,7 @@ class Home extends Component {
           <div className="col-lg-9">
             <div
               id="middle-panel"
-              className="card p-2 m-2"
+              className="card p-0 mt-2"
               style={this.panelStyle}
             >
               <div className="p-3">

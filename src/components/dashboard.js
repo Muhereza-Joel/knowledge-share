@@ -51,7 +51,7 @@ class Dashboard extends Component {
       case "questions":
         return <Questions username={`${this.props.username}`}/>;
       case "tags":
-        return <Tags />;
+        return <Tags username={`${this.props.username}`}/>;
       default:
         return null;
     }

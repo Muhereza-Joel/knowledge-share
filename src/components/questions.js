@@ -77,7 +77,7 @@ class Questions extends Component {
               <div className="col-lg-9">
                 <div
                   id="middle-panel"
-                  className="card p-2 m-2"
+                  className="card p-0 mt-2"
                   style={this.panelStyle}
                 >
                 <div className="p-3">
@@ -102,7 +102,7 @@ class Questions extends Component {
                   <div className="card-title h6 mb-3">Popular Tags</div>
 
                   {popularTagsData.map((tag, index) => (
-                    <PopularTag key={index} id={tag.id} title={tag.name} description={tag.description} username={`${this.props.username}`}/>
+                    <PopularTag key={tag.id} id={tag.id} title={tag.name} description={tag.description} username={`${this.props.username}`}/>
                   ))}
 
 

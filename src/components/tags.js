@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, memo } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import PopularTag from "./popularTag";
 
@@ -39,43 +39,36 @@ class Tags extends Component {
   }
 
   render() {
-    const { tagsData, loading, error } = this.state;
+    const { tagsData} = this.state;
     return (
       <div>
-      
-      
-            <div id="content-section">
-            
-                <div
-                  id="middle-panel"
-                  className="card p-2 m-2"
-                  style={this.panelStyle}
-                >
-                  <div className="pt-2 w-75 h4 m-2">All Tags</div>
-                  <div className="row g-0">
-                    {tagsData.map((tag, index) => (
-                      <div className="col-lg-3">
-                        <div className="card p-4 m-2">
-                        <PopularTag
-                          key={index}
-                          id={tag.id}
-                          title={tag.name}
-                          description={tag.description}
-                          username={`${this.props.username}`}
-                        />
-
-                        </div>
-                      </div>
-                    ))}
+        <div id="content-section">
+          <div
+            id="middle-panel"
+            className="card p-2 m-2"
+            style={this.panelStyle}
+          >
+            <div className="pt-2 w-75 h4 m-2">All Tags</div>
+            <div className="row g-0">
+              {tagsData.map((tag, index) => (
+                <div className="col-lg-3"  key={tag.id}>
+                  <div className="card p-4 m-2">
+                    <PopularTag
+                      key={tag.id}
+                      id={tag.id}
+                      title={tag.name}
+                      description={tag.description}
+                      username={`${this.props.username}`}
+                    />
                   </div>
                 </div>
-              
+              ))}
             </div>
-         
-        
+          </div>
+        </div>
       </div>
     );
   }
 }
 
-export default Tags;
+export default memo(Tags);

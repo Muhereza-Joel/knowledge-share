@@ -32,7 +32,7 @@ const QuestionCard = ({
 
   return (
     <div
-      className="card px-4 py-3 my-1"
+      className="card p-3 my-1"
       style={{
         backgroundColor: isHovered ? "#f6f9ff" : "transparent",
         transition: "border 0.3s ease",
@@ -40,7 +40,7 @@ const QuestionCard = ({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <div className="row">
+      <div className="row g-0">
         <div className="col-sm-2">
           <div className="d-flex flex-column">
             <div>{votes} Votes</div>

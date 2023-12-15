@@ -1,45 +1,78 @@
 import React, { Component } from "react";
 import "bootstrap/dist/css/bootstrap.css";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import { Nav } from "react-bootstrap";
+import PopularTag from "./popularTag";
 
 class Tags extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      userId: 123,
+      tagsData: [],
+      loading: true,
+      error: null,
+    };
+  }
 
   panelStyle = {
     minHeight: "90vh",
   };
 
+  componentDidMount() {
+    fetch("http://localhost:3001/api/tags/popular-tags/")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        return response.json();
+      })
+      .then((data) => {
+        this.setState({
+          tagsData: data,
+        });
+      })
+      .catch((error) => {
+        this.setState({
+          error: error.message,
+        });
+      });
+  }
+
   render() {
+    const { tagsData, loading, error } = this.state;
     return (
       <div>
-       
-        <div className="row g-0">
-
-          <div className="col-lg-12">
-            <div id="content-section" className="row g-0">
-              <div className="col-lg-8">
+      
+      
+            <div id="content-section">
+            
                 <div
                   id="middle-panel"
                   className="card p-2 m-2"
                   style={this.panelStyle}
                 >
-                    Tags middle panel
-                </div>
-              </div>
+                  <div className="pt-2 w-75 h4 m-2">All Tags</div>
+                  <div className="row g-0">
+                    {tagsData.map((tag, index) => (
+                      <div className="col-lg-3">
+                        <div className="card p-4 m-2">
+                        <PopularTag
+                          key={index}
+                          id={tag.id}
+                          title={tag.name}
+                          description={tag.description}
+                          username={`${this.props.username}`}
+                        />
 
-              <div className="col-lg-4">
-                <div
-                  id="right-panel"
-                  className="d-flex flex-column p-2 m-2"
-                  style={this.panelStyle}
-                >
-                  <div className="card-title">Trending</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              
             </div>
-          </div>
-        </div>
+         
+        
       </div>
     );
   }

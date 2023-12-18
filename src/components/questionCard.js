@@ -12,6 +12,7 @@ const QuestionCard = ({
   votes,
   answers,
   views,
+  onQuestionClick,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -28,6 +29,11 @@ const QuestionCard = ({
 
   const handleMouseLeave = () => {
     setIsHovered(false);
+  };
+
+  const handleClick = () => {
+    // Call the callback function passed from Dashboard
+    onQuestionClick && onQuestionClick(questionId);
   };
 
   return (
@@ -51,7 +57,7 @@ const QuestionCard = ({
         <div className="col-sm-8">
           <div className="text-primary">
             <Nav.Item className="mt-3">
-              <Nav.Link href={questionUrl}>
+              <Nav.Link href={questionUrl} onClick={handleClick}>
                 <p
                   className="fw-normal text-secondary h5"
                   style={{

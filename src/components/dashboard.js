@@ -1,15 +1,17 @@
-import React, { Component } from "react";
+import React, { Component, memo } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import { Nav } from "react-bootstrap";
 import Home from "./home";
 import Questions from "./questions";
 import Tags from "./tags";
+import QuestionDetails from "./questionDetails";
 
 class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
       selectedComponent: localStorage.getItem("selectedComponent") || "home",
+      questionId: localStorage.getItem("selectedQuestionId") || "",
     };
   }
 
@@ -49,12 +51,23 @@ class Dashboard extends Component {
       case "home":
         return <Home username={`${this.props.username}`}/>;
       case "questions":
-        return <Questions username={`${this.props.username}`}/>;
+        return <Questions username={`${this.props.username}`} onQuestionClick={this.handleQuestionLinkClick} />;
       case "tags":
         return <Tags username={`${this.props.username}`}/>;
+      case "questionDetails":
+        return <QuestionDetails questionId={`${this.state.questionId}`}/>;
       default:
         return null;
     }
+  };
+
+  handleQuestionLinkClick = (questionId) => {
+    this.setState({
+      selectedComponent: "questionDetails",
+    });
+    this.handleNavLinkClick("questionDetails");
+    localStorage.setItem("selectedQuestionId", questionId);
+    
   };
 
   render() {
@@ -86,7 +99,7 @@ class Dashboard extends Component {
               <Nav.Item className="d-flex align-items-center mt-3">
                 <Nav.Link
                   href={`/knowledge-share/${username}/`}
-                  className="text-info px-2 fw-bold"
+                  className="text-info px-2 fw-bold text-dark"
                   onClick={() => this.handleNavLinkClick("home")}
                 >
                   Home
@@ -96,7 +109,7 @@ class Dashboard extends Component {
               <Nav.Item className="d-flex align-items-center mt-3">
                 <Nav.Link
                   href={`/knowledge-share/${username}/questions/`}
-                  className="text-info px-2 fw-bold"
+                  className="text-info px-2 fw-bold text-dark"
                   onClick={() => this.handleNavLinkClick("questions")}
                 >
                   Questions
@@ -106,7 +119,7 @@ class Dashboard extends Component {
               <Nav.Item className="d-flex align-items-center mt-3">
                 <Nav.Link
                   href={`/knowledge-share/${username}/tags/`}
-                  className="text-info px-2 fw-bold"
+                  className="text-info px-2 fw-bold text-dark"
                   onClick={() => this.handleNavLinkClick("tags")}
                 >
                   Tags
@@ -129,4 +142,4 @@ class Dashboard extends Component {
   }
 }
 
-export default Dashboard;
+export default memo(Dashboard);

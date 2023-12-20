@@ -1,9 +1,18 @@
 import React, { useState, useEffect } from "react";
+import { Nav, Modal, Button, Form } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
-import { Nav } from "react-bootstrap";
+import "bootstrap-icons/font/bootstrap-icons.css";
 
-const PopularTag = ({ id, title, description, username }) => {
+const PopularTag = ({
+  id,
+  title,
+  description,
+  username,
+  onDelete,
+  showIcons = true,
+}) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [showIconsState, setShowIconsState] = useState(showIcons);
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -11,6 +20,18 @@ const PopularTag = ({ id, title, description, username }) => {
 
   const handleMouseLeave = () => {
     setIsHovered(false);
+  };
+
+  const handleEdit = () => {
+    console.log("Edit icon clicked for tag:", id);
+  };
+
+  const handleView = () => {
+    console.log("View icon clicked for tag:", id);
+  };
+
+  const handleDelete = () => {
+    onDelete(id);
   };
 
   const truncateText = (text, maxLength) => {
@@ -37,7 +58,6 @@ const PopularTag = ({ id, title, description, username }) => {
   };
 
   useEffect(() => {
-    // Effect to clean up the border color on component unmount
     return () => setIsHovered(false);
   }, []);
 
@@ -78,6 +98,29 @@ const PopularTag = ({ id, title, description, username }) => {
           </div>
         </div>
       </div>
+
+      {isHovered && showIconsState && (
+        <div
+          className="position-absolute top-75 start-75 translate-end"
+          style={{ backgroundColor: "#f6f9ff", border: "4px solid #cce6e8" }}
+        >
+          <i
+            className="bi bi-pencil mx-2 text-primary"
+            onClick={handleEdit}
+            style={{ cursor: "pointer" }}
+          ></i>
+          <i
+            className="bi bi-eye mx-2 text-success"
+            onClick={handleView}
+            style={{ cursor: "pointer" }}
+          ></i>
+          <i
+            className="bi bi-trash mx-2 text-danger"
+            onClick={handleDelete}
+            style={{ cursor: "pointer" }}
+          ></i>
+        </div>
+      )}
     </div>
   );
 };

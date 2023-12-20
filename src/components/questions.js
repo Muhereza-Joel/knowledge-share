@@ -98,6 +98,7 @@ const Questions = (props) => {
                     title={tag.name}
                     description={tag.description}
                     username={`${props.username}`}
+                    showIcons={false}
                   />
                 ))}
               </div>

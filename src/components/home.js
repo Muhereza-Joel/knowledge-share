@@ -59,6 +59,10 @@ const Home = (props) => {
 
   const { questionData, lastUsedTagsData } = state;
 
+  const handleAskQuestionNavigation = () => {
+    props.onAskQuestionClick("askQuestion");
+  }
+
   return (
     <div>
       <div id="content-section" className="row g-0">
@@ -72,13 +76,14 @@ const Home = (props) => {
               <div className="d-flex align-items-center mb-3">
                 <div className="pt-2 w-75 h4">Your Recent Questions</div>
 
-                <Nav.Item className="mt-3">
+                <Nav.Item className="mt-3 text-end w-25">
                   <Nav.Link
                     href={`/knowledge-share/${props.username}/questions/ask-question/`}
                     className="text-info px-2 fw-bold"
+                    onClick={handleAskQuestionNavigation}
                   >
                     <button className="btn btn-sm btn-primary">
-                      Ask Question
+                      Ask Question ?
                     </button>
                   </Nav.Link>
                 </Nav.Item>

@@ -15,8 +15,8 @@ class App extends Component {
             <Route path="/" element={<Login />} />
             <Route path="/auth/register/" element={<Register />} />
             <Route path="/auth/login/" element={<Login />} />
-            <Route path="/knowledge-share/" element={<Dashboard username="Muhereza-Joel"/>} />
-            <Route path="/knowledge-share/:username/*" element={<Dashboard username="Muhereza-Joel"/>} />
+            <Route path="/knowledge-share/" element={<Dashboard username="muhereza-joel"/>} />
+            <Route path="/knowledge-share/:username/*" element={<Dashboard username="muhereza-joel"/>} />
           </Routes>
         </div>
       </Router>

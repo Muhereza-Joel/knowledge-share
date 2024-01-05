@@ -1,5 +1,5 @@
 import React, { useState, useEffect, memo } from "react";
-import { Modal, Button, Form, FloatingLabel, Alert } from "react-bootstrap";
+import { Modal, Button, Form, Alert } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/css/bootstrap.css";
@@ -26,7 +26,6 @@ const Tags = (props) => {
     setSearchTerm(e.target.value);
   };
 
-  
   const handleAddTag = async () => {
     try {
       // Validate form fields
@@ -50,12 +49,18 @@ const Tags = (props) => {
 
       const data = await response.json();
       setTagsData([...tagsData, data]);
-      toast.success("Tag added successfully!", { style: { backgroundColor: "#cce6e8", color: "#333" } });
+      toast.success("Tag added successfully!", {
+        style: { backgroundColor: "#cce6e8", color: "#333" },
+      });
       handleCloseModal();
     } catch (error) {
       setError(error.message);
     }
   };
+
+  const handleUpdate = (data) => {
+    setTagsData([data]);
+  }
 
   const handleShowModal = () => {
     setShowModal(true);
@@ -99,8 +104,6 @@ const Tags = (props) => {
     setFilteredTags(filtered);
   }, [searchTerm, tagsData]);
 
-
- 
   return (
     <div>
       <div id="content-section">
@@ -113,16 +116,22 @@ const Tags = (props) => {
             <div className="pt-2 h5 m-2 mx-3">All Tags</div>
             <div className="w-75 pt-2" id="search">
               <Form.Control
-                  type="text"
-                  style={{backgroundColor: "#f6f9ff", border: "2px solid #cce6e8"}}
-                  placeholder="Search by tag name"
-                  value={searchTerm}
-                  onChange={handleSearch}
-                />
+                type="text"
+                style={{
+                  backgroundColor: "#f6f9ff",
+                  border: "2px solid #cce6e8",
+                }}
+                placeholder="Search by tag name"
+                value={searchTerm}
+                onChange={handleSearch}
+              />
             </div>
             <div className="mx-3 text-end pt-2">
               <Button
-               style={{backgroundColor: "#cce6e8", border: "6px solid #e0f8ff"}}
+                style={{
+                  backgroundColor: "#cce6e8",
+                  border: "6px solid #e0f8ff",
+                }}
                 className="btn btn-secondary btn-sm text-dark fw-bold"
                 onClick={handleShowModal}
               >
@@ -132,7 +141,7 @@ const Tags = (props) => {
           </div>
 
           <div className="row g-0">
-          {filteredTags.map((tag, index) => (
+            {filteredTags.map((tag, index) => (
               <div className="col-lg-3" key={tag.id}>
                 <div className="card p-3 m-2">
                   <PopularTag
@@ -141,6 +150,7 @@ const Tags = (props) => {
                     title={tag.name}
                     description={tag.description}
                     username={props.username}
+                    onUpdate = {handleUpdate}
                   />
                 </div>
               </div>
@@ -150,11 +160,26 @@ const Tags = (props) => {
       </div>
 
       {/* Toast container */}
-      <ToastContainer position="bottom-left" autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
+      <ToastContainer
+        position="bottom-left"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
 
-      <Modal show={showModal} onHide={handleCloseModal} >
-       
-        <Modal.Body style={{backgroundColor: "#f6f9ff"}}>
+      <Modal show={showModal} onHide={handleCloseModal}>
+        <Modal.Body
+          style={{
+            backgroundColor: "#f6f9ff",
+            borderRadius: "5px",
+            border: "5px solid #cce6e8",
+          }}
+        >
           {validationError && (
             <Alert variant="danger" className="p-1">
               {validationError}
@@ -183,20 +208,28 @@ const Tags = (props) => {
                 onChange={handleInputChange}
               />
             </Form.Group>
+            <div className="text-end mt-3">
+              <Button
+                className="btn-sm mx-2"
+                variant="secondary"
+                onClick={handleCloseModal}
+              >
+                Cancel
+              </Button>
+              <Button
+                style={{
+                  backgroundColor: "#cce6e8",
+                  border: "3px solid #299ea6",
+                }}
+                className="btn-sm text-dark"
+                variant="primary"
+                onClick={handleAddTag}
+              >
+                Save Tag Info
+              </Button>
+            </div>
           </Form>
         </Modal.Body>
-        <Modal.Footer style={{backgroundColor: "#f6f9ff"}}>
-          <Button
-            className="btn-sm"
-            variant="danger"
-            onClick={handleCloseModal}
-          >
-            Cancel
-          </Button>
-          <Button style={{backgroundColor: "#cce6e8", border: "3px solid #299ea6"}} className="btn-sm text-dark" variant="primary" onClick={handleAddTag}>
-            Save Tag Info
-          </Button>
-        </Modal.Footer>
       </Modal>
     </div>
   );

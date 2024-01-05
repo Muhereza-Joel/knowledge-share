@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Nav, Modal, Button, Form } from "react-bootstrap";
+import { Nav, Modal, Button, Form, Alert } from "react-bootstrap";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
@@ -9,10 +11,19 @@ const PopularTag = ({
   description,
   username,
   onDelete,
+  onUpdate,
   showIcons = true,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [showIconsState, setShowIconsState] = useState(showIcons);
+
+  const [showViewModel, setShowViewModel] = useState(false);
+  const [showEditModel, setShowEditModel] = useState(false);
+  const [tagDetails, setTagDetails] = useState({id: id, title: title, description: description });
+
+  const [newTag, setNewTag] = useState({id: id, title: title, description: description });
+  const [error, setError] = useState(null);
+  const [validationError, setValidationError] = useState(null);
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -23,11 +34,36 @@ const PopularTag = ({
   };
 
   const handleEdit = () => {
-    console.log("Edit icon clicked for tag:", id);
+    handleShowEditModel(true, { id, title, description });
+  };
+
+  const handleShowEditModel = (showModel, tagDetails) => {
+    setShowEditModel(showModel);
+    setTagDetails(tagDetails);
+    setNewTag(tagDetails);
+  };
+
+  const handleCloseEditModel = () => {
+    setShowEditModel(false);
+    setIsHovered(false);
+    setTagDetails({});
+    setNewTag({});
+    setValidationError(null)
   };
 
   const handleView = () => {
-    console.log("View icon clicked for tag:", id);
+    handleShowViewModel(true, { title, description });
+  };
+
+  const handleShowViewModel = (showModel, tagDetails) => {
+    setShowViewModel(showModel);
+    setTagDetails(tagDetails);
+  };
+
+  const handleCloseViewModel = () => {
+    setShowViewModel(false);
+    setIsHovered(false);
+    setTagDetails({});
   };
 
   const handleDelete = () => {
@@ -60,6 +96,45 @@ const PopularTag = ({
   useEffect(() => {
     return () => setIsHovered(false);
   }, []);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewTag((prevTag) => ({ ...prevTag, [name]: value }));
+  };
+
+  const handleUpdateTag = async () => {
+    try {
+      // Validate form fields
+      if (!newTag.title || !newTag.description) {
+        setValidationError("All fields are required.");
+        return;
+      }
+
+      const response = await fetch("http://localhost:3001/api/tags/edit-tag/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newTag),
+        mode: "cors",
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      onUpdate(data);
+      toast.success("Tag Details Updated successfully!", {
+        style: { backgroundColor: "#cce6e8", color: "#333" },
+      });
+
+      handleCloseEditModel();
+
+    } catch (error) {
+      setError(error.message)
+    }
+  }
 
   return (
     <div
@@ -94,7 +169,7 @@ const PopularTag = ({
                 </span>
               </Nav.Link>
             </Nav.Item>
-            <p className="text-secondary">{truncateText(description, 50)}</p>
+            <p className="text-secondary">{truncateText(description, 60)}</p>
           </div>
         </div>
       </div>
@@ -121,6 +196,101 @@ const PopularTag = ({
           ></i>
         </div>
       )}
+      {/* Start View Tag Details Model */}
+      <Modal show={showViewModel} onHide={handleCloseViewModel}>
+        <Modal.Body
+          style={{
+            backgroundColor: "#f6f9ff",
+            borderRadius: "5px",
+            border: "5px solid #cce6e8",
+          }}
+        >
+          <small className="text-secondary">Title</small>
+          <h4>{tagDetails.title}</h4>
+          <hr></hr>
+          <small className="text-secondary">Description</small>
+          <p className="mt-1">{tagDetails.description}</p>
+
+          <div className="text-end">
+            <Button
+              className="btn-sm"
+              variant="secondary"
+              onClick={handleCloseViewModel}
+            >
+              Close
+            </Button>
+          </div>
+        </Modal.Body>
+      </Modal>
+      {/* End View Tag Details Model */}
+
+      {/* Start Edit Tag Details Model */}
+      <Modal show={showEditModel} onHide={handleCloseEditModel}>
+        <Modal.Body
+          style={{
+            backgroundColor: "#f6f9ff",
+            borderRadius: "5px",
+            border: "5px solid #cce6e8",
+          }}
+        >
+          {validationError && (
+            <Alert variant="danger" className="p-1">
+              {validationError}
+            </Alert>
+          )}
+          <Form>
+            <Form.Group className="mb-0" controlId="editTagName">
+            <Form.Control
+                type="hidden"
+                placeholder="Enter tag name"
+                name="tagId"
+                value={newTag.id}
+              />
+              <Form.Label>Tag Name</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter tag name"
+                name="title"
+                value={newTag.title}
+                onChange={handleInputChange}
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-0" controlId="editTagDescription">
+              <Form.Label>Description</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={3}
+                placeholder="Enter tag description"
+                name="description"
+                value={newTag.description}
+                onChange={handleInputChange}
+              />
+            </Form.Group>
+            <div className="text-end mt-3">
+              <Button
+                className="btn-sm mx-2"
+                variant="secondary"
+                onClick={handleCloseEditModel}
+              >
+                Cancel
+              </Button>
+              <Button
+                style={{
+                  backgroundColor: "#cce6e8",
+                  border: "3px solid #299ea6",
+                }}
+                className="btn-sm text-dark"
+                variant="primary"
+                onClick={handleUpdateTag}
+              >
+                Update Tag Info
+              </Button>
+            </div>
+          </Form>
+        </Modal.Body>
+      </Modal>
+      {/* End Edit Tag Details Model */}
     </div>
   );
 };

@@ -40,7 +40,7 @@ class Login extends Component {
   }
 
   componentDidUpdate() {
-    const { errors, redirectToDashboard, ...valuesToStore } = this.state; // Exclude errors from values to store
+    const { errors, redirectToDashboard, ...valuesToStore } = this.state; // Exclude errors and redirectToDashboard from values to store
     localStorage.setItem("loginFormValues", JSON.stringify(valuesToStore));
   }
 

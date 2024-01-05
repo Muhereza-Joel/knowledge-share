@@ -5,6 +5,7 @@ import Home from "./home";
 import Questions from "./questions";
 import Tags from "./tags";
 import QuestionDetails from "./questionDetails";
+import AskQuestion from "./askQuestion";
 
 class Dashboard extends Component {
   constructor(props) {
@@ -17,7 +18,7 @@ class Dashboard extends Component {
 
   style = {
     backgroundColor: "#f6f9ff",
-    position: 'relative',
+    position: "relative",
   };
 
   panelStyle = {
@@ -26,15 +27,15 @@ class Dashboard extends Component {
 
   leftPanelStyle = {
     ...this.panelStyle,
-    position: 'sticky',
+    position: "sticky",
     top: 60,
-  }
+  };
 
   topPaneStyle = {
     width: "100%",
     height: "7vh",
-    zIndex: '3',
-    position: 'sticky',
+    zIndex: "3",
+    position: "sticky",
     top: 0,
   };
 
@@ -49,13 +50,25 @@ class Dashboard extends Component {
     // Determine which component to render based on the selectedComponent state
     switch (this.state.selectedComponent) {
       case "home":
-        return <Home username={`${this.props.username}`}/>;
+        return (
+          <Home
+            username={`${this.props.username}`}
+            onAskQuestionClick={this.handleNavLinkClick}
+          />
+        );
       case "questions":
-        return <Questions username={`${this.props.username}`} onQuestionClick={this.handleQuestionLinkClick} />;
+        return (
+          <Questions
+            username={`${this.props.username}`}
+            onQuestionClick={this.handleQuestionLinkClick}
+          />
+        );
       case "tags":
-        return <Tags username={`${this.props.username}`}/>;
+        return <Tags username={`${this.props.username}`} />;
       case "questionDetails":
-        return <QuestionDetails questionId={`${this.state.questionId}`}/>;
+        return <QuestionDetails questionId={`${this.state.questionId}`} />;
+      case "askQuestion":
+        return <AskQuestion />;
       default:
         return null;
     }
@@ -67,7 +80,6 @@ class Dashboard extends Component {
     });
     this.handleNavLinkClick("questionDetails");
     localStorage.setItem("selectedQuestionId", questionId);
-    
   };
 
   render() {
@@ -78,31 +90,44 @@ class Dashboard extends Component {
         <div className="row mx-0 mt-0" style={this.topPaneStyle}>
           <div className="card d-flex justify-content-center">
             <div className="d-flex">
-                <div className="w-25">
-                    <h5><span className="text-success">Knowledge</span>Share</h5>
-                </div>
+              <div className="w-25">
+                <h5>
+                  <span className="text-success">Knowledge</span>Share
+                </h5>
+              </div>
 
-                <div className="w-75 d-flex">
-                    <h6 className="mx-4">{username}</h6>
-                    <h6 className="mx-4"></h6>
-                    <h6 className="mx-2 ml-4">Notifications</h6>
-                    <h6 className="mx-2">Settings</h6>
-                    <h6 className="mx-2">Profile</h6>
+              <div className="w-75 d-flex">
+                <Nav.Item>
+                  <Nav.Link
+                    href={`/knowledge-share/${username}/`}
+                    className="text-info px-2 fw-bold text-dark"
+                    onClick={() => this.handleNavLinkClick("home")}
+                  >
+                    {username}
+                  </Nav.Link>
+                </Nav.Item>
 
-                </div>
+                <h6 className="mx-4"></h6>
+                <h6 className="mx-2 ml-4">Notifications</h6>
+                <h6 className="mx-2">Settings</h6>
+                <h6 className="mx-2">Profile</h6>
+              </div>
             </div>
           </div>
         </div>
         <div className="row g-0">
           <div className="col-lg-2">
-            <div className="d-flex flex-column p-2 m-2" style={this.leftPanelStyle}>
+            <div
+              className="d-flex flex-column p-2 m-2"
+              style={this.leftPanelStyle}
+            >
               <Nav.Item className="d-flex align-items-center mt-3">
                 <Nav.Link
-                  href={`/knowledge-share/${username}/`}
+                  href={`/knowledge-share/${username}/questions/ask-question/`}
                   className="text-info px-2 fw-bold text-dark"
-                  onClick={() => this.handleNavLinkClick("home")}
+                  onClick={() => this.handleNavLinkClick("askQuestion")}
                 >
-                  Home
+                  Ask Question
                 </Nav.Link>
               </Nav.Item>
 
@@ -112,7 +137,7 @@ class Dashboard extends Component {
                   className="text-info px-2 fw-bold text-dark"
                   onClick={() => this.handleNavLinkClick("questions")}
                 >
-                  Questions
+                  All Questions
                 </Nav.Link>
               </Nav.Item>
 
@@ -132,8 +157,6 @@ class Dashboard extends Component {
             <div id="content-section" className="row g-0">
               {/* Render the selected component */}
               {this.renderSelectedComponent()}
-
-              
             </div>
           </div>
         </div>

@@ -36,7 +36,7 @@ const Tags = (props) => {
         return;
       }
 
-      const response = await fetch("http://localhost:3001/api/tags/add-tag/", {
+      const response = await fetch("http://localhost:3001/api/v1/tags/add-tag/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -60,9 +60,20 @@ const Tags = (props) => {
     }
   };
 
-  const handleUpdate = (data) => {
-    setTagsData([data]);
+  const handleUpdate = (newTagData) => {
+    const index = tagsData.findIndex((tag) => tag.id === newTagData.id);
+
+    setTagsData((prevTags) => [
+      ...prevTags.slice(0, index),
+      newTagData,
+      ...prevTags.slice(index + 1),
+    ]);
   };
+
+  const handleDeleteTag = (tagId) => {
+    const updatedTags = tagsData.filter((tag) => tag.id !== tagId);
+    setTagsData(updatedTags);
+  }
 
   const handleShowModal = () => {
     setShowModal(true);
@@ -80,7 +91,7 @@ const Tags = (props) => {
     const fetchTags = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3001/api/tags/popular-tags/"
+          "http://localhost:3001/api/v1/tags/popular-tags/"
         );
 
         if (!response.ok) {
@@ -113,10 +124,10 @@ const Tags = (props) => {
 
   return (
     <div style={style}>
-        <TopBar username="muhereza-joel"/>
       <div className="row g-0">
+        <TopBar username="muhereza-joel" />
         <div className="col-sm-2">
-          <LeftSideBar username="muhereza-joel"/>
+          <LeftSideBar username="muhereza-joel" />
         </div>
         <div className="col-sm-10">
           <div>
@@ -165,6 +176,7 @@ const Tags = (props) => {
                           description={tag.description}
                           username={props.username}
                           onUpdate={handleUpdate}
+                          onDelete={handleDeleteTag}
                         />
                       </div>
                     </div>

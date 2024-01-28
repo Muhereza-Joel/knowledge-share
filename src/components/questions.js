@@ -19,7 +19,7 @@ const Questions = (props) => {
       try {
         const [questionsResponse, tagsResponse] = await Promise.all([
           fetch("http://localhost:3001/api/questions/all/"),
-          fetch("http://localhost:3001/api/tags/popular-tags/"),
+          fetch("http://localhost:3001/api/v1/tags/popular-tags/"),
         ]);
 
         if (!questionsResponse.ok || !tagsResponse.ok) {

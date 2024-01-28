@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Nav, Modal, Button, Form, Alert } from "react-bootstrap";
+import { Nav, Modal, Button, Form, Alert, ModalBody } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/css/bootstrap.css";
@@ -19,9 +19,18 @@ const PopularTag = ({
 
   const [showViewModel, setShowViewModel] = useState(false);
   const [showEditModel, setShowEditModel] = useState(false);
-  const [tagDetails, setTagDetails] = useState({id: id, title: title, description: description });
+  const [showConfirmDeleteModel, setShowConfirmDeleteModel] = useState(false);
+  const [tagDetails, setTagDetails] = useState({
+    id: id,
+    title: title,
+    description: description,
+  });
 
-  const [newTag, setNewTag] = useState({id: id, title: title, description: description });
+  const [newTag, setNewTag] = useState({
+    id: id,
+    title: title,
+    description: description,
+  });
   const [error, setError] = useState(null);
   const [validationError, setValidationError] = useState(null);
 
@@ -48,7 +57,7 @@ const PopularTag = ({
     setIsHovered(false);
     setTagDetails({});
     setNewTag({});
-    setValidationError(null)
+    setValidationError(null);
   };
 
   const handleView = () => {
@@ -67,7 +76,18 @@ const PopularTag = ({
   };
 
   const handleDelete = () => {
-    onDelete(id);
+    handleShowConfirmDeleteModel(true, { id, title, description });
+  };
+
+  const handleShowConfirmDeleteModel = (showModel, tagDetails) => {
+    setShowConfirmDeleteModel(showModel);
+    setTagDetails(tagDetails);
+  };
+
+  const handleCloseConfirmDeleteModel = () => {
+    setShowConfirmDeleteModel(false);
+    setIsHovered(false);
+    setTagDetails({});
   };
 
   const truncateText = (text, maxLength) => {
@@ -102,6 +122,33 @@ const PopularTag = ({
     setNewTag((prevTag) => ({ ...prevTag, [name]: value }));
   };
 
+  const handleDeleteTag = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/api/v1/tags/delete-tag/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(tagDetails),
+        mode: "cors",
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      onDelete(data.id);
+      toast.success("Tag Deleted successfully!", {
+        style: { backgroundColor: "#cce6e8", color: "#333" },
+      });
+
+      handleCloseConfirmDeleteModel();
+    } catch (error) {
+      setError(error.message);
+    }
+  }
+
   const handleUpdateTag = async () => {
     try {
       // Validate form fields
@@ -110,7 +157,7 @@ const PopularTag = ({
         return;
       }
 
-      const response = await fetch("http://localhost:3001/api/tags/edit-tag/", {
+      const response = await fetch("http://localhost:3001/api/v1/tags/edit-tag/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -123,18 +170,17 @@ const PopularTag = ({
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
-      const data = await response.json();
-      onUpdate(data);
+      const newTagData = await response.json();
+      onUpdate(newTagData);
       toast.success("Tag Details Updated successfully!", {
         style: { backgroundColor: "#cce6e8", color: "#333" },
       });
 
       handleCloseEditModel();
-
     } catch (error) {
-      setError(error.message)
+      setError(error.message);
     }
-  }
+  };
 
   return (
     <div
@@ -240,7 +286,7 @@ const PopularTag = ({
           )}
           <Form>
             <Form.Group className="mb-0" controlId="editTagName">
-            <Form.Control
+              <Form.Control
                 type="hidden"
                 placeholder="Enter tag name"
                 name="tagId"
@@ -291,6 +337,41 @@ const PopularTag = ({
         </Modal.Body>
       </Modal>
       {/* End Edit Tag Details Model */}
+
+      {/* Start Confirm Delete Model */}
+      <Modal show={showConfirmDeleteModel} onHide={handleCloseConfirmDeleteModel}>
+        <Modal.Body
+          style={{
+            backgroundColor: "#f6f9ff",
+            borderRadius: "5px",
+            border: "5px solid #cce6e8",
+          }}
+        >
+          <h5 className="text-secondary">Are you sure you want to delete this tag?</h5>
+          <hr></hr>
+          <small className="text-warning">Caution:</small>
+          <p className="mt-1">Deleting this tag will also delete all data associated with this tag. Note that this action is undoable..</p>
+
+          <div className="text-end">
+            <Button
+              className="btn-sm"
+              variant="secondary"
+              onClick={handleCloseConfirmDeleteModel}
+            >
+              Close
+            </Button>
+
+            <Button
+              className="btn-sm ms-2"
+              variant="danger"
+              onClick={handleDeleteTag}
+            >
+              Yes, Delete Tag.
+            </Button>
+          </div>
+        </Modal.Body>
+      </Modal>
+      {/* End Confirm Delete Model */}
     </div>
   );
 };

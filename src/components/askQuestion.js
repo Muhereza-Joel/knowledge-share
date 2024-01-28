@@ -18,7 +18,7 @@ const AskQuestion = (props) => {
   const fetchSuggestedTags = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3001/api/tags/popular-tags?query=${searchInput}`
+        `http://localhost:3001/api/v1/tags/popular-tags?query=${searchInput}`
       );
       const data = await response.json();
       setSuggestedTags(data);

@@ -94,7 +94,7 @@ const AskQuestion = (props) => {
   return (
     <div style={style}>
       <TopBar username={props.username} />
-      <div className="row">
+      <div className="row g-0">
         <div className="col-sm-2">
           <LeftSideBar username={props.username} />
         </div>

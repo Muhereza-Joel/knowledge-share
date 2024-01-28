@@ -4,7 +4,7 @@ import Tag from "./tag";
 import TopBar from "./topBar";
 import LeftSideBar from "./leftSideBar";
 
-const QuestionDetails = ({ username, onQuestionClick }) => {
+const QuestionDetails = (props, { username, onQuestionClick }) => {
   const [questionDetails, setQuestionDetails] = useState({});
   const [isHovered, setIsHovered] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -52,10 +52,10 @@ const QuestionDetails = ({ username, onQuestionClick }) => {
 
   return (
     <div style={style}>
-      <TopBar username="muhereza-joel" />
+      <TopBar username={props.username} />
       <div className="row">
         <div className="col-sm-2">
-          <LeftSideBar username="muhereza-joel" />
+          <LeftSideBar username={props.username} />
         </div>
         <div className="col-sm-10">
           <div className="mt-4 p-2">

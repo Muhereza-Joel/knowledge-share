@@ -66,7 +66,7 @@ class Dashboard extends Component {
 
     return (
       <div style={this.style}>
-        <TopBar username="muhereza-joel" />
+        <TopBar username={username} />
         <div className="row g-0">
           <div className="col-lg-2">
             <LeftSideBar

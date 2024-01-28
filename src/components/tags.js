@@ -125,9 +125,9 @@ const Tags = (props) => {
   return (
     <div style={style}>
       <div className="row g-0">
-        <TopBar username="muhereza-joel" />
+        <TopBar username={props.username} />
         <div className="col-sm-2">
-          <LeftSideBar username="muhereza-joel" />
+          <LeftSideBar username={props.username} />
         </div>
         <div className="col-sm-10">
           <div>

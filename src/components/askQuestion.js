@@ -93,10 +93,10 @@ const AskQuestion = (props) => {
 
   return (
     <div style={style}>
-      <TopBar username="muhereza-joel" />
+      <TopBar username={props.username} />
       <div className="row">
         <div className="col-sm-2">
-          <LeftSideBar username="muhereza-joel" />
+          <LeftSideBar username={props.username} />
         </div>
         <div className="col-sm-10">
           <div className="mt-2 p-2">

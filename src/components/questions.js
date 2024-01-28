@@ -65,10 +65,10 @@ const Questions = (props) => {
 
   return (
     <div style={style}>
-      <TopBar username="muhereza-joel"/>
+      <TopBar username={props.username}/>
       <div className="row g-0">
         <div className="col-lg-2">
-          <LeftSideBar username="muhereza-joel"/>
+          <LeftSideBar username={props.username}/>
         </div>
         <div className="col-lg-10">
           <div id="content-section" className="row g-0">

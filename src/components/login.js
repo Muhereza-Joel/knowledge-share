@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { Nav } from "react-bootstrap";
+import { isAuthenticated, login } from "../auth"
 
 class Login extends Component {
   style = {
@@ -85,35 +86,20 @@ class Login extends Component {
     const { email, password } = this.state;
 
     if (Object.keys(errors).length === 0) {
-      try {
-        const response = await fetch("http://localhost:3001/api/auth/login/", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
-          mode: "cors",
-        });
+      const authenticationResult = await login(email, password);
 
-        const result = await response.json();
+      if (authenticationResult) {
+        // Authentication successful
+        this.setState({ isLoggedIn: true });
 
-        if (response.ok) {
-
-          if (result.success) {
-            this.setState({ isLoggedIn: true });
-            setTimeout(() => {
-              this.setState({
-                redirectToDashboard: true,
-                username: result.username,
-              });
-            }, 2000)
-          
-          } 
-        } else {
-          alert("Login failed. Invalid credentials.");
-        }
-      } catch (error) {
-        console.error("Error:", error);
+        setTimeout(() => {
+          this.setState({
+            redirectToDashboard: true,
+          });
+        }, 10);
+      } else {
+        // Authentication failed
+        alert("Login failed. Invalid credentials.");
       }
     }
 
@@ -122,10 +108,10 @@ class Login extends Component {
   };
 
   render() {
-    const { errors, redirectToDashboard, username } = this.state;
+    const { errors, redirectToDashboard} = this.state;
 
     if (redirectToDashboard) {
-      return <Navigate to={`/knowledge-share/${username}`} />;
+      return <Navigate to={`/knowledge-share/`} />;
     }
 
     return (

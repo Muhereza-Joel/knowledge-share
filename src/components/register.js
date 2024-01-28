@@ -92,28 +92,28 @@ class Register extends Component {
 
   handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     const errors = {};
-
+  
     if (!this.state.username.trim()) {
       errors.username = "Username is required";
     }
-
+  
     if (!this.state.email.trim()) {
       errors.email = "Email is required";
     } else if (!this.validateEmail(this.state.email)) {
       errors.email = "Invalid email address";
     }
-
+  
     if (!this.state.password.trim()) {
       errors.password = "Password is required";
     }
-
+  
     const { username, email, password } = this.state;
-
+  
     if (Object.keys(errors).length === 0) {
       try {
-        const response = await fetch("http://localhost:3001/api/auth/register", {
+        const response = await fetch("http://localhost:3001/api/v1/auth/register", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -121,11 +121,12 @@ class Register extends Component {
           body: JSON.stringify({ username, email, password }),
           mode: "cors",
         });
-
+  
         const data = await response.json();
-
+  
         if (response.ok) {
-          if (data.success) {
+          if (!data.user || !data.user.errors) {
+            // Redirect only if there are no errors in the response
             this.setState({
               alert: {
                 show: true,
@@ -133,12 +134,29 @@ class Register extends Component {
                 message: "Registration successful! redirecting...",
               },
             });
-
+  
             setTimeout(() => {
               this.setState({
                 redirectToLogin: true,
               });
-            }, 2000)
+            }, 2000);
+          } else {
+            // Handle errors from the backend response
+            const backendErrors = data.user.errors;
+            if (backendErrors.email) {
+              errors.email = backendErrors.email;
+            }
+            if (backendErrors.username) {
+              errors.username = backendErrors.username;
+            }
+  
+            this.setState({
+              alert: {
+                show: true,
+                type: "danger",
+                message: "Registration failed,please check the form for errors.",
+              },
+            });
           }
         } else {
           this.setState({
@@ -160,9 +178,10 @@ class Register extends Component {
         });
       }
     }
-
+  
     this.setState({ errors });
   };
+  
 
   render() {
     const { errors, alert, redirectToLogin} = this.state;

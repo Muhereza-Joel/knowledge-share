@@ -2,6 +2,8 @@ import React, { useState, useEffect, memo } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import QuestionCard from "./questionCard";
 import PopularTag from "./popularTag";
+import TopBar from "./topBar";
+import LeftSideBar from "./leftSideBar";
 
 const Questions = (props) => {
   const [state, setState] = useState({
@@ -53,12 +55,22 @@ const Questions = (props) => {
     minHeight: "90vh",
   };
 
+  const style = {
+    backgroundColor: "#f6f9ff",
+    position: "relative",
+  };
+
+
   const { questionData, popularTagsData, loading, error } = state;
 
   return (
-    <div>
+    <div style={style}>
+      <TopBar username="muhereza-joel"/>
       <div className="row g-0">
-        <div className="col-lg-12">
+        <div className="col-lg-2">
+          <LeftSideBar username="muhereza-joel"/>
+        </div>
+        <div className="col-lg-10">
           <div id="content-section" className="row g-0">
             <div className="col-lg-9">
               <div
@@ -76,7 +88,7 @@ const Questions = (props) => {
                       key={index}
                       {...question}
                       username={`${props.username}`}
-                      onQuestionClick={props.onQuestionClick}
+                      
                     />
                   ))}
                 </div>

@@ -4,6 +4,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/css/bootstrap.css";
 import PopularTag from "./popularTag";
+import LeftSideBar from "./leftSideBar";
+import TopBar from "./topBar";
 
 const Tags = (props) => {
   const [tagsData, setTagsData] = useState([]);
@@ -60,7 +62,7 @@ const Tags = (props) => {
 
   const handleUpdate = (data) => {
     setTagsData([data]);
-  }
+  };
 
   const handleShowModal = () => {
     setShowModal(true);
@@ -104,133 +106,148 @@ const Tags = (props) => {
     setFilteredTags(filtered);
   }, [searchTerm, tagsData]);
 
-  return (
-    <div>
-      <div id="content-section">
-        <div
-          id="middle-panel"
-          className="card p-2 m-2"
-          style={{ minHeight: "90vh" }}
-        >
-          <div className="d-flex mb-3">
-            <div className="pt-2 h5 m-2 mx-3">All Tags</div>
-            <div className="w-75 pt-2" id="search">
-              <Form.Control
-                type="text"
-                style={{
-                  backgroundColor: "#f6f9ff",
-                  border: "2px solid #cce6e8",
-                }}
-                placeholder="Search by tag name"
-                value={searchTerm}
-                onChange={handleSearch}
-              />
-            </div>
-            <div className="mx-3 text-end pt-2">
-              <Button
-                style={{
-                  backgroundColor: "#cce6e8",
-                  border: "6px solid #e0f8ff",
-                }}
-                className="btn btn-secondary btn-sm text-dark fw-bold"
-                onClick={handleShowModal}
-              >
-                Add New Tag
-              </Button>
-            </div>
-          </div>
+  const style = {
+    backgroundColor: "#f6f9ff",
+    position: "relative",
+  };
 
-          <div className="row g-0">
-            {filteredTags.map((tag, index) => (
-              <div className="col-lg-3" key={tag.id}>
-                <div className="card p-3 m-2">
-                  <PopularTag
-                    key={tag.id}
-                    id={tag.id}
-                    title={tag.name}
-                    description={tag.description}
-                    username={props.username}
-                    onUpdate = {handleUpdate}
-                  />
+  return (
+    <div style={style}>
+      <div className="row">
+        <TopBar username="muhereza-joel"/>
+        <div className="col-sm-2">
+          <LeftSideBar username="muhereza-joel"/>
+        </div>
+        <div className="col-sm-10">
+          <div>
+            <div id="content-section">
+              <div
+                id="middle-panel"
+                className="card p-2 m-2"
+                style={{ minHeight: "90vh" }}
+              >
+                <div className="d-flex mb-3">
+                  <div className="pt-2 h5 m-2 mx-3">All Tags</div>
+                  <div className="w-75 pt-2" id="search">
+                    <Form.Control
+                      type="text"
+                      style={{
+                        backgroundColor: "#f6f9ff",
+                        border: "2px solid #cce6e8",
+                      }}
+                      placeholder="Search by tag name"
+                      value={searchTerm}
+                      onChange={handleSearch}
+                    />
+                  </div>
+                  <div className="mx-3 text-end pt-2">
+                    <Button
+                      style={{
+                        backgroundColor: "#cce6e8",
+                        border: "6px solid #e0f8ff",
+                      }}
+                      className="btn btn-secondary btn-sm text-dark fw-bold"
+                      onClick={handleShowModal}
+                    >
+                      Add New Tag
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="row g-0">
+                  {filteredTags.map((tag, index) => (
+                    <div className="col-lg-3" key={tag.id}>
+                      <div className="card p-3 m-2">
+                        <PopularTag
+                          key={tag.id}
+                          id={tag.id}
+                          title={tag.name}
+                          description={tag.description}
+                          username={props.username}
+                          onUpdate={handleUpdate}
+                        />
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
-            ))}
+            </div>
+
+            {/* Toast container */}
+            <ToastContainer
+              position="bottom-left"
+              autoClose={3000}
+              hideProgressBar={false}
+              newestOnTop
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+            />
+
+            <Modal show={showModal} onHide={handleCloseModal}>
+              <Modal.Body
+                style={{
+                  backgroundColor: "#f6f9ff",
+                  borderRadius: "5px",
+                  border: "5px solid #cce6e8",
+                }}
+              >
+                {validationError && (
+                  <Alert variant="danger" className="p-1">
+                    {validationError}
+                  </Alert>
+                )}
+                <Form>
+                  <Form.Group className="mb-0" controlId="tagName">
+                    <Form.Label>Tag Name</Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="Enter tag name"
+                      name="name"
+                      value={newTag.name}
+                      onChange={handleInputChange}
+                    />
+                  </Form.Group>
+
+                  <Form.Group className="mb-0" controlId="tagDescription">
+                    <Form.Label>Description</Form.Label>
+                    <Form.Control
+                      as="textarea"
+                      rows={3}
+                      placeholder="Enter tag description"
+                      name="description"
+                      value={newTag.description}
+                      onChange={handleInputChange}
+                    />
+                  </Form.Group>
+                  <div className="text-end mt-3">
+                    <Button
+                      className="btn-sm mx-2"
+                      variant="secondary"
+                      onClick={handleCloseModal}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      style={{
+                        backgroundColor: "#cce6e8",
+                        border: "3px solid #299ea6",
+                      }}
+                      className="btn-sm text-dark"
+                      variant="primary"
+                      onClick={handleAddTag}
+                    >
+                      Save Tag Info
+                    </Button>
+                  </div>
+                </Form>
+              </Modal.Body>
+            </Modal>
           </div>
         </div>
       </div>
-
-      {/* Toast container */}
-      <ToastContainer
-        position="bottom-left"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
-
-      <Modal show={showModal} onHide={handleCloseModal}>
-        <Modal.Body
-          style={{
-            backgroundColor: "#f6f9ff",
-            borderRadius: "5px",
-            border: "5px solid #cce6e8",
-          }}
-        >
-          {validationError && (
-            <Alert variant="danger" className="p-1">
-              {validationError}
-            </Alert>
-          )}
-          <Form>
-            <Form.Group className="mb-0" controlId="tagName">
-              <Form.Label>Tag Name</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter tag name"
-                name="name"
-                value={newTag.name}
-                onChange={handleInputChange}
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-0" controlId="tagDescription">
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={3}
-                placeholder="Enter tag description"
-                name="description"
-                value={newTag.description}
-                onChange={handleInputChange}
-              />
-            </Form.Group>
-            <div className="text-end mt-3">
-              <Button
-                className="btn-sm mx-2"
-                variant="secondary"
-                onClick={handleCloseModal}
-              >
-                Cancel
-              </Button>
-              <Button
-                style={{
-                  backgroundColor: "#cce6e8",
-                  border: "3px solid #299ea6",
-                }}
-                className="btn-sm text-dark"
-                variant="primary"
-                onClick={handleAddTag}
-              >
-                Save Tag Info
-              </Button>
-            </div>
-          </Form>
-        </Modal.Body>
-      </Modal>
     </div>
   );
 };

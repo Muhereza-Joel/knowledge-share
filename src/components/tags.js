@@ -113,8 +113,8 @@ const Tags = (props) => {
 
   return (
     <div style={style}>
-      <div className="row">
         <TopBar username="muhereza-joel"/>
+      <div className="row g-0">
         <div className="col-sm-2">
           <LeftSideBar username="muhereza-joel"/>
         </div>

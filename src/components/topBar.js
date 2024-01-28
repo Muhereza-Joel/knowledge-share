@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.css";
 
 const TopBar = (props) => {
   const topPaneStyle = {
-    width: "100vw",
+    width: "98vw",
     height: "7vh",
     zIndex: "3",
     position: "sticky",

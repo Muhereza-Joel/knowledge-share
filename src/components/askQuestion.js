@@ -9,32 +9,35 @@ import LeftSideBar from "./leftSideBar";
 import TopBar from "./topBar";
 
 const AskQuestion = (props) => {
+  const [isQuestionSubmitted, setIsQuestionSubmitted] = useState(false);
+  const [questionTitle, setQuestionTitle] = useState("");
   const [description, setDescription] = useState("");
   const [searchInput, setSearchInput] = useState("");
   const [suggestedTags, setSuggestedTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
+  const [selectedTagsData, setSelectedTagsData] = useState([]);
   const [images, setImages] = useState([]);
 
   const fetchSuggestedTags = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3001/api/v1/tags/popular-tags?query=${searchInput}`
+        `http://localhost:3001/api/v1/tags/all?query=${searchInput}`
       );
       const data = await response.json();
-      setSuggestedTags(data);
+
+      const tagsWithIds = data.map((tag) => ({ id: tag.id, name: tag.name }));
+      setSuggestedTags(tagsWithIds);
     } catch (error) {
       console.error("Error fetching suggested tags:", error);
     }
   };
 
   // Debounce the fetchSuggestedTags function to avoid rapid API calls
-  const debouncedFetch = debounce(fetchSuggestedTags, 300);
+  const debouncedFetch = debounce(fetchSuggestedTags, 1000);
 
   useEffect(() => {
     if (searchInput.length > 0) {
       debouncedFetch();
-    } else {
-      setSuggestedTags([]);
     }
 
     // Cleanup function to cancel debouncedFetch when component unmounts
@@ -42,6 +45,10 @@ const AskQuestion = (props) => {
       debouncedFetch.cancel();
     };
   }, [searchInput, debouncedFetch]);
+
+  const handleQuestionTitleChange = (value) => {
+    setQuestionTitle(value);
+  };
 
   const handleDescriptionChange = (value) => {
     setDescription(value);
@@ -53,12 +60,18 @@ const AskQuestion = (props) => {
   };
 
   const handleTagClick = (tag) => {
-    if (selectedTags.includes(tag)) {
+    const tagId = tag.id;
+
+    if (selectedTags.includes(tagId)) {
       setSelectedTags(
-        selectedTags.filter((selectedTag) => selectedTag !== tag)
+        selectedTags.filter((selectedTag) => selectedTag !== tagId)
+      );
+      setSelectedTagsData(
+        selectedTagsData.filter((selectedTag) => selectedTag.id !== tagId)
       );
     } else {
-      setSelectedTags([...selectedTags, tag]);
+      setSelectedTags([...selectedTags, tagId]);
+      setSelectedTagsData([...selectedTagsData, tag]);
     }
   };
 
@@ -91,6 +104,65 @@ const AskQuestion = (props) => {
     position: "relative",
   };
 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    if (isQuestionSubmitted) {
+      alert("This question has already been submitted.");
+      return;
+    }
+
+    // Check if required fields are filled
+    if (!questionTitle || !description || selectedTags.length === 0) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+
+    // Prepare the data for submission
+    const formData = new FormData();
+    formData.append("questionTitle", questionTitle);
+    formData.append("description", description);
+    formData.append("tags", JSON.stringify(selectedTags));
+
+    // Append each image file to the form data
+  images.forEach((image, index) => {
+    formData.append(`images`, image);
+  });
+
+    try {
+      // Submit the form data to the server
+      const response = await fetch(
+        "http://localhost:3001/api/questions/add",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      if (response.ok) {
+        // Handle success (you may redirect or perform other actions)
+        alert("Question submitted successfully!");
+
+        setIsQuestionSubmitted(true); // Update the state to indicate question submission
+
+        // Reset form inputs and state variables
+        setQuestionTitle("");
+        setDescription("");
+        setSearchInput("");
+        setSuggestedTags([]);
+        setSelectedTags([]);
+        setSelectedTagsData([]);
+        setImages([]);
+      } else {
+        // Handle error
+        alert("Failed to submit question. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error submitting question:", error);
+      alert("An unexpected error occurred. Please try again later.");
+    }
+  };
+
   return (
     <div style={style}>
       <TopBar username={props.username} />
@@ -115,7 +187,7 @@ const AskQuestion = (props) => {
             </div>
 
             <div className="my-2">
-              <Form>
+              <Form onSubmit={handleSubmit} encType="multipart/form-data">
                 <Form.Group
                   className="mb-0 p-4 card"
                   controlId="questionDescription"
@@ -124,12 +196,23 @@ const AskQuestion = (props) => {
                     Compose Your Question
                   </Form.Label>
 
+                  <Form.Control
+                    value={questionTitle}
+                    type="text"
+                    className="my-3"
+                    placeholder="Enter question title here"
+                    name="question-title"
+                    onChange={(e) => handleQuestionTitleChange(e.target.value)}
+                    required
+                  />
+
                   <ReactQuill
                     value={description}
                     onChange={handleDescriptionChange}
                     placeholder="Describe your issue or challenge you are currently facing and later associate it with any tags..."
                     name="description"
                     style={quillEditorStyle}
+                    required
                   />
                 </Form.Group>
                 <Form.Group className="p-4 card mt-2">
@@ -153,36 +236,44 @@ const AskQuestion = (props) => {
                   <div>
                     {searchInput.length > 0 && (
                       <div>
-                        {suggestedTags.map((tag) => (
-                          <span
-                            key={tag.id} // or use a unique key property from your data
-                            className={`tag ${
-                              selectedTags.includes(tag.name) ? "selected" : ""
-                            }`}
-                            onClick={() => handleTagClick(tag.name)}
-                            style={{
-                              backgroundColor: selectedTags.includes(tag.name)
-                                ? "#299ea6"
-                                : "#666",
-                              color: selectedTags.includes(tag.name)
-                                ? "#fff"
-                                : "#fff",
-                              border: selectedTags.includes(tag.name)
-                                ? "3px solid #299ea6"
-                                : "3px solid #299ea6",
-                              margin: "0px 3px",
-                              padding: "0px 3px",
-                              borderRadius: "10px",
-                            }}
-                          >
-                            <small>{tag.name}</small>
-                          </span>
-                        ))}
+                        {searchInput.length > 0 && (
+                          <div>
+                            {suggestedTags.map((tag) => (
+                              <span
+                                key={tag.id}
+                                className={`tag ${
+                                  selectedTags.includes(tag.id)
+                                    ? "selected"
+                                    : ""
+                                }`}
+                                onClick={() => handleTagClick(tag)}
+                                style={{
+                                  backgroundColor: selectedTags.includes(tag.id)
+                                    ? "#299ea6"
+                                    : "#666",
+                                  color: selectedTags.includes(tag.id)
+                                    ? "#fff"
+                                    : "#fff",
+                                  border: selectedTags.includes(tag.id)
+                                    ? "3px solid #299ea6"
+                                    : "3px solid #299ea6",
+                                  margin: "0px 3px",
+                                  padding: "0px 3px",
+                                  borderRadius: "10px",
+                                }}
+                              >
+                                <small>{tag.name}</small>
+                              </span>
+                            ))}
 
-                        {selectedTags.length === 0 && (
-                          <p style={{ color: "#FF0000", marginTop: "10px" }}>
-                            Please select at least one tag.
-                          </p>
+                            {selectedTags.length === 0 && (
+                              <p
+                                style={{ color: "#FF0000", marginTop: "10px" }}
+                              >
+                                Please select at least one tag.
+                              </p>
+                            )}
+                          </div>
                         )}
                       </div>
                     )}
@@ -190,14 +281,14 @@ const AskQuestion = (props) => {
 
                   {/* Display selected tags in the div below the search input */}
 
-                  {selectedTags.length > 0 && (
+                  {selectedTagsData.length > 0 && (
                     <div className="d-flex flex-column mt-4 alert alert-success">
                       <Form.Label className="mt-0 mb-1 text-muted h4">
                         Tags you have selected
                       </Form.Label>
                       <div className="d-flex">
-                        {selectedTags.map((tag) => (
-                          <Tag key={tag} text={tag} />
+                        {selectedTagsData.map((tag) => (
+                          <Tag key={tag.id} text={tag.name} />
                         ))}
                       </div>
                     </div>
@@ -214,6 +305,7 @@ const AskQuestion = (props) => {
                     accept="image/jpg"
                     multiple
                     onChange={handleImageChange}
+                    name="images"
                   />
 
                   {/* Display selected images */}
@@ -268,7 +360,11 @@ const AskQuestion = (props) => {
                   )}
                 </Form.Group>
                 <div className="mt-4">
-                  <Button className="btn-sm mx-1" variant="primary">
+                  <Button
+                    type="submit"
+                    className="btn-sm mx-1"
+                    variant="primary"
+                  >
                     Submit Your Question
                   </Button>
                 </div>

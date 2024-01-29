@@ -2,6 +2,7 @@ import React, { useState, useEffect, memo } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import { Nav } from "react-bootstrap";
 import Tag from "./tag";
+import { useNavigate } from "react-router-dom";
 
 
 const QuestionCard = ({
@@ -15,6 +16,7 @@ const QuestionCard = ({
   onQuestionClick,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const navigate = useNavigate();
 
   const questionUrl = `/knowledge-share/${username}/questions/${questionId}`;
 
@@ -34,6 +36,7 @@ const QuestionCard = ({
   const handleClick = () => {
     // Call the callback function passed from Dashboard
     onQuestionClick && onQuestionClick(questionId);
+    navigate(`/knowledge-share/${username}/questions/${questionId}`);
   };
 
   return (

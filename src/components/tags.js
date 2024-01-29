@@ -91,7 +91,7 @@ const Tags = (props) => {
     const fetchTags = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3001/api/v1/tags/popular-tags/"
+          "http://localhost:3001/api/v1/tags/all/"
         );
 
         if (!response.ok) {
@@ -134,7 +134,7 @@ const Tags = (props) => {
             <div id="content-section">
               <div
                 id="middle-panel"
-                className="card p-2 m-2"
+                className=" p-2 m-2"
                 style={{ minHeight: "90vh" }}
               >
                 <div className="d-flex mb-3">

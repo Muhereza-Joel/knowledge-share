@@ -78,7 +78,7 @@ class Dashboard extends Component {
           <div className="col-lg-10">
             <div id="content-section" className="row g-0">
               <Home
-                username={`${this.props.username}`}
+                username={username}
                 onAskQuestionClick={this.handleNavLinkClick}
               />
             </div>

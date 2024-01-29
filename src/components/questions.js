@@ -18,7 +18,7 @@ const Questions = (props) => {
     const fetchData = async () => {
       try {
         const [questionsResponse, tagsResponse] = await Promise.all([
-          fetch("http://localhost:3001/api/questions/all/"),
+          fetch("http://localhost:3001/api/v1/questions/all/"),
           fetch("http://localhost:3001/api/v1/tags/popular-tags/"),
         ]);
 

@@ -4,36 +4,8 @@ import Tag from "./tag";
 import TopBar from "./topBar";
 import LeftSideBar from "./leftSideBar";
 
-const QuestionDetails = (props, { username, onQuestionClick }) => {
-  const [questionDetails, setQuestionDetails] = useState({});
+const QuestionDetails = ({ username, questionDetails }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const questionUrl = `/knowledge-share/${username}/questions/?questionId`;
-
-  useEffect(() => {
-    const fetchQuestionDetails = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:3001/api/questions/question/a19d9e44-0326-46ee-8f98-52600edc17e2`
-        );
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        setQuestionDetails(data[0]);
-        setLoading(false);
-      } catch (error) {
-        setError(error.message);
-        setLoading(false);
-      }
-    };
-
-    fetchQuestionDetails();
-    setIsHovered(false);
-  }, []);
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -43,59 +15,55 @@ const QuestionDetails = (props, { username, onQuestionClick }) => {
     setIsHovered(false);
   };
 
-  
-
- const style = {
+  const style = {
     backgroundColor: "#f6f9ff",
     position: "relative",
   };
 
+  // Check if questionDetails is defined before destructuring
+  const { questionTitle, tags, votes, answers, views, description, images } =
+    questionDetails || {};
+
   return (
     <div style={style}>
-      <TopBar username={props.username} />
-      <div className="row">
+      <TopBar username={username} />
+      <div className="row g-0">
         <div className="col-sm-2">
-          <LeftSideBar username={props.username} />
+          <LeftSideBar username={username} />
         </div>
         <div className="col-sm-10">
-          <div className="mt-4 p-2">
-            <h4>Question Details</h4>
-
+          <div className="mt-0 p-2">
             <div className="row g-0">
-              <div className="col-lg-8">
+              <div className="col-lg-9">
                 <div>
                   <div
                     className="card p-3"
                     onMouseEnter={handleMouseEnter}
                     onMouseLeave={handleMouseLeave}
                   >
+                    <h4>Question Details</h4>
                     <div className="text-primary">
+                      {/* Use optional chaining to access nested properties */}
                       <p className="fw-bold text-secondary h5">
-                        {questionDetails.questionTitle}
+                        {questionTitle}
                       </p>
                       <div className="d-flex flex-row  align-items-center">
-                        <div className="mx-1">
-                          {questionDetails.answers} Answers
-                        </div>
-                        <div className="mx-1">
-                          {questionDetails.votes} Votes
-                        </div>
-                        <div className="mx-1">
-                          {questionDetails.views} Views
-                        </div>
+                        <div className="mx-1">{answers} Answers</div>
+                        <div className="mx-1">{votes} Votes</div>
+                        <div className="mx-1">{views} Views</div>
                       </div>
                       <hr></hr>
 
-                      <p className="text-secondary">
-                        {questionDetails.descrption}
-                      </p>
+                      <div
+                        className="text-secondary"
+                        dangerouslySetInnerHTML={{ __html: description }}
+                      />
                       <hr></hr>
                     </div>
 
                     <div className="d-flex mt-2">
-                      {questionDetails.tags &&
-                      questionDetails.tags.length > 0 ? (
-                        questionDetails.tags.map((tag, index) => (
+                      {tags && tags.length > 0 ? (
+                        tags.map((tag, index) => (
                           <Tag
                             key={index}
                             text={tag.name}
@@ -111,14 +79,32 @@ const QuestionDetails = (props, { username, onQuestionClick }) => {
 
                   <div className="h5 mt-4">Add Your Answer?</div>
                   <div className="px-0">
-                    <textarea className="card" rows={8} cols={102}></textarea>
+                    <textarea
+                      className="card w-100"
+                      rows={8}
+                      cols={102}
+                    ></textarea>
                     <button className="btn btn-sm btn-secondary mt-2 mb-3">
                       Submit Answer
                     </button>
                   </div>
                 </div>
               </div>
-              <div className="col-lg-4"></div>
+              <div className="col-lg-3">
+              <div className="d-flex flex-column justify-content-center">
+            {/* Conditionally render images if available */}
+            {images &&
+              images.length > 0 &&
+              images.map((image, index) => (
+                <img
+                  key={index}
+                  src={image.url}
+                  alt={`Image ${index + 1}`}
+                  className="img-fluid mx-3 mb-2"
+                />
+              ))}
+          </div>
+              </div>
             </div>
           </div>
         </div>

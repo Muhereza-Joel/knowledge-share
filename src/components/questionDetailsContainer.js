@@ -32,7 +32,6 @@ const QuestionDetailsContainer = ({ username }) => {
         }
 
         const data = await response.json();
-        console.log(data);
         setQuestionDetails(data);
       } catch (error) {
         setError(error.message);

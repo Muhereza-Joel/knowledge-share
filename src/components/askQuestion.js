@@ -118,26 +118,32 @@ const AskQuestion = (props) => {
       return;
     }
 
+    const userId = localStorage.getItem("userId");
+
+    // Check if userId is available
+    if (!userId) {
+      alert("User information not available. Please log in.");
+      return;
+    }
+
     // Prepare the data for submission
     const formData = new FormData();
     formData.append("questionTitle", questionTitle);
     formData.append("description", description);
     formData.append("tags", JSON.stringify(selectedTags));
+    formData.append("userId", userId);
 
     // Append each image file to the form data
-  images.forEach((image, index) => {
-    formData.append(`images`, image);
-  });
+    images.forEach((image, index) => {
+      formData.append(`images`, image);
+    });
 
     try {
       // Submit the form data to the server
-      const response = await fetch(
-        "http://localhost:3001/api/questions/add",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      const response = await fetch("http://localhost:3001/api/v1/questions/add", {
+        method: "POST",
+        body: formData,
+      });
 
       if (response.ok) {
         // Handle success (you may redirect or perform other actions)

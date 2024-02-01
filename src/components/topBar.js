@@ -1,11 +1,8 @@
-import React from "react";
-import { Nav } from "react-bootstrap";
+import React, {useState} from "react";
 import "bootstrap/dist/css/bootstrap.css";
-import { useNavigate } from "react-router-dom";
-import { logout } from "../auth";
+import SplitDropdown from "./SplitDropdown";
 
 const TopBar = (props) => {
-  const navigate = useNavigate();
 
   const topPaneStyle = {
     width: "98vw",
@@ -14,14 +11,6 @@ const TopBar = (props) => {
     position: "sticky",
     top: 0,
     backgroundColor: "#f6f9ff",
-  };
-
-  const handleLogout = () => {
-    // Call the logout function from auth.js
-    logout();
-
-    // Redirect to /auth/login/
-    navigate("/auth/login");
   };
 
 
@@ -44,21 +33,7 @@ const TopBar = (props) => {
           </div>
 
           <div className="w-25 text-end">
-          <Nav.Item>
-              <Nav.Link
-                href={`/knowledge-share/${props.username}/`}
-                className="text-info px-2 fw-bold text-dark"
-              >
-                {props.username}
-              </Nav.Link>
-            </Nav.Item>
-          <h6
-          className="mx-2"
-          onClick={handleLogout}
-          style={{ cursor: "pointer" }}
-        >
-          Sign Out
-          </h6>
+            <SplitDropdown username={props.username}/>
           </div>
         
     </div>

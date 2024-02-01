@@ -3,6 +3,9 @@ import "bootstrap/dist/css/bootstrap.css";
 import { Nav } from "react-bootstrap";
 import Tag from "./tag";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
+import Avator from "../assets/images/MyImage.jpg";
+import QuestionMoment from "./questionMoment";
 
 
 const QuestionCard = ({
@@ -13,6 +16,7 @@ const QuestionCard = ({
   votes,
   answers,
   views,
+  created_at,
   onQuestionClick,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -41,10 +45,12 @@ const QuestionCard = ({
 
   return (
     <div
-      className="card p-3 my-1"
+      className="card px-3 py-2 my-1"
       style={{
         backgroundColor: isHovered ? "#f6f9ff" : "transparent",
         transition: "border 0.3s ease",
+        border: "none",
+        borderRadius: "0px"
       }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -52,9 +58,9 @@ const QuestionCard = ({
       <div className="row g-0">
         <div className="col-sm-2">
           <div className="d-flex flex-column">
-            <div>{votes} Votes</div>
-            <div>{answers} Answers</div>
-            <div>{views} Views</div>
+            <div><span className="fw-bold">{votes}</span> Votes</div>
+            <div><span className="fw-bold">{answers}</span> Answers</div>
+            <div><span className="fw-bold">{views}</span> Views</div>
           </div>
         </div>
         <div className="col-sm-8">
@@ -62,7 +68,7 @@ const QuestionCard = ({
             <Nav.Item className="mt-3">
               <Nav.Link href={questionUrl} onClick={handleClick}>
                 <p
-                  className="fw-normal text-secondary h5"
+                  className="fw-normal text-primary h5"
                   style={{
                     textDecoration: isHovered ? "underline" : "none",
                     fontStyle: 'bold',
@@ -90,7 +96,12 @@ const QuestionCard = ({
             )}
           </div>
         </div>
-        <div className="col-sm-2"></div>
+        <div className="col-sm-2">
+          <div className="d-flex flex-column">
+           <QuestionMoment avator={Avator} username={username} created_at={created_at}/>
+            
+          </div>
+        </div>
       </div>
     </div>
   );

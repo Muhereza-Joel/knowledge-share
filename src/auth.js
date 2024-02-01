@@ -2,6 +2,8 @@
 
 const TOKEN_KEY = 'authToken';
 const USERNAME_KEY = 'username'; // New key for storing the username in localStorage
+const USERID_KEY = 'userId';
+const USERROLE_KEY = 'userRole'
 
 const isAuthenticated = () => {
   const authToken = localStorage.getItem(TOKEN_KEY);
@@ -23,6 +25,8 @@ const login = async (email, password) => {
 
     if (response.ok && result.success) {
       localStorage.setItem(TOKEN_KEY, result.authToken);
+      localStorage.setItem(USERID_KEY, result.id);
+      localStorage.setItem(USERROLE_KEY, result.role);
       localStorage.setItem(USERNAME_KEY, result.username); // Store username in localStorage
       return { success: true, username: result.username };
     } else {

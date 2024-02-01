@@ -86,8 +86,8 @@ const Questions = (props) => {
                   {questionData.map((question, index) => (
                     <QuestionCard
                       key={index}
-                      {...question}
-                      username={`${props.username}`}
+                      data={question}
+                      currentUser={`${props.username}`}
                       
                     />
                   ))}

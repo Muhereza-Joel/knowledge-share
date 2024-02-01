@@ -3,26 +3,27 @@ import "bootstrap/dist/css/bootstrap.css";
 import { Nav } from "react-bootstrap";
 import Tag from "./tag";
 import { useNavigate } from "react-router-dom";
-import moment from "moment";
 import Avator from "../assets/images/MyImage.jpg";
 import QuestionMoment from "./questionMoment";
 
 
-const QuestionCard = ({
-  username,
-  questionId,
-  questionTitle,
-  tags,
-  votes,
-  answers,
-  views,
-  created_at,
-  onQuestionClick,
-}) => {
+const QuestionCard = (props) => {
   const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
 
-  const questionUrl = `/knowledge-share/${username}/questions/${questionId}`;
+  const {
+    username,
+    questionId,
+    questionTitle,
+    tags,
+    votes,
+    answers,
+    views,
+    created_at,
+    onQuestionClick,
+  } = props.data;
+
+  const questionUrl = `/knowledge-share/${props.currentUser}/questions/${questionId}`;
 
   useEffect(() => {
     // Clean up the hover state when unmounting
@@ -40,7 +41,7 @@ const QuestionCard = ({
   const handleClick = () => {
     // Call the callback function passed from Dashboard
     onQuestionClick && onQuestionClick(questionId);
-    navigate(`/knowledge-share/${username}/questions/${questionId}`);
+    navigate(`/knowledge-share/${props.currentUser}/questions/${questionId}`);
   };
 
   return (

@@ -1,5 +1,7 @@
 // auth.js
 
+import { useAuth } from "./AuthContext";
+
 const TOKEN_KEY = 'authToken';
 const USERNAME_KEY = 'username'; // New key for storing the username in localStorage
 const USERID_KEY = 'userId';
@@ -11,6 +13,7 @@ const isAuthenticated = () => {
 };
 
 const login = async (email, password) => {
+
   try {
     const response = await fetch("http://localhost:3001/api/v1/auth/login/", {
       method: "POST",
@@ -31,6 +34,7 @@ const login = async (email, password) => {
       return { success: true, username: result.username };
     } else {
       return { success: false, username: null };
+      
     }
   } catch (error) {
     console.error("Error:", error);

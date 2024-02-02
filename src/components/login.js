@@ -5,6 +5,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { Nav } from "react-bootstrap";
 import { isAuthenticated, login } from "../auth"
+import Dashboard from "./dashboard";
 
 class Login extends Component {
   style = {
@@ -88,9 +89,10 @@ class Login extends Component {
     if (Object.keys(errors).length === 0) {
       const authenticationResult = await login(email, password);
 
-      if (authenticationResult) {
+      if (authenticationResult.username) {
         // Authentication successful
         this.setState({ isLoggedIn: true });
+        this.setState({ username: authenticationResult.username });
 
         setTimeout(() => {
           this.setState({
@@ -111,7 +113,7 @@ class Login extends Component {
     const { errors, redirectToDashboard} = this.state;
 
     if (redirectToDashboard) {
-      return <Navigate to={`/knowledge-share/`} />;
+      return <Dashboard username={this.state.username} />
     }
 
     return (

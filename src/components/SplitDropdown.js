@@ -10,7 +10,7 @@ const SplitDropdown = (props) => {
 
   const handleLogout = () => {
     logout();
-    navigate("/auth/login");
+    navigate("/logout");
   };
 
   const handleNavigatioToHome = () => {

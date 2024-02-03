@@ -36,14 +36,17 @@ const Tags = (props) => {
         return;
       }
 
-      const response = await fetch("http://localhost:3001/api/v1/tags/add-tag/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newTag),
-        mode: "cors",
-      });
+      const response = await fetch(
+        "http://localhost:3001/api/v1/tags/add-tag/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newTag),
+          mode: "cors",
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -73,7 +76,7 @@ const Tags = (props) => {
   const handleDeleteTag = (tagId) => {
     const updatedTags = tagsData.filter((tag) => tag.id !== tagId);
     setTagsData(updatedTags);
-  }
+  };
 
   const handleShowModal = () => {
     setShowModal(true);
@@ -90,9 +93,7 @@ const Tags = (props) => {
   useEffect(() => {
     const fetchTags = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:3001/api/v1/tags/all/"
-        );
+        const response = await fetch("http://localhost:3001/api/v1/tags/all/");
 
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -127,7 +128,9 @@ const Tags = (props) => {
       <div className="row g-0">
         <TopBar username={props.username} />
         <div className="col-sm-2">
-          <LeftSideBar username={props.username} />
+          <div style={{ position: "fixed", top: "50px", width: "18%" }}>
+            <LeftSideBar username={props.username} />
+          </div>
         </div>
         <div className="col-sm-10">
           <div>

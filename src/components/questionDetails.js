@@ -97,12 +97,14 @@ const QuestionDetails = ({ username, questionDetails }) => {
       <TopBar username={username} />
       <div className="row g-0">
         <div className="col-sm-2">
-          <LeftSideBar username={username} />
+          <div style={{ position: "fixed", top: "50px", width: "18%" }}>
+            <LeftSideBar username={username} />
+          </div>
         </div>
         <div className="col-sm-10">
           <div className="mt-0 p-2">
             <div className="row g-0">
-              <div className="col-lg-9">
+              <div className="col-lg-10">
                 <div>
                   <div
                     className="card p-3"
@@ -197,7 +199,7 @@ const QuestionDetails = ({ username, questionDetails }) => {
                   </Form>
                 </div>
               </div>
-              <div className="col-lg-3">
+              <div className="col-lg-2">
                 <div className="d-flex flex-column justify-content-center">
                   {images &&
                     images.length > 0 &&

@@ -140,10 +140,13 @@ const AskQuestion = (props) => {
 
     try {
       // Submit the form data to the server
-      const response = await fetch("http://localhost:3001/api/v1/questions/add", {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        "http://localhost:3001/api/v1/questions/add",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       if (response.ok) {
         // Handle success (you may redirect or perform other actions)
@@ -174,7 +177,9 @@ const AskQuestion = (props) => {
       <TopBar username={props.username} />
       <div className="row g-0">
         <div className="col-sm-2">
-          <LeftSideBar username={props.username} />
+          <div style={{ position: "fixed", top: "50px", width: "18%" }}>
+            <LeftSideBar username={props.username} />
+          </div>
         </div>
         <div className="col-sm-10">
           <div className="mt-2 p-2">

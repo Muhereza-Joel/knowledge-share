@@ -28,34 +28,38 @@ const Calender = (props) => {
 
   const handleAddEvent = (e) => {
     e.preventDefault();
-  
+
     // Validate start and end dates
-    const isValidDates = startDate && endDate && new Date(startDate) < new Date(endDate);
-  
+    const isValidDates =
+      startDate && endDate && new Date(startDate) < new Date(endDate);
+
     if (!isValidDates) {
-      toast.error("Invalid date range. Please select valid start and end dates.", {
-        style: { backgroundColor: "#ffc2c2", color: "#333" },
-      });
+      toast.error(
+        "Invalid date range. Please select valid start and end dates.",
+        {
+          style: { backgroundColor: "#ffc2c2", color: "#333" },
+        }
+      );
       return;
     }
-  
+
     // Validate that the start date is not in the past
     const currentDate = new Date().toISOString().split("T")[0]; // Get current date in "YYYY-MM-DD" format
-  
+
     if (startDate < currentDate) {
       toast.error("Invalid start date. Please select a date in the future.", {
         style: { backgroundColor: "#ffc2c2", color: "#333" },
       });
       return;
     }
-  
+
     const newEvent = {
       title: eventTitle,
       start: startDate,
       end: endDate,
       userId: localStorage.getItem("userId"),
     };
-  
+
     fetch("http://localhost:3001/api/v1/events/add", {
       method: "POST",
       headers: {
@@ -70,13 +74,13 @@ const Calender = (props) => {
         const newData = {
           id: id,
           title: title,
-          start: start_date, 
-          end: end_date, 
-        }
-  
+          start: start_date,
+          end: end_date,
+        };
+
         // Use the extracted fields for updating the state
         setEvents([...events, newData]);
-  
+
         toast.success("Event added successfully!", {
           style: { backgroundColor: "#cce6e8", color: "#333" },
         });
@@ -84,16 +88,13 @@ const Calender = (props) => {
       .catch((error) => {
         console.error("Error saving event", error);
       });
-  
+
     setEventTitle("");
     setStartDate("");
     setEndDate("");
   };
-  
-  
 
   const getEvents = () => {
-   
     const userId = localStorage.getItem("userId");
 
     if (!userId) {
@@ -114,11 +115,10 @@ const Calender = (props) => {
         const transformedEvents = data.map((event) => ({
           id: event.id,
           title: event.title,
-          start: event.start_date, 
-          end: event.end_date, 
+          start: event.start_date,
+          end: event.end_date,
         }));
 
-        
         setEvents(transformedEvents);
       })
       .catch((error) => {
@@ -195,7 +195,6 @@ const Calender = (props) => {
     });
 
     console.log(updatedEvent);
-
   };
 
   const handleEditEvent = () => {
@@ -224,10 +223,12 @@ const Calender = (props) => {
       <TopBar username={props.username} />
       <div className="row g-0">
         <div className="col-lg-2">
-          <LeftSideBar username={props.username} />
+          <div style={{ position: "fixed", top: "50px", width: "18%" }}>
+            <LeftSideBar username={props.username} />
+          </div>
         </div>
         <div className="col-lg-7">
-          <div className="card p-3 mt-2">
+          <div className="card p-3 mt-2 ms-3">
             <FullCalendar
               plugins={[
                 dayGridPlugin,
@@ -239,9 +240,10 @@ const Calender = (props) => {
               events={events}
               eventClick={handleEventClick}
               headerToolbar={{
-                left: 'prev,next today',
-                center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek,timeGridYear',
+                left: "prev,next today",
+                center: "title",
+                right:
+                  "dayGridMonth,timeGridWeek,timeGridDay,listWeek,timeGridYear",
               }}
               themeSystem="Yeti"
             />

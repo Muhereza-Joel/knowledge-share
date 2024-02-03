@@ -16,7 +16,7 @@ const LeftSideBar = (props) => {
 
   const leftPanelStyle = {
     ...panelStyle,
-    position: "sticky",
+    position: "sticky !important",
     top: 60,
   };
 

@@ -88,6 +88,7 @@ const Questions = (props) => {
                       key={index}
                       data={question}
                       currentUser={`${props.username}`}
+                      loading = {loading}
                       
                     />
                   ))}

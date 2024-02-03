@@ -62,6 +62,21 @@ const LeftSideBar = (props) => {
 
         <Nav.Item
           className={`d-flex align-items-center mt-3 ${
+            activeLink === "calender" ? "active" : ""
+          }`}
+          style={activeLink === "calender" ? linkStyle : {}}
+        >
+          <Nav.Link
+            href={`/knowledge-share/${props.username}/calendar/`}
+            className="text-info px-3 fw-bold text-dark"
+            onClick={() => setActiveLink("calender")}
+          >
+            My Calendar
+          </Nav.Link>
+        </Nav.Item>
+
+        <Nav.Item
+          className={`d-flex align-items-center mt-3 ${
             activeLink === "tags" ? "active" : ""
           }`}
           style={activeLink === "tags" ? linkStyle : {}}
@@ -75,20 +90,6 @@ const LeftSideBar = (props) => {
           </Nav.Link>
         </Nav.Item>
 
-        <Nav.Item
-          className={`d-flex align-items-center mt-3 ${
-            activeLink === "calender" ? "active" : ""
-          }`}
-          style={activeLink === "calender" ? linkStyle : {}}
-        >
-          <Nav.Link
-            href={`/knowledge-share/${props.username}/calendar/`}
-            className="text-info px-3 fw-bold text-dark"
-            onClick={() => setActiveLink("calender")}
-          >
-            My Calendar
-          </Nav.Link>
-        </Nav.Item>
       </div>
     </div>
   );

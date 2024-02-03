@@ -1,10 +1,25 @@
 import React, { useState, useEffect, memo } from "react";
 import "bootstrap/dist/css/bootstrap.css";
-import { Nav } from "react-bootstrap";
+import { Card, Placeholder,Nav } from "react-bootstrap";
 import Tag from "./tag";
 import { useNavigate } from "react-router-dom";
 import Avator from "../assets/images/MyImage.jpg";
 import QuestionMoment from "./questionMoment";
+
+const LoadingPlaceholder = () => (
+    <Card className="p-4" style={{border:"none"}}>
+
+      <Placeholder as={Card.Text} animation="wave" >
+        <Placeholder xs={6} bg="secondary" />
+      </Placeholder>
+      <Placeholder as={Card.Text} animation="glow">
+        <Placeholder xs={7} bg="secondary" /> <Placeholder xs={4} /> <Placeholder xs={4} bg="secondary" />
+        <Placeholder xs={6} bg="secondary" /> <Placeholder xs={12} bg="secondary"/>
+      </Placeholder>
+      
+    </Card>
+    
+);
 
 
 const QuestionCard = (props) => {
@@ -44,6 +59,13 @@ const QuestionCard = (props) => {
     navigate(`/knowledge-share/${props.currentUser}/questions/${questionId}`);
   };
 
+  if(props.loading) {
+    return(
+        <LoadingPlaceholder/>       
+    )
+    
+  }
+
   return (
     <div
       className="card px-3 py-2 my-1"
@@ -56,6 +78,7 @@ const QuestionCard = (props) => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
+      
       <div className="row g-0">
         <div className="col-sm-2">
           <div className="d-flex flex-column">

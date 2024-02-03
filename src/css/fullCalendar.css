@@ -1,0 +1,13 @@
+/* Custom styling for buttons */
+.fc-prev-button, .fc-next-button, .fc-today-button {
+    background-color: #007bff; /* Change background color */
+    color: #fff; /* Change text color */
+  }
+  
+  /* Custom styling for events */
+  .custom-event {
+    background-color: #28a745; /* Change background color */
+    color: #fff; /* Change text color */
+    padding: 5px; /* Add padding */
+  }
+  

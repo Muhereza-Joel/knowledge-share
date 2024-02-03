@@ -33,9 +33,7 @@ const App = () => {
     setLoading(false);
   }, []);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  
   const handleLogout = () => {
     setUsername(null);
     localStorage.removeItem("username");

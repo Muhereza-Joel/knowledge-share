@@ -4,6 +4,8 @@ import Comments from "./comments";
 import "bootstrap/dist/css/bootstrap.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import QuestionMoment from "./questionMoment";
+import Avator from "../assets/images/MyImage.jpg";
 
 const Answer = (props) => {
   const [commentInput, setCommentInput] = useState("");
@@ -75,16 +77,16 @@ const Answer = (props) => {
   return (
     <div className="card mt-2 p-2">
       <div className="text-secondary">
-        <p className="fw-bold">{`Answer by ${props.username} ${moment(
-          props.created_at
-        ).fromNow()}`}</p>
+        <div className="text-end">
+          <QuestionMoment avator={Avator} username={props.username} created_at={props.created_at}/>
+        </div>
 
         <div
           dangerouslySetInnerHTML={{
             __html: String(props.answerContent) || "",
           }}
         />
-
+        <hr></hr>
         {/* Toggleable input for adding a comment */}
         <div className="mt-4">
           <Comments comments={comments} onDelete={handleDelete}/>
@@ -115,6 +117,7 @@ const Answer = (props) => {
           >
             Add Comment
           </button>
+
           <ToastContainer
               position="bottom-left"
               autoClose={3000}

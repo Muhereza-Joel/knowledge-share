@@ -5,12 +5,13 @@ import SplitDropdown from "./SplitDropdown";
 const TopBar = (props) => {
 
   const topPaneStyle = {
-    width: "98vw",
+    width: "99.99%",
     height: "7vh",
     zIndex: "3",
     position: "sticky",
     top: 0,
     backgroundColor: "#f6f9ff",
+    boxShadow: "0px 1px 4px 2px rgba(0,0,0,0.1)",
   };
 
 

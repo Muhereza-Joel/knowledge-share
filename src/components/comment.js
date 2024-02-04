@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash, faReply } from "@fortawesome/free-solid-svg-icons";
@@ -13,16 +13,62 @@ const Comment = (props) => {
   const [editedComment, setEditedComment] = useState(comment.comment);
   const [commentText, setCommentText] = useState(comment.comment);
 
-  const handleReplySubmit = () => {
-    // Validate that the reply is not empty before submitting
+  const [loadingReplies, setLoadingReplies] = useState(false);
+
+  const fetchReplies = async () => {
+    try {
+      setLoadingReplies(true);
+
+      // Make a GET request to retrieve replies for the comment
+      const response = await fetch(
+        `http://localhost:3001/api/v1/comments/replies/${comment.id}`
+      );
+
+      const data = await response.json();
+
+      // Update the replies state with the retrieved data
+      setReplies(data);
+
+      setLoadingReplies(false);
+    } catch (error) {
+      console.error("Error fetching replies:", error);
+      setLoadingReplies(false);
+    }
+  };
+
+  useEffect(() => {
+  
+    fetchReplies();
+  }, []); // Empty dependency array ensures that the effect runs only once after the initial render
+
+  const handleReplySubmit = async () => {
+   
     if (replyInput.trim() !== "") {
-      // You can handle the reply submission logic here.
-      // For simplicity, let's just add the reply to the state.
-      setReplies([
-        ...replies,
-        { username: "John", content: replyInput, created_at: new Date() },
-      ]);
-      setReplyInput(""); // Clear the input field after submission.
+      try {
+     
+        const response = await fetch(
+          "http://localhost:3001/api/v1/comments/add-reply",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              commentId: comment.id,
+              reply: replyInput,
+              userId: localStorage.getItem("userId"),
+            }),
+          }
+        );
+
+        const data = await response.json();
+
+        setReplies([...replies, data]);
+
+        setReplyInput(""); // Clear the input field after submission.
+      } catch (error) {
+        console.error("Error adding reply:", error);
+      }
     }
   };
 
@@ -139,13 +185,13 @@ const Comment = (props) => {
                 {replies.map((reply, index) => (
                   <div
                     key={index}
-                    className="p-1 my-1 ms-3 card"
+                    className="p-1 my-2 ms-3 card"
                     style={{ backgroundColor: "#fff", borderRadius: "8px" }}
                   >
                     <span className="fw-bold">{`${reply.username} ${moment(
                       reply.created_at
                     ).fromNow()}`}</span>
-                    <p>{reply.content}</p>
+                    <p>{reply.reply}</p>
                   </div>
                 ))}
               </div>

@@ -207,12 +207,15 @@ const QuestionDetails = ({ username, questionDetails }) => {
                   {images &&
                     images.length > 0 &&
                     images.map((image, index) => (
-                      <img
-                        key={index}
-                        src={image.url}
-                        alt={`Image ${index + 1}`}
-                        className="img-fluid mx-3 mb-2"
-                      />
+                      <div className="card mx-2 mb-3">
+
+                          <img
+                            key={index}
+                            src={image.url}
+                            alt={`Image ${index + 1}`}
+                            className="img-fluid mx-3 mb-2"
+                          />
+                      </div>
                     ))}
                 </div>
               </div>

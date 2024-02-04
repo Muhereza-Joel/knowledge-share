@@ -20,7 +20,7 @@ const SplitDropdown = (props) => {
     <Dropdown as={ButtonGroup}>
       <Button
         variant="secondary"
-        style={{ backgroundColor: "#cce6e8", border: "none", color: "black" }}
+        style={{ backgroundColor: "#cce6e8", border: "none", color: "black", marginTop:"-10px" }}
         className="btn-sm fw-bold"
       >
         {props.username}
@@ -29,7 +29,7 @@ const SplitDropdown = (props) => {
       <Dropdown.Toggle
         split
         variant="secondary"
-        style={{ backgroundColor: "#ace6e8", border: "none", color: "black" }}
+        style={{ backgroundColor: "#ace6e8", border: "none", color: "black", marginTop:"-10px" }}
         id="dropdown-split-basic"
       />
 

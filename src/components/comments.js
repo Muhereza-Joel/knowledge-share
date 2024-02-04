@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import "bootstrap/dist/css/bootstrap.css";
 import Comment from './comment';
 
 const Comments = (props) => {
-    const {comments} = props;
+  const { comments} = props;
 
     return (
         <div>
@@ -11,7 +11,7 @@ const Comments = (props) => {
             <div className="mt-3 card py-1 px-2" style={{ backgroundColor: "#e6f0ef" }}>
               <p className="fw-bold">Comments:</p>
               {comments.map((comment, index) => (
-                <Comment comment={comment}/>
+                 <Comment key={index} comment={comment} onDelete={props.onDelete}/>
                 
               ))}
             </div>

@@ -151,6 +151,9 @@ const QuestionDetails = ({ username, questionDetails }) => {
                     answers.map((answer, index) => (
                       <Answer
                         key={index}
+                        answerId = {answer.answerId}
+                        questionId = {answer.questionId}
+                        userId = {answer.userId}
                         username={answer.username}
                         created_at={answer.created_at}
                         answerContent={answer.answerContent}

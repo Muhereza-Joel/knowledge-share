@@ -80,7 +80,7 @@ const SplitDropdown = (props) => {
               className="text-info px-2 fw-bold text-dark"
               onClick={handleNavigatioToHome}
             >
-              {props.username}
+              Your Dashboard
             </Nav.Link>
           </Nav.Item>
         </Dropdown.Item>
@@ -91,7 +91,7 @@ const SplitDropdown = (props) => {
             onClick={navigateToProfile}
             style={{cursor: "pointer"}}
           >
-            Profile
+            Your Profile
           </h6>
         </Dropdown.Item>
 
@@ -100,7 +100,7 @@ const SplitDropdown = (props) => {
             className="mx-2" 
             style={{cursor: "pointer"}}
           >
-            Notifications
+            Your Notifications
           </h6>
         </Dropdown.Item>
 
@@ -109,7 +109,7 @@ const SplitDropdown = (props) => {
             className="mx-2" 
             style={{cursor: "pointer"}}
           >
-            Settings
+            Account Settings
           </h6>
         </Dropdown.Item>
        

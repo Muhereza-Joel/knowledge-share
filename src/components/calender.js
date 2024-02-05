@@ -228,7 +228,7 @@ const Calender = (props) => {
           </div>
         </div>
         <div className="col-lg-7">
-          <div className="card p-3 mt-2 ms-3">
+          <div className="card p-3 mt-2 ms-3" >
             <FullCalendar
               plugins={[
                 dayGridPlugin,
@@ -325,9 +325,9 @@ const Calender = (props) => {
         </div>
 
         <div className="col-lg-3">
-          <div className="card p-3 mt-2 mx-2">
+          <div className="card p-3 mt-2 mx-2" style={{ border: "none", backgroundColor: "#f6f9ff" }}>
             <div className="text-start">
-              <h5>Add Event</h5>
+              <h5>New Event</h5>
             </div>
             <Form onSubmit={handleAddEvent}>
               <div className="mb-3">

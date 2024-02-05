@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import moment from "moment";
+import Avator from "../assets/images/avator.jpg";
 
 const QuestionMoment = (props) => {
   const [showModal, setShowModal] = useState(false);
@@ -24,7 +25,7 @@ const QuestionMoment = (props) => {
           <img
             width={40}
             height={40}
-            src={props.avator}
+            src={props.avatarUrl || Avator}
             className="rounded-circle"
             onClick={openModal}
             style={{ cursor: "pointer" }}

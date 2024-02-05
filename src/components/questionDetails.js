@@ -157,6 +157,7 @@ const QuestionDetails = ({ username, questionDetails }) => {
                         username={answer.username}
                         created_at={answer.created_at}
                         answerContent={answer.answerContent}
+                        avatarUrl={answer.avatarUrl}
                       />
                     ))
                   ) : (

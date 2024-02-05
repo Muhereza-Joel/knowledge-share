@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
-import moment from "moment";
 import Comments from "./comments";
 import "bootstrap/dist/css/bootstrap.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import QuestionMoment from "./questionMoment";
-import Avator from "../assets/images/MyImage.jpg";
 
 const Answer = (props) => {
   const [commentInput, setCommentInput] = useState("");
@@ -78,7 +76,7 @@ const Answer = (props) => {
     <div className="card mt-2 p-2">
       <div className="text-secondary">
         <div className="text-end">
-          <QuestionMoment avator={Avator} username={props.username} created_at={props.created_at}/>
+          <QuestionMoment avatarUrl={props.avatarUrl} username={props.username} created_at={props.created_at}/>
         </div>
 
         <div

@@ -1,20 +1,59 @@
+import React, {useState, useEffect} from 'react';
 import Button from "react-bootstrap/Button";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Dropdown from "react-bootstrap/Dropdown";
 import { Nav } from "react-bootstrap";
 import { logout } from "../auth";
 import { useNavigate } from "react-router-dom";
+import  Avatar  from "../assets/images/avator.jpg";
 
 const SplitDropdown = (props) => {
   const navigate = useNavigate();
+
+  const [avatarUrl, setAvatarUrl] = useState("");
+  useEffect(() => {
+    const fetchAvatarUrl = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:3001/api/v1/auth/get-avator/${localStorage.getItem("userId")}`
+        );
+
+        if (response.ok) {
+          const avatarData = await response.json();
+          if (Array.isArray(avatarData) && avatarData.length > 0) {
+            setAvatarUrl(avatarData[0].url);
+          } else {
+            console.error("Invalid avatar data structure");
+          }
+        } else {
+          console.error("Failed to fetch avatarUrl");
+        }
+      } catch (error) {
+        console.error("Error during fetch:", error);
+      }
+    };
+
+    fetchAvatarUrl();
+  }, []);
+ 
 
   const handleLogout = () => {
     logout();
     navigate("/logout");
   };
 
+  const navigateToProfile = () => {
+    navigate(`/knowledge-share/${props.username}/profile/`);
+  }
+
   const handleNavigatioToHome = () => {
     navigate(`/knowledge-share/${props.username}/`);
+  }
+
+  const avatorStyle = {
+    width: "30px",
+    height: "30px",
+    marginRight: "5px"
   }
   return (
     <Dropdown as={ButtonGroup}>
@@ -23,7 +62,7 @@ const SplitDropdown = (props) => {
         style={{ backgroundColor: "#cce6e8", border: "none", color: "black", marginTop:"-10px" }}
         className="btn-sm fw-bold"
       >
-        {props.username}
+        <img src={avatarUrl || Avatar} className="rounded-circle" style={avatorStyle}/>{props.username}
       </Button>
 
       <Dropdown.Toggle
@@ -45,6 +84,35 @@ const SplitDropdown = (props) => {
             </Nav.Link>
           </Nav.Item>
         </Dropdown.Item>
+
+        <Dropdown.Item>
+          <h6 
+            className="mx-2"
+            onClick={navigateToProfile}
+            style={{cursor: "pointer"}}
+          >
+            Profile
+          </h6>
+        </Dropdown.Item>
+
+        <Dropdown.Item>
+          <h6 
+            className="mx-2" 
+            style={{cursor: "pointer"}}
+          >
+            Notifications
+          </h6>
+        </Dropdown.Item>
+
+        <Dropdown.Item>
+          <h6 
+            className="mx-2" 
+            style={{cursor: "pointer"}}
+          >
+            Settings
+          </h6>
+        </Dropdown.Item>
+       
         <Dropdown.Item>
           <h6
             className="mx-2"
@@ -54,6 +122,8 @@ const SplitDropdown = (props) => {
             Sign Out
           </h6>
         </Dropdown.Item>
+
+        
       </Dropdown.Menu>
     </Dropdown>
   );

@@ -3,7 +3,6 @@ import "bootstrap/dist/css/bootstrap.css";
 import { Card, Placeholder,Nav } from "react-bootstrap";
 import Tag from "./tag";
 import { useNavigate } from "react-router-dom";
-import Avator from "../assets/images/MyImage.jpg";
 import QuestionMoment from "./questionMoment";
 
 const LoadingPlaceholder = () => (
@@ -36,6 +35,7 @@ const QuestionCard = (props) => {
     views,
     created_at,
     onQuestionClick,
+    avatarUrl
   } = props.data;
 
   const questionUrl = `/knowledge-share/${props.currentUser}/questions/${questionId}`;
@@ -122,7 +122,7 @@ const QuestionCard = (props) => {
         </div>
         <div className="col-sm-2">
           <div className="d-flex flex-column">
-           <QuestionMoment avator={Avator} username={username} created_at={created_at}/>
+           <QuestionMoment avatarUrl={avatarUrl}  username={username} created_at={created_at}/>
             
           </div>
         </div>

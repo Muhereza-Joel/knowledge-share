@@ -1,8 +1,11 @@
 import React, {useState} from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import SplitDropdown from "./SplitDropdown";
+import { useNavigate } from "react-router-dom";
 
 const TopBar = (props) => {
+
+  const navigate = useNavigate();
 
   const topPaneStyle = {
     width: "99.99%",
@@ -28,9 +31,10 @@ const TopBar = (props) => {
           
 
             <h6 className="mx-4"></h6>
-            <h6 className="mx-2 ml-4">Notifications</h6>
-            <h6 className="mx-2">Settings</h6>
-            <h6 className="mx-2">Profile</h6>
+            <h6 className="mx-2 ml-4">Notifications |</h6>
+            <h6 className="mx-2 ml-4">Messages |</h6>
+            <h6 className="mx-2">Settings |</h6>
+            <h6 className="mx-2" style={{cursor: "pointer"}} onClick={() => {navigate(`/knowledge-share/${props.username}/profile/`)}}>Profile</h6>
           </div>
 
           <div className="w-25 text-end">

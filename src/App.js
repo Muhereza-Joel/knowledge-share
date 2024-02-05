@@ -15,6 +15,7 @@ import QuestionDetailsContainer from "./components/questionDetailsContainer";
 import { isAuthenticated } from "./auth";
 import { AuthProvider, useAuth } from "./AuthContext";
 import Calender from "./components/calender";
+import Profile from "./components/profile";
 
 const PrivateRoute = ({ element, path }) => {
   return isAuthenticated() ? (
@@ -54,6 +55,12 @@ const App = () => {
             path="/knowledge-share/*"
             element={
               <PrivateRoute element={<Dashboard username={username} />} />
+            }
+          />
+          <Route
+            path="/knowledge-share/:username/profile/"
+            element={
+              <PrivateRoute element={<Profile username={username} />} />
             }
           />
           <Route

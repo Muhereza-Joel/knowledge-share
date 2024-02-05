@@ -14,6 +14,33 @@ const Home = (props) => {
     error: null,
   });
 
+  const [avatarUrl, setAvatarUrl] = useState("");
+  useEffect(() => {
+    const fetchAvatarUrl = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:3001/api/v1/auth/get-avator/${localStorage.getItem("userId")}`
+        );
+
+        if (response.ok) {
+          const avatarData = await response.json();
+          if (Array.isArray(avatarData) && avatarData.length > 0) {
+            setAvatarUrl(avatarData[0].url);
+          } else {
+            console.error("Invalid avatar data structure");
+          }
+        } else {
+          console.error("Failed to fetch avatarUrl");
+        }
+      } catch (error) {
+        console.error("Error during fetch:", error);
+      }
+    };
+
+    fetchAvatarUrl();
+  }, []);
+ 
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -98,7 +125,7 @@ const Home = (props) => {
 
         <div className="col-lg-3">
           <div id="right-panel" style={panelStyle}>
-            <ShortProfile username={`${props.username}`} />
+            <ShortProfile username={`${props.username}`} avatarUrl={avatarUrl} />
 
             <div className="p-2 mt-0 mx-2">
               <hr />

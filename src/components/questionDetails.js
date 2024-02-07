@@ -7,6 +7,7 @@ import ReactQuill from "react-quill";
 import { ToastContainer, toast } from "react-toastify";
 import { Form, Button } from "react-bootstrap";
 import Answer from "./answers";
+import API_BASE_URL from "./appConfig";
 
 const QuestionDetails = ({ username, questionDetails }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -62,7 +63,7 @@ const QuestionDetails = ({ username, questionDetails }) => {
 
       // Make the POST request to your API endpoint
       const response = await fetch(
-        "http://localhost:3001/api/v1/questions/add-answer",
+        `${API_BASE_URL}/api/v1/questions/add-answer`,
         {
           method: "POST",
           body: postData,

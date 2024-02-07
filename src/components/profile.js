@@ -4,6 +4,7 @@ import LeftSideBar from "./leftSideBar";
 import ShortProfile from "./shortProfile";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import API_BASE_URL from "./appConfig";
 
 
 const Profile = (props) => {
@@ -12,21 +13,59 @@ const Profile = (props) => {
   const [avatarUrl, setAvatarUrl] = useState("");
 
   const [formData, setFormData] = useState({
-    username: props.username,
-    fullname: props.fullName,
-    gender: props.gender,
-    dateOfBirth: props.dateOfBirth,
-    homeCountry: props.homeCountry,
-    city: props.city,
-    phoneNumber: props.phoneNumber,
-    password: props.password,
+    username: "",
+    fullname: "",
+    email: "",
+    gender: "",
+    dateOfBirth: "",
+    homeCountry: "",
+    city: "",
+    phoneNumber: "",
+    password: "",
   });
+
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      try {
+        const response = await fetch(
+          `${API_BASE_URL}/api/v1/auth/profile/${localStorage.getItem("userId")}`
+        );
+
+        if (response.ok) {
+          const profileDataArray = await response.json();
+          if (Array.isArray(profileDataArray) && profileDataArray.length > 0) {
+            const profileData = profileDataArray[0];
+
+            // Extract only the date part from the dob property
+            const dateOnly = profileData.dob ? profileData.dob.substring(0, 10) : null;
+            
+            setFormData({
+              username: profileData.username,
+              fullname: profileData.fullname,
+              email: profileData.email,
+              gender: profileData.gender,
+              dateOfBirth: dateOnly,
+              homeCountry: profileData.country,
+              city: profileData.city,
+              phoneNumber: profileData.phone_number,
+              password: profileData.password,
+            });
+          }
+        }
+      } catch (error) {
+        console.error("Error during fetch:", error);
+      }
+    };
+
+    fetchProfileData();
+  }, []);
+
 
   useEffect(() => {
     const fetchAvatarUrl = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3001/api/v1/auth/get-avator/${localStorage.getItem(
+          `${API_BASE_URL}/api/v1/auth/get-avator/${localStorage.getItem(
             "userId"
           )}`
         );
@@ -55,7 +94,7 @@ const Profile = (props) => {
     if (isEditing) {
       try {
         const response = await fetch(
-          "http://localhost:3001/api/v1/auth/profile",
+          `${API_BASE_URL}/api/v1/auth/profile`,
           {
             method: "PUT",
             headers: {
@@ -161,7 +200,7 @@ const Profile = (props) => {
                 <input
                   type="text"
                   name="fullname"
-                  value={props.fullName}
+                  value={formData.fullname}
                   disabled={!isEditing}
                   onChange={handleInputChange}
                   className="form-control mb-3"
@@ -171,7 +210,7 @@ const Profile = (props) => {
                 <input
                   type="email"
                   name="email"
-                  value={props.email}
+                  value={formData.email}
                   onChange={handleInputChange}
                   disabled={!isEditing}
                   className="form-control mb-3"
@@ -183,7 +222,7 @@ const Profile = (props) => {
                     <input
                       type="text"
                       name="phoneNumber"
-                      value={props.phoneNumber}
+                      value={formData.phoneNumber}
                       disabled={!isEditing}
                       onChange={handleInputChange}
                       className="form-control mb-3"
@@ -205,9 +244,9 @@ const Profile = (props) => {
                   <div className="mx-3">
                     <label>Date of Birth:</label>
                     <input
-                      type="date"
+                      type={!isEditing ? "text" : "date"}
                       name="dateOfBirth"
-                      value={props.dateOfBirth}
+                      value={formData.dateOfBirth}
                       onChange={handleInputChange}
                       disabled={!isEditing}
                       className="form-control mb-3"
@@ -221,7 +260,7 @@ const Profile = (props) => {
                     <input
                       type="text"
                       name="homeCountry"
-                      value={props.homeCountry}
+                      value={formData.homeCountry}
                       onChange={handleInputChange}
                       disabled={!isEditing}
                       className="form-control mb-3"
@@ -233,7 +272,7 @@ const Profile = (props) => {
                     <input
                       type="text"
                       name="city"
-                      value={props.city}
+                      value={formData.city}
                       onChange={handleInputChange}
                       disabled={!isEditing}
                       className="form-control mb-3"

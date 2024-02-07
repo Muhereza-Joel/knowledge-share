@@ -6,6 +6,7 @@ import { BsUpload } from "react-icons/bs";
 import { BsSave2Fill } from "react-icons/bs";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import API_BASE_URL from "./appConfig";
 
 const ShortProfile = (props) => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -49,7 +50,7 @@ const ShortProfile = (props) => {
       // Make a fetch request to your backend to save the photo
       try {
         const response = await fetch(
-          "http://localhost:3001/api/v1/auth/change-avator",
+          `${API_BASE_URL}/api/v1/auth/change-avator`,
           {
             method: "POST",
             body: formData,

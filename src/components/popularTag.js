@@ -4,6 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import API_BASE_URL from "./appConfig";
 
 const PopularTag = ({
   id,
@@ -124,7 +125,7 @@ const PopularTag = ({
 
   const handleDeleteTag = async () => {
     try {
-      const response = await fetch("http://localhost:3001/api/v1/tags/delete-tag/", {
+      const response = await fetch(`${API_BASE_URL}/api/v1/tags/delete-tag/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -157,7 +158,7 @@ const PopularTag = ({
         return;
       }
 
-      const response = await fetch("http://localhost:3001/api/v1/tags/edit-tag/", {
+      const response = await fetch(`${API_BASE_URL}/api/v1/tags/edit-tag/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash, faReply } from "@fortawesome/free-solid-svg-icons";
+import API_BASE_URL from "./appConfig";
 
 const Comment = (props) => {
   const currentUserId = localStorage.getItem("userId");
@@ -21,7 +22,7 @@ const Comment = (props) => {
 
       // Make a GET request to retrieve replies for the comment
       const response = await fetch(
-        `http://localhost:3001/api/v1/comments/replies/${comment.id}`
+        `${API_BASE_URL}/api/v1/comments/replies/${comment.id}`
       );
 
       const data = await response.json();
@@ -47,7 +48,7 @@ const Comment = (props) => {
       try {
      
         const response = await fetch(
-          "http://localhost:3001/api/v1/comments/add-reply",
+          `${API_BASE_URL}/api/v1/comments/add-reply`,
           {
             method: "POST",
             headers: {
@@ -80,7 +81,7 @@ const Comment = (props) => {
     try {
       // Make a DELETE request to delete the comment
       const response = await fetch(
-        `http://localhost:3001/api/v1/comments/delete/${comment.id}`,
+        `${API_BASE_URL}/api/v1/comments/delete/${comment.id}`,
         {
           method: "DELETE",
         }
@@ -100,7 +101,7 @@ const Comment = (props) => {
     try {
       // Make a PUT request to edit the comment
       const response = await fetch(
-        `http://localhost:3001/api/v1/comments/update/${comment.id}`,
+        `${API_BASE_URL}/api/v1/comments/update/${comment.id}`,
         {
           method: "PUT",
           headers: {

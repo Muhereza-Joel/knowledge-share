@@ -6,6 +6,7 @@ import { Nav } from "react-bootstrap";
 import { logout } from "../auth";
 import { useNavigate } from "react-router-dom";
 import  Avatar  from "../assets/images/avator.jpg";
+import API_BASE_URL from "./appConfig";
 
 const SplitDropdown = (props) => {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ const SplitDropdown = (props) => {
     const fetchAvatarUrl = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3001/api/v1/auth/get-avator/${localStorage.getItem("userId")}`
+          `${API_BASE_URL}/api/v1/auth/get-avator/${localStorage.getItem("userId")}`
         );
 
         if (response.ok) {

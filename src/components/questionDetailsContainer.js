@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
 import QuestionDetails from "./questionDetails";
+import API_BASE_URL from "./appConfig";
 
 const QuestionDetailsContainer = ({ username }) => {
   const [questionDetails, setQuestionDetails] = useState({});
@@ -15,7 +16,7 @@ const QuestionDetailsContainer = ({ username }) => {
     const fetchQuestionDetails = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3001/api/v1/questions/question",
+          `${API_BASE_URL}/api/v1/questions/question`,
           {
             method: "POST",
             headers: {

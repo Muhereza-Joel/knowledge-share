@@ -4,6 +4,7 @@ import QuestionCard from "./questionCard";
 import PopularTag from "./popularTag";
 import TopBar from "./topBar";
 import LeftSideBar from "./leftSideBar";
+import API_BASE_URL from "./appConfig";
 
 const Questions = (props) => {
   const [state, setState] = useState({
@@ -18,8 +19,8 @@ const Questions = (props) => {
     const fetchData = async () => {
       try {
         const [questionsResponse, tagsResponse] = await Promise.all([
-          fetch("http://localhost:3001/api/v1/questions/all/"),
-          fetch("http://localhost:3001/api/v1/tags/popular-tags/"),
+          fetch(`${API_BASE_URL}/api/v1/questions/all/`),
+          fetch(`${API_BASE_URL}/api/v1/tags/popular-tags/`),
         ]);
 
         if (!questionsResponse.ok || !tagsResponse.ok) {

@@ -1,7 +1,7 @@
 // auth.js
 
 import { useAuth } from "./AuthContext";
-
+import API_BASE_URL from "./components/appConfig";
 const TOKEN_KEY = 'authToken';
 const USERNAME_KEY = 'username'; // New key for storing the username in localStorage
 const USERID_KEY = 'userId';
@@ -15,7 +15,7 @@ const isAuthenticated = () => {
 const login = async (email, password) => {
 
   try {
-    const response = await fetch("http://localhost:3001/api/v1/auth/login/", {
+    const response = await fetch(`${API_BASE_URL}/api/v1/auth/login/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

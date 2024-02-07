@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import QuestionMoment from "./questionMoment";
+import API_BASE_URL from "./appConfig";
 
 const Answer = (props) => {
   const [commentInput, setCommentInput] = useState("");
@@ -15,7 +16,7 @@ const Answer = (props) => {
     const fetchComments = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3001/api/v1/comments/all/${props.answerId}`
+          `${API_BASE_URL}/api/v1/comments/all/${props.answerId}`
         );
         const data = await response.json();
         setComments(data);
@@ -44,7 +45,7 @@ const Answer = (props) => {
       try {
 
         const response = await fetch(
-          "http://localhost:3001/api/v1/comments/add",
+          `${API_BASE_URL}/api/v1/comments/add`,
           {
             method: "POST",
             headers: {

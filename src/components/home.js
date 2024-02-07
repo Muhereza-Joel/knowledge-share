@@ -4,6 +4,7 @@ import { Nav } from "react-bootstrap";
 import QuestionCard from "./questionCard";
 import ShortProfile from "./shortProfile";
 import PopularTag from "./popularTag";
+import API_BASE_URL from "./appConfig";
 
 const Home = (props) => {
   const [state, setState] = useState({
@@ -19,7 +20,7 @@ const Home = (props) => {
     const fetchAvatarUrl = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3001/api/v1/auth/get-avator/${localStorage.getItem("userId")}`
+          `${API_BASE_URL}/api/v1/auth/get-avator/${localStorage.getItem("userId")}`
         );
 
         if (response.ok) {
@@ -45,8 +46,8 @@ const Home = (props) => {
     const fetchData = async () => {
       try {
         const [questionsResponse, tagsResponse] = await Promise.all([
-          fetch(`http://localhost:3001/api/v1/questions/all`),
-          fetch("http://localhost:3001/api/v1/tags/most-used-tags/"),
+          fetch(`${API_BASE_URL}/api/v1/questions/all`),
+          fetch(`${API_BASE_URL}/api/v1/tags/most-used-tags/`),
         ]);
 
         if (!questionsResponse.ok || !tagsResponse.ok) {

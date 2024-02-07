@@ -7,6 +7,7 @@ import Tag from "./tag";
 import debounce from "lodash/debounce";
 import LeftSideBar from "./leftSideBar";
 import TopBar from "./topBar";
+import API_BASE_URL from "./appConfig";
 
 const AskQuestion = (props) => {
   const [isQuestionSubmitted, setIsQuestionSubmitted] = useState(false);
@@ -21,7 +22,7 @@ const AskQuestion = (props) => {
   const fetchSuggestedTags = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3001/api/v1/tags/all?query=${searchInput}`
+        `${API_BASE_URL}/api/v1/tags/all?query=${searchInput}`
       );
       const data = await response.json();
 
@@ -141,7 +142,7 @@ const AskQuestion = (props) => {
     try {
       // Submit the form data to the server
       const response = await fetch(
-        "http://localhost:3001/api/v1/questions/add",
+        `${API_BASE_URL}/api/v1/questions/add`,
         {
           method: "POST",
           body: formData,

@@ -6,6 +6,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import PopularTag from "./popularTag";
 import LeftSideBar from "./leftSideBar";
 import TopBar from "./topBar";
+import API_BASE_URL from "./appConfig";
 
 const Tags = (props) => {
   const [tagsData, setTagsData] = useState([]);
@@ -37,7 +38,7 @@ const Tags = (props) => {
       }
 
       const response = await fetch(
-        "http://localhost:3001/api/v1/tags/add-tag/",
+        `${API_BASE_URL}/api/v1/tags/add-tag/`,
         {
           method: "POST",
           headers: {
@@ -93,7 +94,7 @@ const Tags = (props) => {
   useEffect(() => {
     const fetchTags = async () => {
       try {
-        const response = await fetch("http://localhost:3001/api/v1/tags/all/");
+        const response = await fetch(`${API_BASE_URL}/api/v1/tags/all/`);
 
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);

@@ -11,6 +11,7 @@ import { Button, Form, Modal } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../css/fullCalendar.css";
+import API_BASE_URL from "./appConfig";
 
 const Calender = (props) => {
   const [events, setEvents] = useState([]);
@@ -60,7 +61,7 @@ const Calender = (props) => {
       userId: localStorage.getItem("userId"),
     };
 
-    fetch("http://localhost:3001/api/v1/events/add", {
+    fetch(`${API_BASE_URL}/api/v1/events/add`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -103,7 +104,7 @@ const Calender = (props) => {
     }
 
     // Make a POST request with the user ID
-    fetch("http://localhost:3001/api/v1/events/all", {
+    fetch(`${API_BASE_URL}/api/v1/events/all`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -131,7 +132,7 @@ const Calender = (props) => {
   }, []); // Empty dependency array ensures the effect runs only once, equivalent to componentDidMount
 
   const deleteEvent = (eventId) => {
-    fetch(`http://localhost:3001/api/v1/events/delete/${eventId}`, {
+    fetch(`${API_BASE_URL}/api/v1/events/delete/${eventId}`, {
       method: "DELETE",
     })
       .then((response) => response.json())
@@ -155,7 +156,7 @@ const Calender = (props) => {
   };
 
   const updateEvent = (eventId, updatedEvent) => {
-    fetch(`http://localhost:3001/api/v1/events/update/${eventId}`, {
+    fetch(`${API_BASE_URL}/api/v1/events/update/${eventId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

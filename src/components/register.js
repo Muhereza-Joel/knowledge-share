@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { Nav } from "react-bootstrap";
+import API_BASE_URL from "./appConfig";
 
 class Register extends Component {
   style = {
@@ -113,7 +114,7 @@ class Register extends Component {
   
     if (Object.keys(errors).length === 0) {
       try {
-        const response = await fetch("http://localhost:3001/api/v1/auth/register", {
+        const response = await fetch(`${API_BASE_URL}/api/v1/auth/register`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

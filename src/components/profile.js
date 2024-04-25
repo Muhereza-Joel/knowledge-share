@@ -5,9 +5,11 @@ import ShortProfile from "./shortProfile";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import API_BASE_URL from "./appConfig";
+import Cookies from "js-cookie";
 
 
 const Profile = (props) => {
+  const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
   const [isEditing, setIsEditing] = useState();
   const [isEditPassword, setIsEditingPassword] = useState();
   const [avatarUrl, setAvatarUrl] = useState("");
@@ -28,7 +30,7 @@ const Profile = (props) => {
     const fetchProfileData = async () => {
       try {
         const response = await fetch(
-          `${API_BASE_URL}/api/v1/auth/profile/${localStorage.getItem("userId")}`
+          `${API_BASE_URL}/api/v1/auth/profile/${cookieData.USERID_KEY}`
         );
 
         if (response.ok) {
@@ -65,9 +67,7 @@ const Profile = (props) => {
     const fetchAvatarUrl = async () => {
       try {
         const response = await fetch(
-          `${API_BASE_URL}/api/v1/auth/get-avator/${localStorage.getItem(
-            "userId"
-          )}`
+          `${API_BASE_URL}/api/v1/auth/get-avator/${cookieData.USERID_KEY}`
         );
 
         if (response.ok) {
@@ -110,7 +110,7 @@ const Profile = (props) => {
               homeCountry: formData.homeCountry,
               city: formData.city,
               phoneNumber: formData.phoneNumber,
-              userId: localStorage.getItem("userId"),
+              userId: cookieData.USERID_KEY,
             }),
           }
         );

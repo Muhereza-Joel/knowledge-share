@@ -7,8 +7,10 @@ import { BsSave2Fill } from "react-icons/bs";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import API_BASE_URL from "./appConfig";
+import Cookies from 'js-cookie';
 
 const ShortProfile = (props) => {
+  const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
   const [selectedFile, setSelectedFile] = useState(null);
   const [displayedImage, setDisplayedImage] = useState(null);
 
@@ -45,7 +47,7 @@ const ShortProfile = (props) => {
     if (selectedFile) {
       const formData = new FormData();
       formData.append("avatar", selectedFile);
-      formData.append("userId", localStorage.getItem("userId"));
+      formData.append("userId", cookieData.USERID_KEY);
 
       // Make a fetch request to your backend to save the photo
       try {

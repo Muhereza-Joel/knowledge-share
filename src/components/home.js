@@ -5,10 +5,12 @@ import QuestionCard from "./questionCard";
 import ShortProfile from "./shortProfile";
 import PopularTag from "./popularTag";
 import API_BASE_URL from "./appConfig";
+import Cookies from "js-cookie";
 
 const Home = (props) => {
+  const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
   const [state, setState] = useState({
-    userId: 123,
+    userId: cookieData.USERID_KEY,
     questionData: [],
     lastUsedTagsData: [],
     loading: true,
@@ -20,7 +22,7 @@ const Home = (props) => {
     const fetchAvatarUrl = async () => {
       try {
         const response = await fetch(
-          `${API_BASE_URL}/api/v1/auth/get-avator/${localStorage.getItem("userId")}`
+          `${API_BASE_URL}/api/v1/auth/get-avator/${cookieData.USERID_KEY}`
         );
 
         if (response.ok) {

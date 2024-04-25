@@ -3,9 +3,11 @@ import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash, faReply } from "@fortawesome/free-solid-svg-icons";
 import API_BASE_URL from "./appConfig";
+import Cookies from "js-cookie";
 
 const Comment = (props) => {
-  const currentUserId = localStorage.getItem("userId");
+  const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
+  const currentUserId = cookieData.USERID_KEY;
   const { comment, onDelete } = props;
   const [replyInput, setReplyInput] = useState("");
   const [replies, setReplies] = useState([]);
@@ -57,7 +59,7 @@ const Comment = (props) => {
             body: JSON.stringify({
               commentId: comment.id,
               reply: replyInput,
-              userId: localStorage.getItem("userId"),
+              userId: cookieData.USERID_KEY,
             }),
           }
         );

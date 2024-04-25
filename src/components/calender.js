@@ -12,6 +12,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../css/fullCalendar.css";
 import API_BASE_URL from "./appConfig";
+import Cookies from "js-cookie";
 
 const Calender = (props) => {
   const [events, setEvents] = useState([]);
@@ -26,6 +27,9 @@ const Calender = (props) => {
     start: null,
     end: null,
   });
+
+  const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
+  const userId = cookieData.USERID_KEY;
 
   const handleAddEvent = (e) => {
     e.preventDefault();
@@ -58,7 +62,7 @@ const Calender = (props) => {
       title: eventTitle,
       start: startDate,
       end: endDate,
-      userId: localStorage.getItem("userId"),
+      userId: userId,
     };
 
     fetch(`${API_BASE_URL}/api/v1/events/add`, {
@@ -96,10 +100,8 @@ const Calender = (props) => {
   };
 
   const getEvents = () => {
-    const userId = localStorage.getItem("userId");
-
     if (!userId) {
-      console.error("User ID not found in localStorage");
+      console.error("User ID not found");
       return;
     }
 
@@ -229,7 +231,7 @@ const Calender = (props) => {
           </div>
         </div>
         <div className="col-lg-7">
-          <div className="card p-3 mt-2 ms-3" >
+          <div className="card p-3 mt-2 ms-3">
             <FullCalendar
               plugins={[
                 dayGridPlugin,
@@ -326,7 +328,10 @@ const Calender = (props) => {
         </div>
 
         <div className="col-lg-3">
-          <div className="card p-3 mt-2 mx-2" style={{ border: "none", backgroundColor: "#f6f9ff" }}>
+          <div
+            className="card p-3 mt-2 mx-2"
+            style={{ border: "none", backgroundColor: "#f6f9ff" }}
+          >
             <div className="text-start">
               <h5>New Event</h5>
             </div>

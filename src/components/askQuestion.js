@@ -8,6 +8,7 @@ import debounce from "lodash/debounce";
 import LeftSideBar from "./leftSideBar";
 import TopBar from "./topBar";
 import API_BASE_URL from "./appConfig";
+import Cookies from 'js-cookie';
 
 const AskQuestion = (props) => {
   const [isQuestionSubmitted, setIsQuestionSubmitted] = useState(false);
@@ -119,9 +120,8 @@ const AskQuestion = (props) => {
       return;
     }
 
-    const userId = localStorage.getItem("userId");
-
-    // Check if userId is available
+    const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
+    const userId = cookieData.USERID_KEY
     if (!userId) {
       alert("User information not available. Please log in.");
       return;

@@ -7,16 +7,18 @@ import { logout } from "../auth";
 import { useNavigate } from "react-router-dom";
 import  Avatar  from "../assets/images/avator.jpg";
 import API_BASE_URL from "./appConfig";
+import Cookies from 'js-cookie';
 
 const SplitDropdown = (props) => {
   const navigate = useNavigate();
+  const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
 
   const [avatarUrl, setAvatarUrl] = useState("");
   useEffect(() => {
     const fetchAvatarUrl = async () => {
       try {
         const response = await fetch(
-          `${API_BASE_URL}/api/v1/auth/get-avator/${localStorage.getItem("userId")}`
+          `${API_BASE_URL}/api/v1/auth/get-avator/${cookieData.USERID_KEY}`
         );
 
         if (response.ok) {

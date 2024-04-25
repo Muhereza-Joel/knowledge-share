@@ -16,6 +16,7 @@ import { isAuthenticated } from "./auth";
 import { AuthProvider, useAuth } from "./AuthContext";
 import Calender from "./components/calender";
 import Profile from "./components/profile";
+import Cookies from 'js-cookie';
 
 const PrivateRoute = ({ element, path }) => {
   return isAuthenticated() ? (
@@ -28,16 +29,17 @@ const PrivateRoute = ({ element, path }) => {
 const App = () => {
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState(null);
+  const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
+  const usernameFromCookie = cookieData.USERNAME_KEY
 
   useEffect(() => {
-    setUsername(localStorage.getItem("username"));
+    setUsername(usernameFromCookie);
     setLoading(false);
   }, []);
 
   
   const handleLogout = () => {
     setUsername(null);
-    localStorage.removeItem("username");
   };
 
   return (

@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import API_BASE_URL from "./appConfig";
+import Cookies from "js-cookie";
 
 const PopularTag = ({
   id,
@@ -15,6 +16,7 @@ const PopularTag = ({
   onUpdate,
   showIcons = true,
 }) => {
+  const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
   const [isHovered, setIsHovered] = useState(false);
   const [showIconsState, setShowIconsState] = useState(showIcons);
 
@@ -148,7 +150,7 @@ const PopularTag = ({
     } catch (error) {
       setError(error.message);
     }
-  }
+  };
 
   const handleUpdateTag = async () => {
     try {
@@ -204,7 +206,9 @@ const PopularTag = ({
         <div className="col-sm-10">
           <div className="d-flex flex-column">
             <Nav.Item>
-              <Nav.Link href={`/knowledge-share/${username}/tags/${id}`}>
+              <Nav.Link
+                href={`/knowledge-share/${cookieData.USERNAME_KEY}/tags/${id}`}
+              >
                 <span
                   className="fw-bold"
                   style={{
@@ -226,21 +230,26 @@ const PopularTag = ({
           className="position-absolute top-75 start-75 translate-end"
           style={{ backgroundColor: "#f6f9ff", border: "4px solid #cce6e8" }}
         >
-          <i
-            className="bi bi-pencil mx-2 text-primary"
-            onClick={handleEdit}
-            style={{ cursor: "pointer" }}
-          ></i>
+          {cookieData.USERROLE_KEY === "admin" && (
+            <i
+              className="bi bi-pencil mx-2 text-primary"
+              onClick={handleEdit}
+              style={{ cursor: "pointer" }}
+            ></i>
+          )}
           <i
             className="bi bi-eye mx-2 text-success"
             onClick={handleView}
             style={{ cursor: "pointer" }}
           ></i>
-          <i
-            className="bi bi-trash mx-2 text-danger"
-            onClick={handleDelete}
-            style={{ cursor: "pointer" }}
-          ></i>
+
+          {cookieData.USERROLE_KEY === "admin" && (
+            <i
+              className="bi bi-trash mx-2 text-danger"
+              onClick={handleDelete}
+              style={{ cursor: "pointer" }}
+            ></i>
+          )}
         </div>
       )}
       {/* Start View Tag Details Model */}
@@ -340,7 +349,10 @@ const PopularTag = ({
       {/* End Edit Tag Details Model */}
 
       {/* Start Confirm Delete Model */}
-      <Modal show={showConfirmDeleteModel} onHide={handleCloseConfirmDeleteModel}>
+      <Modal
+        show={showConfirmDeleteModel}
+        onHide={handleCloseConfirmDeleteModel}
+      >
         <Modal.Body
           style={{
             backgroundColor: "#f6f9ff",
@@ -348,10 +360,15 @@ const PopularTag = ({
             border: "5px solid #cce6e8",
           }}
         >
-          <h5 className="text-secondary">Are you sure you want to delete this tag?</h5>
+          <h5 className="text-secondary">
+            Are you sure you want to delete this tag?
+          </h5>
           <hr></hr>
           <small className="text-warning">Caution:</small>
-          <p className="mt-1">Deleting this tag will also delete all data associated with this tag. Note that this action is undoable..</p>
+          <p className="mt-1">
+            Deleting this tag will also delete all data associated with this
+            tag. Note that this action is undoable..
+          </p>
 
           <div className="text-end">
             <Button

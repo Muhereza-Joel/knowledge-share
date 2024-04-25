@@ -65,7 +65,7 @@ const SplitDropdown = (props) => {
         style={{ backgroundColor: "#cce6e8", border: "none", color: "black", marginTop:"-10px" }}
         className="btn-sm fw-bold"
       >
-        <img src={avatarUrl || Avatar} className="rounded-circle" style={avatorStyle}/>{props.username}
+        <img src={avatarUrl || Avatar} className="rounded-circle" style={avatorStyle}/>{cookieData.USERNAME_KEY}
       </Button>
 
       <Dropdown.Toggle

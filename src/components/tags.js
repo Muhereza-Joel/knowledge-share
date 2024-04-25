@@ -7,8 +7,10 @@ import PopularTag from "./popularTag";
 import LeftSideBar from "./leftSideBar";
 import TopBar from "./topBar";
 import API_BASE_URL from "./appConfig";
+import Cookies from "js-cookie";
 
 const Tags = (props) => {
+  const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
   const [tagsData, setTagsData] = useState([]);
   const [filteredTags, setFilteredTags] = useState([]);
   const [error, setError] = useState(null);
@@ -37,17 +39,14 @@ const Tags = (props) => {
         return;
       }
 
-      const response = await fetch(
-        `${API_BASE_URL}/api/v1/tags/add-tag/`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(newTag),
-          mode: "cors",
-        }
-      );
+      const response = await fetch(`${API_BASE_URL}/api/v1/tags/add-tag/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newTag),
+        mode: "cors",
+      });
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -156,16 +155,18 @@ const Tags = (props) => {
                     />
                   </div>
                   <div className="mx-3 text-end pt-2">
-                    <Button
-                      style={{
-                        backgroundColor: "#cce6e8",
-                        border: "6px solid #e0f8ff",
-                      }}
-                      className="btn btn-secondary btn-sm text-dark fw-bold"
-                      onClick={handleShowModal}
-                    >
-                      Add New Tag
-                    </Button>
+                    {cookieData.USERROLE_KEY === "admin" && (
+                      <Button
+                        style={{
+                          backgroundColor: "#cce6e8",
+                          border: "6px solid #e0f8ff",
+                        }}
+                        className="btn btn-secondary btn-sm text-dark fw-bold"
+                        onClick={handleShowModal}
+                      >
+                        Add New Tag
+                      </Button>
+                    )}
                   </div>
                 </div>
 

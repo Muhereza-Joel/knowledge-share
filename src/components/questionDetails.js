@@ -8,8 +8,10 @@ import { ToastContainer, toast } from "react-toastify";
 import { Form, Button } from "react-bootstrap";
 import Answer from "./answers";
 import API_BASE_URL from "./appConfig";
+import Cookies from "js-cookie";
 
 const QuestionDetails = ({ username, questionDetails }) => {
+  const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
   const [isHovered, setIsHovered] = useState(false);
   const [answerContent, setAnswerContent] = useState("");
   const [answers, setAnswers] = useState(questionDetails.answers || []); // Initialize with an empty array if undefined
@@ -59,7 +61,7 @@ const QuestionDetails = ({ username, questionDetails }) => {
       const postData = new FormData();
       postData.append("questionId", questionId);
       postData.append("answer", answerContent);
-      postData.append("userId", localStorage.getItem("userId"));
+      postData.append("userId", cookieData.USERID_KEY);
 
       // Make the POST request to your API endpoint
       const response = await fetch(
@@ -113,9 +115,23 @@ const QuestionDetails = ({ username, questionDetails }) => {
                     onMouseLeave={handleMouseLeave}
                   >
                     <div className="text-primary">
-                      <p className="fw-bold text-secondary h5">
-                        {questionTitle}
-                      </p>
+                      <div className="d-flex flex-row">
+                        <div className="w-75">
+                          <p className="fw-bold text-secondary h5">
+                            {questionTitle}
+                          </p>
+                        </div>
+                        <div className="w-25 text-end">
+                          {cookieData.USERROLE_KEY === 'admin' && (
+                            <Button
+                              className="btn btn-sm btn-danger mb-3"
+                              type="submit"
+                            >
+                              Delete Question
+                            </Button>
+                          )}
+                        </div>
+                      </div>
                       <div className="d-flex flex-row  align-items-center">
                         <div className="mx-1">
                           {answers && answers.length} Answers
@@ -152,13 +168,14 @@ const QuestionDetails = ({ username, questionDetails }) => {
                     answers.map((answer, index) => (
                       <Answer
                         key={index}
-                        answerId = {answer.answerId}
-                        questionId = {answer.questionId}
-                        userId = {answer.userId}
+                        answerId={answer.answerId}
+                        questionId={answer.questionId}
+                        userId={answer.userId}
                         username={answer.username}
                         created_at={answer.created_at}
                         answerContent={answer.answerContent}
                         avatarUrl={answer.avatarUrl}
+                        role = {answer.role}
                       />
                     ))
                   ) : (
@@ -210,13 +227,12 @@ const QuestionDetails = ({ username, questionDetails }) => {
                     images.length > 0 &&
                     images.map((image, index) => (
                       <div className="card mx-2 mb-3">
-
-                          <img
-                            key={index}
-                            src={image.url}
-                            alt={`Image ${index + 1}`}
-                            className="img-fluid mx-3 mb-2"
-                          />
+                        <img
+                          key={index}
+                          src={image.url}
+                          alt={`Image ${index + 1}`}
+                          className="img-fluid mx-3 mb-2"
+                        />
                       </div>
                     ))}
                 </div>

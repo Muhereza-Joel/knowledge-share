@@ -5,11 +5,13 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import QuestionMoment from "./questionMoment";
 import API_BASE_URL from "./appConfig";
+import Cookies from "js-cookie";
 
 const Answer = (props) => {
   const [commentInput, setCommentInput] = useState("");
   const [comments, setComments] = useState([]);
   const [isInputVisible, setIsInputVisible] = useState(false);
+  const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
 
   useEffect(() => {
     // Make a GET request to fetch comments for the answer
@@ -25,14 +27,14 @@ const Answer = (props) => {
       }
     };
 
-
     fetchComments();
   }, [props.answerId]); // Dependency array to re-run effect when answerId changes
 
   const handleDelete = (deletedCommentId) => {
-  
-    const updatedComments = comments.filter(comment => comment.id !== deletedCommentId);
-   
+    const updatedComments = comments.filter(
+      (comment) => comment.id !== deletedCommentId
+    );
+
     setComments(updatedComments);
     toast.success("Comment deleted successfully!", {
       style: { backgroundColor: "#cce6e8", color: "#333" },
@@ -40,33 +42,27 @@ const Answer = (props) => {
   };
 
   const handleCommentSubmit = async () => {
-
     if (commentInput.trim() !== "") {
       try {
-
-        const response = await fetch(
-          `${API_BASE_URL}/api/v1/comments/add`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              answerId: props.answerId,
-              questionId: props.questionId,
-              userId: localStorage.getItem("userId"),
-              comment: commentInput,
-            }),
-          }
-        );
+        const response = await fetch(`${API_BASE_URL}/api/v1/comments/add`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            answerId: props.answerId,
+            questionId: props.questionId,
+            userId: localStorage.getItem("userId"),
+            comment: commentInput,
+          }),
+        });
 
         const newComment = await response.json();
         setComments((prevComments) => [...prevComments, newComment]);
-     
-        setCommentInput("");
-        
-        setIsInputVisible(false);
 
+        setCommentInput("");
+
+        setIsInputVisible(false);
       } catch (error) {
         console.error("Error submitting comment:", error);
       }
@@ -76,10 +72,29 @@ const Answer = (props) => {
   return (
     <div className="card mt-2 p-2">
       <div className="text-secondary">
-        <div className="text-end">
-          <QuestionMoment avatarUrl={props.avatarUrl} username={props.username} created_at={props.created_at}/>
-        </div>
+        <div className="">
+          <div className="d-flex flex-row">
+            <div className="w-25 pt-5">
+              {props.role === "expert" && (
+                <span
+                  className="bagde bg-success text-light py-1 px-3 fw-100"
+                  style={{ borderRadius: 50 }}
+                >
+                  Expert Answer
+                </span>
+              )}
+            </div>
 
+            <div className="w-75 text-end">
+              <QuestionMoment
+                avatarUrl={props.avatarUrl}
+                username={props.username}
+                created_at={props.created_at}
+              />
+            </div>
+          </div>
+        </div>
+        <hr></hr>
         <div
           dangerouslySetInnerHTML={{
             __html: String(props.answerContent) || "",
@@ -88,7 +103,7 @@ const Answer = (props) => {
         <hr></hr>
         {/* Toggleable input for adding a comment */}
         <div className="mt-4">
-          <Comments comments={comments} onDelete={handleDelete}/>
+          <Comments comments={comments} onDelete={handleDelete} />
 
           {isInputVisible && (
             <div className="mt-2">
@@ -118,16 +133,16 @@ const Answer = (props) => {
           </button>
 
           <ToastContainer
-              position="bottom-left"
-              autoClose={3000}
-              hideProgressBar={false}
-              newestOnTop
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-            />
+            position="bottom-left"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
         </div>
       </div>
     </div>

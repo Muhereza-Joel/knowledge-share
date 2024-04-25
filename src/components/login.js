@@ -133,6 +133,7 @@ const Login = () => {
           <Form.Control
             type="email"
             name="email"
+            autoComplete="off"
             placeholder="Enter username or email"
             onChange={handleChange}
             onBlur={handleBlur}

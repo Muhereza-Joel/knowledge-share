@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import { Nav } from "react-bootstrap";
+import Cookies from 'js-cookie';
 
 const Tag = ({ text, tagId, username }) => {
+  const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
   const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
@@ -21,7 +23,7 @@ const Tag = ({ text, tagId, username }) => {
   return (
     <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <Nav.Item>
-        <Nav.Link href={`/knowledge-share/${username}/tags/${tagId}`}>
+        <Nav.Link href={`/knowledge-share/${cookieData.USERNAME_KEY}/tags/${tagId}`}>
           <span
             className="badge mx-1"
             style={{

@@ -4,8 +4,10 @@ import { Card, Placeholder,Nav } from "react-bootstrap";
 import Tag from "./tag";
 import { useNavigate } from "react-router-dom";
 import QuestionMoment from "./questionMoment";
+import Cookies from 'js-cookie';
 
 const LoadingPlaceholder = () => (
+  
     <Card className="p-4" style={{border:"none"}}>
 
       <Placeholder as={Card.Text} animation="wave" >
@@ -22,6 +24,7 @@ const LoadingPlaceholder = () => (
 
 
 const QuestionCard = (props) => {
+  const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
   const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
 
@@ -38,7 +41,7 @@ const QuestionCard = (props) => {
     avatarUrl
   } = props.data;
 
-  const questionUrl = `/knowledge-share/${props.currentUser}/questions/${questionId}`;
+  const questionUrl = `/knowledge-share/${cookieData.USERNAME_KEY}/questions/${questionId}`;
 
   useEffect(() => {
     // Clean up the hover state when unmounting

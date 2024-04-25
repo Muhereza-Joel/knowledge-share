@@ -46,11 +46,11 @@ const SplitDropdown = (props) => {
   };
 
   const navigateToProfile = () => {
-    navigate(`/knowledge-share/${props.username}/profile/`);
+    navigate(`/knowledge-share/${cookieData.USERNAME_KEY}/profile/`);
   }
 
   const handleNavigatioToHome = () => {
-    navigate(`/knowledge-share/${props.username}/`);
+    navigate(`/knowledge-share/${cookieData.USERNAME_KEY}/`);
   }
 
   const avatorStyle = {
@@ -79,7 +79,7 @@ const SplitDropdown = (props) => {
         <Dropdown.Item>
           <Nav.Item>
             <Nav.Link
-              href={`/knowledge-share/${props.username}/`}
+              href={`/knowledge-share/${cookieData.USERNAME_KEY}/`}
               className="text-info px-2 fw-bold text-dark"
               onClick={handleNavigatioToHome}
             >

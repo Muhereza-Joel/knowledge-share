@@ -1,4 +1,4 @@
-import React, { Component, memo } from "react";
+import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import { Nav } from "react-bootstrap";
 import Home from "./home";
@@ -8,84 +8,65 @@ import QuestionDetails from "./questionDetails";
 import AskQuestion from "./askQuestion";
 import LeftSideBar from "./leftSideBar";
 import TopBar from "./topBar";
+import Cookies from 'js-cookie';
 
-class Dashboard extends Component {
-  constructor(props) {
-    super(props);
-  }
+const Dashboard = (props) => {
+  const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
+  const [selectedComponent, setSelectedComponent] = useState("home");
+  const [questionId, setQuestionId] = useState(null);
+  const username = cookieData.USERNAME_KEY;
 
-  style = {
-    backgroundColor: "#f6f9ff",
-    position: "relative",
+  useEffect(() => {
+    // Perform any side effects or initialization here
+  }, []);
+
+  const handleNavLinkClick = (component) => {
+    setSelectedComponent(component);
+    // Additional logic if needed
   };
 
-  panelStyle = {
-    minHeight: "90vh",
+  const handleQuestionLinkClick = (questionId) => {
+    setQuestionId(questionId);
+    // Additional logic if needed
   };
 
-  leftPanelStyle = {
-    ...this.panelStyle,
-    position: "sticky",
-    top: 60,
-  };
-
-  topPaneStyle = {
-    width: "100%",
-    height: "7vh",
-    zIndex: "3",
-    position: "sticky",
-    top: 0,
-  };
-
- 
-  renderSelectedComponent = () => {
-    // Determine which component to render based on the selectedComponent state
-    switch (this.state.selectedComponent) {
-      
+  const renderSelectedComponent = () => {
+    switch (selectedComponent) {
       case "questions":
         return (
           <Questions
-            username={`${this.props.username}`}
-            onQuestionClick={this.handleQuestionLinkClick}
+            username={username}
+            onQuestionClick={handleQuestionLinkClick}
           />
         );
       case "tags":
-        return <Tags username={`${this.props.username}`} />;
+        return <Tags username={username} />;
       case "questionDetails":
-        return <QuestionDetails questionId={`${this.state.questionId}`} />;
-      
+        return <QuestionDetails questionId={questionId} />;
       default:
-        return null;
+        return <Home/>;
     }
   };
 
+  return (
+    <div style={{ backgroundColor: "#f6f9ff", position: "relative" }}>
+      <TopBar username={username} />
+      <div className="row g-0">
+        <div className="col-lg-2">
+          <LeftSideBar
+            username={username}
+            handleNavLinkClick={handleNavLinkClick}
+          />
+        </div>
 
-  render() {
-    const username = this.props.username;
-
-    return (
-      <div style={this.style}>
-        <TopBar username={username} />
-        <div className="row g-0">
-          <div className="col-lg-2">
-            <LeftSideBar
-              username={username}
-              handleNavLinkClick={this.handleNavLinkClick}
-            />
-          </div>
-
-          <div className="col-lg-10">
-            <div id="content-section" className="row g-0">
-              <Home
-                username={username}
-                onAskQuestionClick={this.handleNavLinkClick}
-              />
-            </div>
+        <div className="col-lg-10">
+          <div id="content-section" className="row g-0">
+            {renderSelectedComponent()}
           </div>
         </div>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
-export default memo(Dashboard);
+export default Dashboard;

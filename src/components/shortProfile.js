@@ -78,7 +78,7 @@ const ShortProfile = (props) => {
     }
   };
 
-  const { username, avatarUrl } = props;
+  const { avatarUrl } = props;
 
   return (
     <div className="mt-0 mx-3 text-center" style={style}>
@@ -92,7 +92,7 @@ const ShortProfile = (props) => {
       <div className="d-flex justify-content-center">
         <span className="text-center">
           Signed In As
-          <div className="h4 text-center">{username}</div>
+          <div className="h4 text-center">{cookieData.USERNAME_KEY}</div>
         </span>
       </div>
 

@@ -22,7 +22,7 @@ const PrivateRoute = ({ element, path }) => {
   return isAuthenticated() ? (
     element
   ) : (
-    <Navigate to="/auth/login/" state={{ from: path }} />
+    <Navigate to="/knowledge-share/auth/login/" state={{ from: path }} />
   );
 };
 
@@ -47,14 +47,20 @@ const App = () => {
       <AuthProvider>
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route path="/auth/register/" element={<Register />} />
-          <Route path="/auth/login/" element={<Login />} />
+          <Route path="/knowledge-share/auth/register/" element={<Register />} />
+          <Route path="/knowledge-share/auth/login/" element={<Login />} />
           <Route
             path="/logout"
             element={<Logout handleLogout={handleLogout} />}
           />
           <Route
             path="/knowledge-share/*"
+            element={
+              <PrivateRoute element={<Dashboard username={username} />} />
+            }
+          />
+          <Route
+            path="/knowledge-share/:username"
             element={
               <PrivateRoute element={<Dashboard username={username} />} />
             }

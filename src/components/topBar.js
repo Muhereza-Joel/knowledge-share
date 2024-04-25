@@ -2,9 +2,10 @@ import React, {useState} from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import SplitDropdown from "./SplitDropdown";
 import { useNavigate } from "react-router-dom";
+import Cookies from 'js-cookie';
 
 const TopBar = (props) => {
-
+  const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
   const navigate = useNavigate();
 
   const topPaneStyle = {
@@ -14,7 +15,7 @@ const TopBar = (props) => {
     position: "sticky",
     top: 0,
     backgroundColor: "#f6f9ff",
-    boxShadow: "0px 1px 4px 2px rgba(0,0,0,0.1)",
+    // boxShadow: "0px 1px 4px 2px rgba(0,0,0,0.1)",
   };
 
 
@@ -34,7 +35,7 @@ const TopBar = (props) => {
             <h6 className="mx-2 ml-4">Notifications |</h6>
             <h6 className="mx-2 ml-4">Messages |</h6>
             <h6 className="mx-2">Settings |</h6>
-            <h6 className="mx-2" style={{cursor: "pointer"}} onClick={() => {navigate(`/knowledge-share/${props.username}/profile/`)}}>Profile</h6>
+            <h6 className="mx-2" style={{cursor: "pointer"}} onClick={() => {navigate(`/knowledge-share/${cookieData.USERNAME_KEY}/profile/`)}}>Profile</h6>
           </div>
 
           <div className="w-25 text-end">

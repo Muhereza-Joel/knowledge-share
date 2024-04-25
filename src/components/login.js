@@ -1,25 +1,16 @@
-import React, { Component } from "react";
-import { Routes, Route, Navigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { Nav } from "react-bootstrap";
-import { isAuthenticated, login } from "../auth"
-import Dashboard from "./dashboard";
+import { isAuthenticated, login } from "../auth";
+import Cookies from 'js-cookie';
 
-class Login extends Component {
-  style = {
-    backgroundColor: "#f6f9ff",
-    minHeight: "100vh",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    fontSize: "calc(10px + 1vmin)",
-    color: "white",
-  };
-
-  state = {
+const Login = () => {
+  const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
     email: "",
     password: "",
     username: "",
@@ -29,75 +20,81 @@ class Login extends Component {
       password: "",
     },
     redirectToDashboard: false,
-  };
+  });
 
-  componentDidMount() {
-    const storedFormValues =
-      JSON.parse(localStorage.getItem("loginFormValues")) || {};
+  useEffect(() => {
+    const storedFormValues = JSON.parse(localStorage.getItem("loginFormValues")) || {};
     const { errors, rememberMe, ...rest } = storedFormValues;
-    this.setState({
+    setFormData((prevFormData) => ({
+      ...prevFormData,
       ...rest,
       rememberMe: Boolean(rememberMe),
-    });
-  }
+    }));
+  }, []);
 
-  componentDidUpdate() {
-    const { errors, redirectToDashboard, ...valuesToStore } = this.state; // Exclude errors and redirectToDashboard from values to store
+  useEffect(() => {
+    const { errors, redirectToDashboard, ...valuesToStore } = formData; // Exclude errors and redirectToDashboard from values to store
     localStorage.setItem("loginFormValues", JSON.stringify(valuesToStore));
-  }
+  }, [formData]);
 
-  handleChange = (e) => {
+  const handleChange = (e) => {
     const { name, type, checked } = e.target;
     const value = type === "checkbox" ? checked : e.target.value;
 
-    this.setState((prevState) => ({
+    setFormData((prevFormData) => ({
+      ...prevFormData,
       [name]: value,
       errors: {
-        ...prevState.errors,
+        ...prevFormData.errors,
         [name]: "",
       },
     }));
   };
 
-  handleBlur = (e) => {
+  const handleBlur = (e) => {
     const { name, value } = e.target;
 
     if (!value.trim()) {
-      this.setState((prevState) => ({
+      setFormData((prevFormData) => ({
+        ...prevFormData,
         errors: {
-          ...prevState.errors,
+          ...prevFormData.errors,
           [name]: `${name.charAt(0).toUpperCase() + name.slice(1)} is required`,
         },
       }));
     }
   };
 
-  handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const errors = {};
-    if (!this.state.email.trim()) {
+    if (!formData.email.trim()) {
       errors.email = "Email is required";
     }
 
-    if (!this.state.password.trim()) {
+    if (!formData.password.trim()) {
       errors.password = "Password is required";
     }
 
-    const { email, password } = this.state;
+    const { email, password } = formData;
 
     if (Object.keys(errors).length === 0) {
       const authenticationResult = await login(email, password);
 
       if (authenticationResult.username) {
         // Authentication successful
-        this.setState({ isLoggedIn: true });
-        this.setState({ username: authenticationResult.username });
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          isLoggedIn: true,
+          username: authenticationResult.username,
+        }));
 
         setTimeout(() => {
-          this.setState({
+          setFormData((prevFormData) => ({
+            ...prevFormData,
             redirectToDashboard: true,
-          });
+          }));
         }, 10);
       } else {
         // Authentication failed
@@ -106,91 +103,99 @@ class Login extends Component {
     }
 
     // Update the state with errors
-    this.setState({ errors });
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      errors,
+    }));
   };
 
-  render() {
-    const { errors, redirectToDashboard} = this.state;
-
-    if (redirectToDashboard) {
-      return <Dashboard username={this.state.username} />
-    }
-
-    return (
-      <div style={this.style}>
-        <div className="d-flex flex-column align-items-center justify-content-center">
-          <div className="d-flex mb-4">
-            <h1 className="text-success">K</h1>
-            <h1 className="text-info">S</h1>
-          </div>
-          <h3 className="text-dark mb-1"> KnowledgeShare</h3>
-          <span className="text-dark mb-3">
-            Uganda's Number One Agricultural Resource Center
-          </span>
+  if (formData.redirectToDashboard) {
+    navigate(`/knowledge-share/${cookieData.USERNAME_KEY}`);
+  } 
+  return (
+    <div style={style}>
+      <div className="d-flex flex-column align-items-center justify-content-center">
+        <div className="d-flex mb-4">
+          <h1 className="text-success">K</h1>
+          <h1 className="text-info">S</h1>
         </div>
-        <Form className="card p-3" onSubmit={this.handleSubmit} noValidate>
-          <h5 className="text-dark text-center mb-4">Login To Your Account</h5>
-          <Form.Group className="mb-3 mt-3" controlId="formBasicEmail">
-            <Form.Label className="text-dark">
-              Username or Email address
-            </Form.Label>
-            <Form.Control
-              type="email"
-              name="email"
-              placeholder="Enter username or email"
-              onChange={this.handleChange}
-              onBlur={this.handleBlur}
-              value={this.state.email}
-              required
-            />
-            {errors.email && (
-              <small className="text-danger">{errors.email}</small>
-            )}
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formBasicPassword">
-            <Form.Label className="text-dark">Password</Form.Label>
-            <Form.Control
-              type="password"
-              name="password"
-              placeholder="Password"
-              onChange={this.handleChange}
-              onBlur={this.handleBlur}
-              value={this.state.password}
-              required
-            />
-            {errors.password && (
-              <small className="text-danger">{errors.password}</small>
-            )}
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formBasicCheckbox">
-            <Form.Check
-              type="checkbox"
-              name="rememberMe"
-              label="Remember Me"
-              onChange={this.handleChange}
-              checked={this.state.rememberMe}
-            />
-          </Form.Group>
-
-          <Button variant="secondary" type="submit" className="btn-sm">
-            Login
-          </Button>
-
-          <Nav.Item className="d-flex align-items-center mt-3">
-            If you don't have an account click
-            <small>
-              <Nav.Link href="/auth/register/" className="text-info px-2">
-                here
-              </Nav.Link>
-            </small>
-          </Nav.Item>
-
-        </Form>
+        <h3 className="text-dark mb-1"> KnowledgeShare</h3>
+        <span className="text-dark mb-3">
+          Uganda's Number One Agricultural Resource Center
+        </span>
       </div>
-    );
-  }
-}
+      <Form className="card p-3" onSubmit={handleSubmit} noValidate>
+        <h5 className="text-dark text-center mb-4">Login To Your Account</h5>
+        <Form.Group className="mb-3 mt-3" controlId="formBasicEmail">
+          <Form.Label className="text-dark">
+            Username or Email address
+          </Form.Label>
+          <Form.Control
+            type="email"
+            name="email"
+            placeholder="Enter username or email"
+            onChange={handleChange}
+            onBlur={handleBlur}
+            value={formData.email}
+            required
+          />
+          {formData.errors.email && (
+            <small className="text-danger">{formData.errors.email}</small>
+          )}
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="formBasicPassword">
+          <Form.Label className="text-dark">Password</Form.Label>
+          <Form.Control
+            type="password"
+            name="password"
+            placeholder="Password"
+            onChange={handleChange}
+            onBlur={handleBlur}
+            value={formData.password}
+            required
+          />
+          {formData.errors.password && (
+            <small className="text-danger">{formData.errors.password}</small>
+          )}
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="formBasicCheckbox">
+          <Form.Check
+            type="checkbox"
+            name="rememberMe"
+            label="Remember Me"
+            onChange={handleChange}
+            checked={formData.rememberMe}
+          />
+        </Form.Group>
+
+        <Button variant="secondary" type="submit" className="btn-sm">
+          Login
+        </Button>
+
+        <Nav.Item className="d-flex align-items-center mt-3">
+          If you don't have an account click
+          <small>
+            <Nav.Link href="/knowledge-share/auth/register/" className="text-info px-2">
+              here
+            </Nav.Link>
+          </small>
+        </Nav.Item>
+      </Form>
+    </div>
+  );
+};
+
+const style = {
+  backgroundColor: "#f6f9ff",
+  minHeight: "100vh",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+  fontSize: "calc(10px + 1vmin)",
+  color: "white",
+};
 
 export default Login;

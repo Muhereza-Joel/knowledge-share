@@ -188,7 +188,7 @@ class Register extends Component {
     const { errors, alert, redirectToLogin} = this.state;
 
     if(redirectToLogin){
-      return <Navigate to="/auth/login/" />;
+      return <Navigate to="/knowledge-share/auth/login/" />;
     }
 
     return (
@@ -268,7 +268,7 @@ class Register extends Component {
           <Nav.Item className="d-flex align-items-center mt-3">
             You have an account click
             <small>
-              <Nav.Link href="/auth/login/" className="text-info px-2">
+              <Nav.Link href="/knowledge-share/auth/login/" className="text-info px-2">
                 here to login
               </Nav.Link>
             </small>

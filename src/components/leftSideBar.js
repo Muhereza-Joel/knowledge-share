@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Nav } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 
 const LeftSideBar = (props) => {
   const storedActiveLink = localStorage.getItem("activeLink") || "ask-question";
@@ -23,9 +23,10 @@ const LeftSideBar = (props) => {
   };
 
   const linkStyle = {
-    backgroundColor: "#fff",
+    backgroundColor: "#217537",
+    color: "#fff",
     borderRadius: "0px 50px 50px 0px",
-    boxShadow: "0px 0px 10px 3px rgba(0,0,0,0.1)",
+    boxShadow: "0px 0px 5px 3px rgba(0,0,0,0.1)",
     padding: "13px 0 13px 0",
   };
 
@@ -40,7 +41,7 @@ const LeftSideBar = (props) => {
         >
           <Nav.Link
             href={`/knowledge-share/${cookieData.USERNAME_KEY}/questions/ask-question/`}
-            className="text-info px-3 fw-bold text-dark"
+            className="px-3 fw-bold"
             onClick={() => setActiveLink("ask-question")}
           >
             Ask Question
@@ -55,7 +56,7 @@ const LeftSideBar = (props) => {
         >
           <Nav.Link
             href={`/knowledge-share/${cookieData.USERNAME_KEY}/questions/`}
-            className="text-info px-3 fw-bold text-dark"
+            className="px-3 fw-bold"
             onClick={() => setActiveLink("all-questions")}
           >
             All Questions
@@ -70,7 +71,7 @@ const LeftSideBar = (props) => {
         >
           <Nav.Link
             href={`/knowledge-share/${cookieData.USERNAME_KEY}/calendar/`}
-            className="text-info px-3 fw-bold text-dark"
+            className="px-3 fw-bold"
             onClick={() => setActiveLink("calender")}
           >
             My Calendar
@@ -85,13 +86,29 @@ const LeftSideBar = (props) => {
         >
           <Nav.Link
             href={`/knowledge-share/${cookieData.USERNAME_KEY}/tags/`}
-            className="text-info px-3 fw-bold text-dark"
+            className="px-3 fw-bold"
             onClick={() => setActiveLink("tags")}
           >
             Tags
           </Nav.Link>
         </Nav.Item>
 
+        {cookieData.USERROLE_KEY === "admin" && (
+          <Nav.Item
+            className={`d-flex align-items-center mt-3 ${
+              activeLink === "users" ? "active" : ""
+            }`}
+            style={activeLink === "users" ? linkStyle : {}}
+          >
+            <Nav.Link
+              href={`/knowledge-share/users/`}
+              className="px-3 fw-bold"
+              onClick={() => setActiveLink("users")}
+            >
+              Plartform Users
+            </Nav.Link>
+          </Nav.Item>
+        )}
       </div>
     </div>
   );

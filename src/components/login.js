@@ -6,6 +6,7 @@ import Form from "react-bootstrap/Form";
 import { Nav } from "react-bootstrap";
 import { isAuthenticated, login } from "../auth";
 import Cookies from 'js-cookie';
+import logo from "../assets/images/logo.png"
 
 const Login = () => {
   const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
@@ -116,15 +117,14 @@ const Login = () => {
     <div style={style}>
       <div className="d-flex flex-column align-items-center justify-content-center">
         <div className="d-flex mb-4">
-          <h1 className="text-success">K</h1>
-          <h1 className="text-info">S</h1>
+          <img src={logo} width={100} height={100}/>
         </div>
         <h3 className="text-dark mb-1"> KnowledgeShare</h3>
         <span className="text-dark mb-3">
           Uganda's Number One Agricultural Resource Center
         </span>
       </div>
-      <Form className="card p-3" onSubmit={handleSubmit} noValidate>
+      <Form style={{border: "1px solid #217537"}} className="card p-3" onSubmit={handleSubmit} noValidate>
         <h5 className="text-dark text-center mb-4">Login To Your Account</h5>
         <Form.Group className="mb-3 mt-3" controlId="formBasicEmail">
           <Form.Label className="text-dark">
@@ -139,6 +139,7 @@ const Login = () => {
             onBlur={handleBlur}
             value={formData.email}
             required
+            style={{border: "1px solid #217537"}}
           />
           {formData.errors.email && (
             <small className="text-danger">{formData.errors.email}</small>
@@ -155,6 +156,7 @@ const Login = () => {
             onBlur={handleBlur}
             value={formData.password}
             required
+            style={{border: "1px solid #217537"}}
           />
           {formData.errors.password && (
             <small className="text-danger">{formData.errors.password}</small>
@@ -171,7 +173,7 @@ const Login = () => {
           />
         </Form.Group>
 
-        <Button variant="secondary" type="submit" className="btn-sm">
+        <Button variant="success" type="submit" className="btn-sm">
           Login
         </Button>
 

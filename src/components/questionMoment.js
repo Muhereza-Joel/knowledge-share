@@ -15,7 +15,7 @@ const QuestionMoment = (props) => {
   };
 
   const style = {
-    borderRight: "4px solid #299ea6",
+    borderRight: "4px solid #217537",
     paddingRight: "6px",
   };
   return (

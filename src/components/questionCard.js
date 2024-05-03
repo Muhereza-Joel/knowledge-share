@@ -95,7 +95,7 @@ const QuestionCard = (props) => {
             <Nav.Item className="mt-3">
               <Nav.Link href={questionUrl} onClick={handleClick}>
                 <p
-                  className="fw-normal text-primary h5"
+                  className="fw-normal text-dark h5"
                   style={{
                     textDecoration: isHovered ? "underline" : "none",
                     fontStyle: 'bold',

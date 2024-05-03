@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import SplitDropdown from "./SplitDropdown";
 import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
+import logo from "../assets/images/logo.png"
 
 const TopBar = (props) => {
   const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
@@ -24,7 +25,7 @@ const TopBar = (props) => {
       
           <div className="w-25">
             <h5>
-              <span className="text-success">Knowledge</span>Share
+             <img src={logo} style={{width: 35, height: 35}}/> <span className="text-success">Knowledge</span>Share
             </h5>
           </div>
 

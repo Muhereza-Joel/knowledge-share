@@ -17,6 +17,7 @@ import { AuthProvider, useAuth } from "./AuthContext";
 import Calender from "./components/calender";
 import Profile from "./components/profile";
 import Cookies from 'js-cookie';
+import Users from "./components/Users";
 
 const PrivateRoute = ({ element, path }) => {
   return isAuthenticated() ? (
@@ -104,6 +105,10 @@ const App = () => {
           <Route
             path="/knowledge-share/:username/calendar/"
             element={<PrivateRoute element={<Calender username={username} />} />}
+          />
+          <Route
+            path="/knowledge-share/users/"
+            element={<PrivateRoute element={<Users username={username} />} />}
           />
         </Routes>
       </AuthProvider>

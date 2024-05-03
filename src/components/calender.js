@@ -347,6 +347,7 @@ const Calender = (props) => {
                     onChange={(e) => setEventTitle(e.target.value)}
                     name="eventTitle"
                     required
+                    style={{border: "1px solid #217537"}}
                   />
                 </Form.Group>
               </div>
@@ -361,6 +362,7 @@ const Calender = (props) => {
                     onChange={(e) => setStartDate(e.target.value)}
                     name="startDate"
                     required
+                    style={{border: "1px solid #217537"}}
                   />
                 </Form.Group>
               </div>
@@ -375,11 +377,12 @@ const Calender = (props) => {
                     onChange={(e) => setEndDate(e.target.value)}
                     name="endDate"
                     required
+                    style={{border: "1px solid #217537"}}
                   />
                 </Form.Group>
               </div>
               <div>
-                <Button type="submit" className="btn btn-sm btn-secondary">
+                <Button type="submit" className="btn btn-sm btn-success">
                   Add Event
                 </Button>
               </div>

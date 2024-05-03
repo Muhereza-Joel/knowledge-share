@@ -125,7 +125,7 @@ const Answer = (props) => {
 
           
           <button
-            className={`btn btn-sm btn-primary ms-0 mt-3 ${
+            className={`btn btn-sm btn-success ms-0 mt-3 ${
               isInputVisible ? "d-none" : ""
             }`}
             onClick={() => setIsInputVisible(true)}

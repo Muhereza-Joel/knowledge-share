@@ -62,7 +62,7 @@ const SplitDropdown = (props) => {
     <Dropdown as={ButtonGroup}>
       <Button
         variant="secondary"
-        style={{ backgroundColor: "#cce6e8", border: "none", color: "black", marginTop:"-10px" }}
+        style={{ backgroundColor: "#217537", border: "none", color: "white", marginTop:"-10px" }}
         className="btn-sm fw-bold"
       >
         <img src={avatarUrl || Avatar} className="rounded-circle" style={avatorStyle}/>{cookieData.USERNAME_KEY}
@@ -71,7 +71,7 @@ const SplitDropdown = (props) => {
       <Dropdown.Toggle
         split
         variant="secondary"
-        style={{ backgroundColor: "#ace6e8", border: "none", color: "black", marginTop:"-10px" }}
+        style={{ backgroundColor: "#217537", border: "none", color: "white", marginTop:"-10px" }}
         id="dropdown-split-basic"
       />
 

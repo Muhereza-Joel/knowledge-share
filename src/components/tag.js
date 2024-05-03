@@ -25,9 +25,10 @@ const Tag = ({ text, tagId, username }) => {
       <Nav.Item>
         <Nav.Link href={`/knowledge-share/${cookieData.USERNAME_KEY}/tags/${tagId}`}>
           <span
-            className="badge mx-1"
+            className="badge mx-1 text-dark"
             style={{
-              backgroundColor: isHovered ? "#888" : "#444",
+              border: "3px solid #217537",
+              // backgroundColor: isHovered ? "#888" : "#217537",
               transition: "border 0.3s ease",
             }}
           >

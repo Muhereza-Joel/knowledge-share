@@ -108,7 +108,7 @@ const Home = (props) => {
                     href={`/knowledge-share/${props.username}/questions/ask-question/`}
                     className="text-info px-2 fw-bold"
                   >
-                    <button className="btn btn-sm btn-primary">
+                    <button className="btn btn-sm btn-primary bg-success">
                       Ask Question ?
                     </button>
                   </Nav.Link>

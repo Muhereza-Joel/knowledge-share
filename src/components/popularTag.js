@@ -104,7 +104,8 @@ const PopularTag = ({
     width: 50,
     height: 50,
     border: `4px solid ${isHovered ? "#299ea6" : "transparent"}`,
-    backgroundColor: "#cce6e8",
+    backgroundColor: "#217537",
+    // backgroundColor: "#cce6e8",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -196,7 +197,7 @@ const PopularTag = ({
         <div className="col-sm-2">
           <div className="d-flex flex-column align-items-center justify-content-center">
             <div
-              className="h4 p-2 m-1 text-dark rounded-circle text-center"
+              className="h4 p-2 m-1 text-light rounded-circle text-center"
               style={letterStyle}
             >
               {title.charAt(0).toUpperCase()}

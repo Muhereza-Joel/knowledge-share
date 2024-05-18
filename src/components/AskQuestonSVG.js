@@ -61,7 +61,7 @@ const AskQuestionSVG = () => {
             We are are a trusted source of knowledge concerning agriculture, Ask your question today!
           </text>
           <text x="20" y="160"  font-size="15" className="highlight">
-            Lets Share, Develop and Proper!!!
+            Lets Share, Develop and Prosper!!!
           </text>
         </g>
       </svg>

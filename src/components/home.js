@@ -48,7 +48,7 @@ const Home = (props) => {
     const fetchData = async () => {
       try {
         const [questionsResponse, tagsResponse] = await Promise.all([
-          fetch(`${API_BASE_URL}/api/v1/questions/all`),
+          fetch(`${API_BASE_URL}/api/v1/questions/recent`),
           fetch(`${API_BASE_URL}/api/v1/tags/most-used-tags/`),
         ]);
 
@@ -101,7 +101,7 @@ const Home = (props) => {
           >
             <div className="p-3">
               <div className="d-flex align-items-center mb-3">
-                <div className="pt-2 w-75 h4">Your Recent Questions</div>
+                <div className="pt-2 w-75 h4">Top 100 Recent Questions</div>
 
                 <Nav.Item className="mt-3 text-end w-25">
                   <Nav.Link

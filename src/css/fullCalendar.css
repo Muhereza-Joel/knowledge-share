@@ -1,5 +1,5 @@
 .fc .fc-button {
-  background-color: #28a745;
+  background-color: #217537;
   color: #ffffff;
   border: none;
   border-radius: 5px;
@@ -10,12 +10,12 @@
 
 /* Customize the hover effect for buttons */
 .fc-button:hover {
-  background-color: #28a745; /* Darker background color on hover */
+  background-color: #217537; /* Darker background color on hover */
 }
 
 /* Customize the appearance of the active state for buttons */
 .fc-button:active {
-  background-color: #297103; /* Even darker background color on active state */
+  background-color: #217537; /* Even darker background color on active state */
 }
 
 /* Customize the appearance of the disabled state for buttons */
@@ -27,14 +27,14 @@
 
 /* Custom styling for events */
 .custom-event {
-  background-color: #28a745; /* Change background color */
+  background-color: #217537; /* Change background color */
   color: #fff; /* Change text color */
   padding: 5px; /* Add padding */
 }
 
 /* Change the background color of the calendar */
 .fc .fc-toolbar-title {
-  color: #28a745; /* Change the color of the title */
+  color: #217537; /* Change the color of the title */
 }
 
 /* Change the color of event text */
@@ -44,7 +44,7 @@
 
 /* Change the background color of events */
 .fc-event {
-  background-color: #28a745; /* Event background color */
+  background-color: #217537; /* Event background color */
   border: 1px solid #ffffff; /* Event border color */
 }
 

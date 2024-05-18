@@ -50,6 +50,21 @@ const LeftSideBar = (props) => {
 
         <Nav.Item
           className={`d-flex align-items-center mt-3 ${
+            activeLink === "my-questions" ? "active" : ""
+          }`}
+          style={activeLink === "my-questions" ? linkStyle : {}}
+        >
+          <Nav.Link
+            href={`/knowledge-share/${cookieData.USERNAME_KEY}/my-questions/`}
+            className="px-3 fw-bold"
+            onClick={() => setActiveLink("my-questions")}
+          >
+            My Questions
+          </Nav.Link>
+        </Nav.Item>
+
+        <Nav.Item
+          className={`d-flex align-items-center mt-3 ${
             activeLink === "all-questions" ? "active" : ""
           }`}
           style={activeLink === "all-questions" ? linkStyle : {}}

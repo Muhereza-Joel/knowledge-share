@@ -8,7 +8,8 @@ import debounce from "lodash/debounce";
 import LeftSideBar from "./leftSideBar";
 import TopBar from "./topBar";
 import API_BASE_URL from "./appConfig";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
+import AskQuestionSVG from "./AskQuestonSVG";
 
 const AskQuestion = (props) => {
   const [isQuestionSubmitted, setIsQuestionSubmitted] = useState(false);
@@ -121,7 +122,7 @@ const AskQuestion = (props) => {
     }
 
     const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
-    const userId = cookieData.USERID_KEY
+    const userId = cookieData.USERID_KEY;
     if (!userId) {
       alert("User information not available. Please log in.");
       return;
@@ -141,13 +142,10 @@ const AskQuestion = (props) => {
 
     try {
       // Submit the form data to the server
-      const response = await fetch(
-        `${API_BASE_URL}/api/v1/questions/add`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      const response = await fetch(`${API_BASE_URL}/api/v1/questions/add`, {
+        method: "POST",
+        body: formData,
+      });
 
       if (response.ok) {
         // Handle success (you may redirect or perform other actions)
@@ -184,18 +182,8 @@ const AskQuestion = (props) => {
         </div>
         <div className="col-sm-10">
           <div className="mt-2 p-2">
-            <div className="alert my-2 p-4 alert-success">
-              <h2 className="text-secondary ">
-                Knowledge Share is a plartform for sharing Knowledge and
-                Experience...
-              </h2>
-              <h4 className="text-info">
-                Feel free to ask any question concerning agriculture
-              </h4>
-              <small>
-                The big community of farmers is waiting, Feel free to ask any
-                question today?
-              </small>
+            <div style={{ width: "100%", height: "100%" }}>
+              <AskQuestionSVG />
             </div>
 
             <div className="my-2">

@@ -18,6 +18,8 @@ import Calender from "./components/calender";
 import Profile from "./components/profile";
 import Cookies from 'js-cookie';
 import Users from "./components/Users";
+import QuestionsTagged from "./components/questionsTagged";
+import MyQuestions from "./components/myQuestions";
 
 const PrivateRoute = ({ element, path }) => {
   return isAuthenticated() ? (
@@ -85,6 +87,12 @@ const App = () => {
             }
           />
           <Route
+            path="/knowledge-share/:username/my-questions/"
+            element={
+              <PrivateRoute element={<MyQuestions username={username} />} />
+            }
+          />
+          <Route
             path="/knowledge-share/:username/questions/:questionId"
             element={
               <PrivateRoute
@@ -101,6 +109,10 @@ const App = () => {
           <Route
             path="/knowledge-share/:username/tags/"
             element={<PrivateRoute element={<Tags username={username} />} />}
+          />
+          <Route
+            path="/knowledge-share/:username/tags/:tagId"
+            element={<PrivateRoute element={<QuestionsTagged username={username} />} />}
           />
           <Route
             path="/knowledge-share/:username/calendar/"

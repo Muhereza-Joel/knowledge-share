@@ -81,7 +81,7 @@ const Questions = (props) => {
               >
                 <div className="p-3">
                   <div className="d-flex align-items-center mb-3">
-                    <div className="pt-2 w-75 h4">Popular Questions</div>
+                    <div className="pt-2 w-75 h4">All Questions</div>
                   </div>
 
                   {questionData.map((question, index) => (

@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import Avator from "../assets/images/avator.jpg";
 import { Button } from "react-bootstrap";
 import { BsUpload } from "react-icons/bs";
-import { BsSave2Fill } from "react-icons/bs";
+import { BiSolidSave } from "react-icons/bi"
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import API_BASE_URL from "./appConfig";
@@ -120,8 +120,8 @@ const ShortProfile = (props) => {
             >
               <BsUpload />
             </Button>
-            <Button variant="primary my-2" onClick={handleAvatarChange}>
-              <BsSave2Fill title="Save Photo" />
+            <Button variant="success my-2" onClick={handleAvatarChange}>
+              <BiSolidSave title="Save Photo" style={{fontSize: 25}}/>
             </Button>
           </div>
         </div>

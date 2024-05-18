@@ -52,7 +52,7 @@ const Answer = (props) => {
           body: JSON.stringify({
             answerId: props.answerId,
             questionId: props.questionId,
-            userId: localStorage.getItem("userId"),
+            userId: cookieData.USERID_KEY,
             comment: commentInput,
           }),
         });

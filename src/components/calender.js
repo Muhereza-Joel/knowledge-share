@@ -259,6 +259,9 @@ const Calender = (props) => {
                   border: "5px solid #cce6e8",
                 }}
               >
+
+                
+                <small className="fw-bold text-success">Edit Event Information</small><br></br><br></br>
                 <Form>
                   <Form.Group controlId="formEventTitle">
                     <Form.Label>Title</Form.Label>
@@ -276,7 +279,15 @@ const Calender = (props) => {
                   <Form.Group controlId="formEventStart">
                     <Form.Label>Start Date</Form.Label>
                     <Form.Control
-                      type="datetime-local"
+                      type="text"
+                      required
+                      value={updatedEvent.start}
+                      disabled
+                      className="mb-1"
+                    />
+                   
+                    <Form.Control
+                      type="date"
                       required
                       value={updatedEvent.start}
                       onChange={(e) =>
@@ -287,10 +298,18 @@ const Calender = (props) => {
                       }
                     />
                   </Form.Group>
+                  <br></br>
                   <Form.Group controlId="formEventEnd">
                     <Form.Label>End Date</Form.Label>
                     <Form.Control
-                      type="datetime-local"
+                      type="text"
+                      required
+                      value={updatedEvent.end}
+                      disabled
+                      className="mb-1"
+                    />
+                    <Form.Control
+                      type="date"
                       required
                       value={updatedEvent.end}
                       onChange={(e) =>
@@ -311,7 +330,7 @@ const Calender = (props) => {
                   </Button>
                   <Button
                     onClick={handleEditEvent}
-                    className="btn btn-primary btn-sm mx-2"
+                    className="btn btn-success btn-sm mx-2"
                   >
                     Save Changes
                   </Button>

@@ -102,7 +102,7 @@ const Profile = (props) => {
               // Add any other headers needed for authentication
             },
             body: JSON.stringify({
-              username: props.username,
+              username: formData.username,
               fullname: formData.fullname,
               email: formData.email,
               gender: formData.gender,

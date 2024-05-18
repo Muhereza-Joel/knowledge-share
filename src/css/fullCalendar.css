@@ -1,13 +1,54 @@
-/* Custom styling for buttons */
-.fc-prev-button, .fc-next-button, .fc-today-button {
-    background-color: #007bff; /* Change background color */
-    color: #fff; /* Change text color */
-  }
-  
-  /* Custom styling for events */
-  .custom-event {
-    background-color: #28a745; /* Change background color */
-    color: #fff; /* Change text color */
-    padding: 5px; /* Add padding */
-  }
-  
+.fc .fc-button {
+  background-color: #28a745;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px; /* Padding */
+  font-size: 14px; /* Font size */
+  cursor: pointer; /* Pointer cursor */
+}
+
+/* Customize the hover effect for buttons */
+.fc-button:hover {
+  background-color: #28a745; /* Darker background color on hover */
+}
+
+/* Customize the appearance of the active state for buttons */
+.fc-button:active {
+  background-color: #297103; /* Even darker background color on active state */
+}
+
+/* Customize the appearance of the disabled state for buttons */
+.fc-button.fc-state-disabled {
+  background-color: #d3d3d3; /* Disabled background color */
+  color: #a9a9a9; /* Disabled text color */
+  cursor: not-allowed; /* Not-allowed cursor for disabled buttons */
+}
+
+/* Custom styling for events */
+.custom-event {
+  background-color: #28a745; /* Change background color */
+  color: #fff; /* Change text color */
+  padding: 5px; /* Add padding */
+}
+
+/* Change the background color of the calendar */
+.fc .fc-toolbar-title {
+  color: #28a745; /* Change the color of the title */
+}
+
+/* Change the color of event text */
+.fc-event-title {
+  color: #ffffff; /* Event text color */
+}
+
+/* Change the background color of events */
+.fc-event {
+  background-color: #28a745; /* Event background color */
+  border: 1px solid #ffffff; /* Event border color */
+}
+
+/* Change the background color of the day cells */
+.fc-daygrid-day {
+  background-color: #f7f7f7; /* Background color for day cells */
+}

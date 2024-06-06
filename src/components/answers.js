@@ -69,18 +69,20 @@ const Answer = (props) => {
     }
   };
 
+  const cardStyle = props.role === "expert" ? { backgroundColor: "#e6ffe6" } : {};
+
   return (
-    <div className="card mt-2 p-2">
+    <div className="card mt-2 p-2" style={cardStyle}>
       <div className="text-secondary">
         <div className="">
           <div className="d-flex flex-row">
             <div className="w-25 pt-5">
               {props.role === "expert" && (
                 <span
-                  className="bagde bg-success text-light py-1 px-3 fw-100"
+                  className="badge bg-dark text-light py-2 px-3 fw-100"
                   style={{ borderRadius: 50 }}
                 >
-                  Expert Answer
+                  Attendant Answer
                 </span>
               )}
             </div>
@@ -94,13 +96,13 @@ const Answer = (props) => {
             </div>
           </div>
         </div>
-        <hr></hr>
+        <hr />
         <div
           dangerouslySetInnerHTML={{
             __html: String(props.answerContent) || "",
           }}
         />
-        <hr></hr>
+        <hr />
         {/* Toggleable input for adding a comment */}
         <div className="mt-4">
           <Comments comments={comments} onDelete={handleDelete} />
@@ -115,7 +117,7 @@ const Answer = (props) => {
                 className="form-control my-2"
               />
               <button
-                className="btn btn-sm btn-primary ms-0"
+                className="btn btn-sm btn-secondary ms-0"
                 onClick={handleCommentSubmit}
               >
                 Submit
@@ -123,9 +125,8 @@ const Answer = (props) => {
             </div>
           )}
 
-          
           <button
-            className={`btn btn-sm btn-success ms-0 mt-3 ${
+            className={`btn btn-sm btn-secondary ms-0 mt-3 ${
               isInputVisible ? "d-none" : ""
             }`}
             onClick={() => setIsInputVisible(true)}

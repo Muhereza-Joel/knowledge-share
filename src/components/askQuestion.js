@@ -10,6 +10,7 @@ import TopBar from "./topBar";
 import API_BASE_URL from "./appConfig";
 import Cookies from "js-cookie";
 import AskQuestionSVG from "./AskQuestonSVG";
+import { ToastContainer, toast } from "react-toastify";
 
 const AskQuestion = (props) => {
   const [isQuestionSubmitted, setIsQuestionSubmitted] = useState(false);
@@ -149,7 +150,9 @@ const AskQuestion = (props) => {
 
       if (response.ok) {
         // Handle success (you may redirect or perform other actions)
-        alert("Question submitted successfully!");
+        toast.success("Question deleted successfully!", {
+          style: { backgroundColor: "#cce6e8", color: "#333" },
+        });
 
         setIsQuestionSubmitted(true); // Update the state to indicate question submission
 
@@ -373,6 +376,17 @@ const AskQuestion = (props) => {
           </div>
         </div>
       </div>
+      <ToastContainer
+        position="bottom-left"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   );
 };

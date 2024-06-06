@@ -26,7 +26,7 @@ const NoUserQuestionsSVG = () => {
       ></g>
       <g id="SVGRepo_iconCarrier">
         {/* <!-- Dotted Background --> */}
-        <circle cx="20" cy="20" r="3" class="st4" />
+        {/* <circle cx="20" cy="20" r="3" class="st4" />
         <circle cx="40" cy="50" r="5" class="st4" />
         <circle cx="60" cy="30" r="2" class="st4" />
         <circle cx="80" cy="70" r="4" class="st4" />
@@ -55,7 +55,7 @@ const NoUserQuestionsSVG = () => {
         <circle cx="240" cy="160" r="4" class="st4" />
         <circle cx="260" cy="140" r="2" class="st4" />
         <circle cx="280" cy="180" r="5" class="st4" />
-        <circle cx="300" cy="160" r="3" class="st4" />
+        <circle cx="300" cy="160" r="3" class="st4" /> */}
 
         {/* <!-- Background Circle --> */}
         <circle cx="150" cy="100" r="90" class="st0" />

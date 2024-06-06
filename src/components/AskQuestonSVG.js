@@ -32,7 +32,7 @@ const AskQuestionSVG = () => {
           `}
         </style>
         <rect width="100%" height="100%" className="background" />
-        <g id="dots">
+        {/* <g id="dots">
           {Array.from({ length: 150 }).map((_, i) => (
             <circle
               key={i}
@@ -42,7 +42,7 @@ const AskQuestionSVG = () => {
               className="small-circle"
             />
           ))}
-        </g>
+        </g> */}
         <g>
           <circle cx="100" cy="250" r="50" className="bubble" />
           <text x="20" y="50"  font-size="24" className="main-text">

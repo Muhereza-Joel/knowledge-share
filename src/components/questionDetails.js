@@ -9,12 +9,16 @@ import { Form, Button } from "react-bootstrap";
 import Answer from "./answers";
 import API_BASE_URL from "./appConfig";
 import Cookies from "js-cookie";
+import DeleteConfirmationModal from "./DeleteConfirmationModal";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const QuestionDetails = ({ username, questionDetails }) => {
   const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
   const [isHovered, setIsHovered] = useState(false);
   const [answerContent, setAnswerContent] = useState("");
   const [answers, setAnswers] = useState(questionDetails.answers || []); // Initialize with an empty array if undefined
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setAnswers(questionDetails.answers || []); // Update answers state when questionDetails.answers changes
@@ -95,6 +99,38 @@ const QuestionDetails = ({ username, questionDetails }) => {
     }
   };
 
+  const handleDeleteClick = () => {
+    setShowDeleteModal(true); // Show the modal when delete button is clicked
+  };
+
+  const handleDeleteConfirm = async () => {
+    try {
+      // Make the DELETE request to your API endpoint
+      const response = await fetch(
+        `${API_BASE_URL}/api/v1/questions/delete/${questionId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          mode: "cors",
+        }
+      );
+
+      if (response.ok) {
+        toast.success("Question deleted successfully!", {
+          style: { backgroundColor: "#cce6e8", color: "#333" },
+        });
+        setShowDeleteModal(false); 
+        setTimeout(() => navigate(`/knowledge-share/${cookieData.USERNAME_KEY}/questions/`), 2000);
+      } else {
+        console.error("Failed to delete question:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error deleting question:", error.message);
+    }
+  };
+
   return (
     <div style={style}>
       <TopBar username={username} />
@@ -122,10 +158,11 @@ const QuestionDetails = ({ username, questionDetails }) => {
                           </p>
                         </div>
                         <div className="w-25 text-end">
-                          {cookieData.USERROLE_KEY === 'admin' && (
+                          {cookieData.USERROLE_KEY === "admin" && (
                             <Button
                               className="btn btn-sm btn-danger mb-3"
                               type="submit"
+                              onClick={handleDeleteClick}
                             >
                               Delete Question
                             </Button>
@@ -175,7 +212,7 @@ const QuestionDetails = ({ username, questionDetails }) => {
                         created_at={answer.created_at}
                         answerContent={answer.answerContent}
                         avatarUrl={answer.avatarUrl}
-                        role = {answer.role}
+                        role={answer.role}
                       />
                     ))
                   ) : (
@@ -241,6 +278,11 @@ const QuestionDetails = ({ username, questionDetails }) => {
           </div>
         </div>
       </div>
+      <DeleteConfirmationModal
+        show={showDeleteModal}
+        handleClose={() => setShowDeleteModal(false)}
+        handleDelete={handleDeleteConfirm}
+      />
     </div>
   );
 };

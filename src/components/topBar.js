@@ -81,7 +81,7 @@ const TopBar = (props) => {
         <h6 className="mx-2 ml-4" style={notificationLinkStyle} onClick={handleNotificationsClick}>
           Notifications <Badge bg="success">{notificationsData.length}</Badge> |
         </h6>
-        <h6 className="mx-2 ml-4">Messages |</h6>
+        
         <h6 className="mx-2" style={{cursor: "pointer"}} onClick={() => {navigate(`/knowledge-share/${cookieData.USERNAME_KEY}/profile/`)}}>Profile</h6>
       </div>
 

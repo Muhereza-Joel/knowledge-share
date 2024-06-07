@@ -150,7 +150,7 @@ const AskQuestion = (props) => {
 
       if (response.ok) {
         // Handle success (you may redirect or perform other actions)
-        toast.success("Question deleted successfully!", {
+        toast.success("Question added successfully!", {
           style: { backgroundColor: "#cce6e8", color: "#333" },
         });
 

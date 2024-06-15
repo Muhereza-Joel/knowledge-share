@@ -109,6 +109,23 @@ const LeftSideBar = (props) => {
         </Nav.Item>
 
         {cookieData.USERROLE_KEY === "admin" && (
+          <>
+          <Nav.Item
+            className={`d-flex align-items-center mt-3 ${
+              activeLink === "products" ? "active" : ""
+            }`}
+            style={activeLink === "products" ? linkStyle : {}}
+          >
+            <Nav.Link
+              href={`/knowledge-share/products/`}
+              className="px-3 fw-bold"
+              onClick={() => setActiveLink("products")}
+            >
+              Products
+            </Nav.Link>
+          </Nav.Item>
+
+
           <Nav.Item
             className={`d-flex align-items-center mt-3 ${
               activeLink === "users" ? "active" : ""
@@ -123,6 +140,7 @@ const LeftSideBar = (props) => {
               Plartform Users
             </Nav.Link>
           </Nav.Item>
+          </>
         )}
       </div>
     </div>

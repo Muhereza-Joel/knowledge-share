@@ -5,6 +5,8 @@ import {
   Routes,
   Navigate,
 } from "react-router-dom";
+
+import 'bootstrap/dist/js/bootstrap.bundle.min';
 import Register from "./components/register";
 import Login from "./components/login";
 import Dashboard from "./components/dashboard";
@@ -20,6 +22,7 @@ import Cookies from 'js-cookie';
 import Users from "./components/Users";
 import QuestionsTagged from "./components/questionsTagged";
 import MyQuestions from "./components/myQuestions";
+import ViewUser from "./components/viewUser";
 
 const PrivateRoute = ({ element, path }) => {
   return isAuthenticated() ? (
@@ -121,6 +124,10 @@ const App = () => {
           <Route
             path="/knowledge-share/users/"
             element={<PrivateRoute element={<Users username={username} />} />}
+          />
+          <Route
+            path="/knowlegeshare/users/profile/:userId"
+            element={<PrivateRoute element={<ViewUser username={username} />} />}
           />
         </Routes>
       </AuthProvider>

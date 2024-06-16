@@ -27,6 +27,7 @@ import Products from "./components/products";
 import ProductsTable from "./components/productsTable";
 import OrdersTable from "./components/ordersTable";
 import EditProduct from "./components/editProduct";
+import AddRecommendations from "./components/addRecommendations";
 
 const PrivateRoute = ({ element, path }) => {
   return isAuthenticated() ? (
@@ -104,6 +105,14 @@ const App = () => {
             element={
               <PrivateRoute
                 element={<QuestionDetailsContainer username={username} />}
+              />
+            }
+          />
+          <Route
+            path="/knowledge-share/:username/questions/recommendations/create/:questionId"
+            element={
+              <PrivateRoute
+                element={<AddRecommendations username={username} />}
               />
             }
           />

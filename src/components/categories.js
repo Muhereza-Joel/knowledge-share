@@ -3,7 +3,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import API_BASE_URL from "./appConfig";
 
-const Categories = () => {
+const Categories = ({ showCreateCategory, showDeleteCategory, onDeleteCategory, onCategorySelect }) => {
   const [categories, setCategories] = useState([]);
   const [categoryName, setCategoryName] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
@@ -66,6 +66,7 @@ const Categories = () => {
       toast.success("Category deleted successfully!", {
         style: { backgroundColor: "#cce6e8", color: "#333" },
       });
+      onDeleteCategory(categoryId); // Call parent function to handle deletion
     } catch (error) {
       console.error("Error deleting category:", error);
     }
@@ -77,28 +78,32 @@ const Categories = () => {
 
   return (
     <div>
-      <h5 className="text-success">Create New Product Category</h5>
-      <small>
-        Product categories are used to organize your products and improve product searches.
-      </small>
-      <form onSubmit={handleCategorySubmit}>
-        <div className="mb-3">
-          <label htmlFor="categoryName" className="form-label">
-            Category Name
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="categoryName"
-            value={categoryName}
-            onChange={(e) => setCategoryName(e.target.value)}
-            required
-          />
+      {showCreateCategory && ( // Display create category section based on props
+        <div>
+          <h5 className="text-success">Create New Product Category</h5>
+          <small>
+            Product categories are used to organize your products and improve product searches.
+          </small>
+          <form onSubmit={handleCategorySubmit}>
+            <div className="mb-3">
+              <label htmlFor="categoryName" className="form-label">
+                Category Name
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                id="categoryName"
+                value={categoryName}
+                onChange={(e) => setCategoryName(e.target.value)}
+                required
+              />
+            </div>
+            <button type="submit" className="btn btn-success btn-sm">
+              Save
+            </button>
+          </form>
         </div>
-        <button type="submit" className="btn btn-success btn-sm">
-          Save
-        </button>
-      </form>
+      )}
       <h4 className="mt-4">
         Existing Categories <span className="badge bg-dark">{categories.length}</span>
       </h4>
@@ -117,12 +122,16 @@ const Categories = () => {
               className="list-group-item d-flex justify-content-between align-items-center p-1"
             >
               {cat.name}
+
+              {showDeleteCategory &&(
+                
               <button
                 className="btn btn-link text-danger btn-sm"
                 onClick={() => handleDeleteCategory(cat.id)}
               >
                 Remove Category
               </button>
+              )}
             </li>
           ))}
         </ul>
@@ -138,7 +147,6 @@ const Categories = () => {
         draggable
         pauseOnHover
       />
-     
     </div>
   );
 };

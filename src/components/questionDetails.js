@@ -5,7 +5,7 @@ import TopBar from "./topBar";
 import LeftSideBar from "./leftSideBar";
 import ReactQuill from "react-quill";
 import { ToastContainer, toast } from "react-toastify";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Nav } from "react-bootstrap";
 import Answer from "./answers";
 import API_BASE_URL from "./appConfig";
 import Cookies from "js-cookie";
@@ -166,6 +166,14 @@ const QuestionDetails = ({ username, questionDetails }) => {
                             >
                               Delete Question
                             </Button>
+                          )}
+                          {cookieData.USERROLE_KEY === "expert" && (
+                             <Nav.Link
+                             href={`/knowledge-share/${username}/questions/recommendations/create/${questionId}`}
+                             className="px-3"
+                           >
+                              <button className="btn btn-success btn-sm">Add Recommendations</button>
+                           </Nav.Link>
                           )}
                         </div>
                       </div>

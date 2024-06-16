@@ -131,7 +131,7 @@ const Products = (props) => {
           <hr />
           <div className="row">
             <div className="col-md-6">
-              <Categories />
+              <Categories showCreateCategory={true} showDeleteCategory={true}/>
             </div>
             <div className="col-md-6">
               <h5 className="text-success">Create Product</h5>

@@ -45,7 +45,7 @@ const Categories = () => {
         style: { backgroundColor: "#cce6e8", color: "#333" },
       });
     } catch (error) {
-      toast.error("Category Exists Already..", {
+      toast.error("Category exists already.", {
         style: { backgroundColor: "#cce6e8", color: "#333" },
       });
     }
@@ -79,8 +79,7 @@ const Categories = () => {
     <div>
       <h5 className="text-success">Create New Product Category</h5>
       <small>
-        Product categories are used to organize your products and improve
-        product searches.
+        Product categories are used to organize your products and improve product searches.
       </small>
       <form onSubmit={handleCategorySubmit}>
         <div className="mb-3">
@@ -110,22 +109,24 @@ const Categories = () => {
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
-      <ul className="list-group">
-        {filteredCategories.map((cat) => (
-          <li
-            key={cat.id}
-            className="list-group-item d-flex justify-content-between align-items-center p-1"
-          >
-            {cat.name}
-            <button
-              className="btn btn-link text-danger btn-sm"
-              onClick={() => handleDeleteCategory(cat.id)}
+      <div className="category-list-container">
+        <ul className="list-group">
+          {filteredCategories.map((cat) => (
+            <li
+              key={cat.id}
+              className="list-group-item d-flex justify-content-between align-items-center p-1"
             >
-              Remove Category
-            </button>
-          </li>
-        ))}
-      </ul>
+              {cat.name}
+              <button
+                className="btn btn-link text-danger btn-sm"
+                onClick={() => handleDeleteCategory(cat.id)}
+              >
+                Remove Category
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
       <ToastContainer
         position="bottom-left"
         autoClose={3000}
@@ -137,6 +138,7 @@ const Categories = () => {
         draggable
         pauseOnHover
       />
+     
     </div>
   );
 };

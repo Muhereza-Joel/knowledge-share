@@ -22,5 +22,76 @@ code {
   z-index: 1000;
 }
 
+.category-list-container {
+  max-height: 500px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+}
+
+/* Webkit Browsers (Chrome, Safari) */
+.category-list-container::-webkit-scrollbar {
+  width: 12px; /* Width of the scrollbar */
+}
+
+.category-list-container::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Track color */
+}
+
+.category-list-container::-webkit-scrollbar-thumb {
+  background-color: #28a745; /* Scrollbar color */
+  border-radius: 10px; /* Rounded corners */
+  border: 3px solid #f1f1f1; /* Padding around the scrollbar */
+}
+
+/* Firefox */
+.category-list-container {
+  scrollbar-width: thin;
+  scrollbar-color: #28a745 #f1f1f1;
+}
+
+/* Edge */
+.category-list-container::-ms-scrollbar {
+  width: 12px; /* Width of the scrollbar */
+}
+
+.category-list-container::-ms-scrollbar-track {
+  background: #f1f1f1; /* Track color */
+}
+
+.category-list-container::-ms-scrollbar-thumb {
+  background-color: #28a745; /* Scrollbar color */
+  border-radius: 10px; /* Rounded corners */
+  border: 3px solid #f1f1f1; /* Padding around the scrollbar */
+}
+
+.notification-offcanvas .offcanvas-header {
+  background-color: #f6f9ff; 
+  color: #444; 
+}
+
+.notification-offcanvas .offcanvas-body {
+  background-color: #f6f9ff; 
+  color: #444;
+}
+
+.notification-offcanvas .offcanvas-footer {
+  background-color: #f6f9ff; 
+  color: #444; 
+}
+
+.notification-offcanvas .offcanvas-body {
+  max-height: 100vh;
+  overflow-y: auto;
+}
+
+.notification-content {
+  max-height: 100%;
+  overflow-y: auto;
+}
+
+
+
 
 

@@ -12,16 +12,6 @@ const LeftSideBar = (props) => {
     localStorage.setItem("activeLink", activeLink);
   }, [activeLink]);
 
-  const panelStyle = {
-    minHeight: "90vh",
-  };
-
-  const leftPanelStyle = {
-    ...panelStyle,
-    position: "sticky !important",
-    top: 60,
-  };
-
   const linkStyle = {
     backgroundColor: "#217537",
     color: "#fff",
@@ -31,8 +21,8 @@ const LeftSideBar = (props) => {
   };
 
   return (
-    <div>
-      <div className="d-flex flex-column pe-4 mt-2" style={leftPanelStyle}>
+    <div className="sidebar">
+      <div className="d-flex flex-column pe-4 mt-2">
         <Nav.Item
           className={`d-flex align-items-center mt-3 ${
             activeLink === "ask-question" ? "active" : ""
@@ -44,7 +34,7 @@ const LeftSideBar = (props) => {
             className="px-3 fw-bold"
             onClick={() => setActiveLink("ask-question")}
           >
-            Ask Question
+            <i className="bi bi-question-circle-fill me-2"></i> Ask Question
           </Nav.Link>
         </Nav.Item>
 
@@ -59,7 +49,7 @@ const LeftSideBar = (props) => {
             className="px-3 fw-bold"
             onClick={() => setActiveLink("my-questions")}
           >
-            My Questions
+            <i className="bi bi-journal-text me-2"></i> My Questions
           </Nav.Link>
         </Nav.Item>
 
@@ -74,22 +64,22 @@ const LeftSideBar = (props) => {
             className="px-3 fw-bold"
             onClick={() => setActiveLink("all-questions")}
           >
-            All Questions
+            <i className="bi bi-list-ul me-2"></i> All Questions
           </Nav.Link>
         </Nav.Item>
 
         <Nav.Item
           className={`d-flex align-items-center mt-3 ${
-            activeLink === "calender" ? "active" : ""
+            activeLink === "calendar" ? "active" : ""
           }`}
-          style={activeLink === "calender" ? linkStyle : {}}
+          style={activeLink === "calendar" ? linkStyle : {}}
         >
           <Nav.Link
             href={`/knowledge-share/${cookieData.USERNAME_KEY}/calendar/`}
             className="px-3 fw-bold"
-            onClick={() => setActiveLink("calender")}
+            onClick={() => setActiveLink("calendar")}
           >
-            My Calendar
+            <i className="bi bi-calendar3 me-2"></i> My Calendar
           </Nav.Link>
         </Nav.Item>
 
@@ -104,42 +94,139 @@ const LeftSideBar = (props) => {
             className="px-3 fw-bold"
             onClick={() => setActiveLink("tags")}
           >
-            Tags
+            <i className="bi bi-tags me-2"></i> Tags
           </Nav.Link>
         </Nav.Item>
 
+        {cookieData.USERROLE_KEY === "expert" && (
+          <>
+            <Nav.Item
+              className={`d-flex align-items-center mt-3 ${
+                activeLink === "create-products" ? "active" : ""
+              }`}
+              style={activeLink === "create-products" ? linkStyle : {}}
+            >
+              <Nav.Link
+                href={`/knowledge-share/products/create-new/`}
+                className="px-3 fw-bold"
+                onClick={() => setActiveLink("create-products")}
+              >
+                <i className="bi bi-plus-circle-fill me-2"></i> Product Management
+              </Nav.Link>
+            </Nav.Item>
+
+            <Nav.Item
+              className={`d-flex align-items-center mt-3 ${
+                activeLink === "products" ? "active" : ""
+              }`}
+              style={activeLink === "products" ? linkStyle : {}}
+            >
+              <Nav.Link
+                href={`/knowledge-share/products/`}
+                className="px-3 fw-bold"
+                onClick={() => setActiveLink("products")}
+              >
+                <i className="bi bi-cart4 me-2"></i> All Products
+              </Nav.Link>
+            </Nav.Item>
+
+            <Nav.Item
+              className={`d-flex align-items-center mt-3 ${
+                activeLink === "orders" ? "active" : ""
+              }`}
+              style={activeLink === "orders" ? linkStyle : {}}
+            >
+              <Nav.Link
+                href={`/knowledge-share/products/orders/`}
+                className="px-3 fw-bold"
+                onClick={() => setActiveLink("orders")}
+              >
+                <i className="bi bi-receipt me-2"></i> All Orders
+              </Nav.Link>
+            </Nav.Item>
+          </>
+        )}
+
+        {cookieData.USERROLE_KEY === "user" && (
+          <>
+            <Nav.Item
+              className={`d-flex align-items-center mt-3 ${
+                activeLink === "my-orders" ? "active" : ""
+              }`}
+              style={activeLink === "my-orders" ? linkStyle : {}}
+            >
+              <Nav.Link
+                href={`/knowledge-share/products/my-orders/`}
+                className="px-3 fw-bold"
+                onClick={() => setActiveLink("my-orders")}
+              >
+                <i className="bi bi-bag-check me-2"></i> My Orders
+              </Nav.Link>
+            </Nav.Item>
+          </>
+        )}
+
         {cookieData.USERROLE_KEY === "admin" && (
           <>
-          <Nav.Item
-            className={`d-flex align-items-center mt-3 ${
-              activeLink === "products" ? "active" : ""
-            }`}
-            style={activeLink === "products" ? linkStyle : {}}
-          >
-            <Nav.Link
-              href={`/knowledge-share/products/`}
-              className="px-3 fw-bold"
-              onClick={() => setActiveLink("products")}
+            <Nav.Item
+              className={`d-flex align-items-center mt-3 ${
+                activeLink === "create-products" ? "active" : ""
+              }`}
+              style={activeLink === "create-products" ? linkStyle : {}}
             >
-              Products
-            </Nav.Link>
-          </Nav.Item>
+              <Nav.Link
+                href={`/knowledge-share/products/create-new/`}
+                className="px-3 fw-bold"
+                onClick={() => setActiveLink("create-products")}
+              >
+                <i className="bi bi-plus-circle-fill me-2"></i> Product Management
+              </Nav.Link>
+            </Nav.Item>
 
-
-          <Nav.Item
-            className={`d-flex align-items-center mt-3 ${
-              activeLink === "users" ? "active" : ""
-            }`}
-            style={activeLink === "users" ? linkStyle : {}}
-          >
-            <Nav.Link
-              href={`/knowledge-share/users/`}
-              className="px-3 fw-bold"
-              onClick={() => setActiveLink("users")}
+            <Nav.Item
+              className={`d-flex align-items-center mt-3 ${
+                activeLink === "products" ? "active" : ""
+              }`}
+              style={activeLink === "products" ? linkStyle : {}}
             >
-              Plartform Users
-            </Nav.Link>
-          </Nav.Item>
+              <Nav.Link
+                href={`/knowledge-share/products/`}
+                className="px-3 fw-bold"
+                onClick={() => setActiveLink("products")}
+              >
+                <i className="bi bi-cart4 me-2"></i> All Products
+              </Nav.Link>
+            </Nav.Item>
+
+            <Nav.Item
+              className={`d-flex align-items-center mt-3 ${
+                activeLink === "orders" ? "active" : ""
+              }`}
+              style={activeLink === "orders" ? linkStyle : {}}
+            >
+              <Nav.Link
+                href={`/knowledge-share/products/orders/`}
+                className="px-3 fw-bold"
+                onClick={() => setActiveLink("orders")}
+              >
+                <i className="bi bi-receipt me-2"></i> All Orders
+              </Nav.Link>
+            </Nav.Item>
+
+            <Nav.Item
+              className={`d-flex align-items-center mt-3 ${
+                activeLink === "users" ? "active" : ""
+              }`}
+              style={activeLink === "users" ? linkStyle : {}}
+            >
+              <Nav.Link
+                href={`/knowledge-share/users/`}
+                className="px-3 fw-bold"
+                onClick={() => setActiveLink("users")}
+              >
+                <i className="bi bi-people me-2"></i> Platform Users
+              </Nav.Link>
+            </Nav.Item>
           </>
         )}
       </div>

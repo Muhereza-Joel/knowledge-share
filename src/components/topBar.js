@@ -56,7 +56,7 @@ const TopBar = (props) => {
 
   const topPaneStyle = {
     width: "99.99%",
-    height: "7vh",
+    height: "8vh",
     zIndex: "3",
     position: "sticky",
     top: 0,

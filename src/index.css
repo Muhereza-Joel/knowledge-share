@@ -10,3 +10,17 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.sidebar {
+  position: fixed;
+  top: 55px; 
+  left: 0;
+  width: 250px; 
+  height: calc(100vh - 60px); 
+  overflow-y: auto; 
+  background-color: #f6f9ff; 
+  z-index: 1000;
+}
+
+
+

@@ -16,7 +16,7 @@ const DataTable = ({ data }) => {
     setSelectedUser(user);
     setModalType(action);
     if (action === 'profile') {
-      window.location.href = `/knowlegeshare/users/profile/${userId}`;
+      window.location.href = `/knowledge-share/users/profile/${userId}`;
     } else {
       $('#actionModal').modal('show');
     }
@@ -69,7 +69,7 @@ const DataTable = ({ data }) => {
   return (
     <div className="card py-4 px-2 mt-4 ms-2">
       <div className="container">
-        <div className="card">
+        <div className="">
           <div className="card-body">
             <table id="dataTable" ref={tableRef} className="table table-striped table-bordered table-hover">
               <thead>

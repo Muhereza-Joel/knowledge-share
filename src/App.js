@@ -23,6 +23,10 @@ import Users from "./components/Users";
 import QuestionsTagged from "./components/questionsTagged";
 import MyQuestions from "./components/myQuestions";
 import ViewUser from "./components/viewUser";
+import Products from "./components/products";
+import ProductsTable from "./components/productsTable";
+import OrdersTable from "./components/ordersTable";
+import EditProduct from "./components/editProduct";
 
 const PrivateRoute = ({ element, path }) => {
   return isAuthenticated() ? (
@@ -126,8 +130,28 @@ const App = () => {
             element={<PrivateRoute element={<Users username={username} />} />}
           />
           <Route
-            path="/knowlegeshare/users/profile/:userId"
+            path="/knowledge-share/users/profile/:userId"
             element={<PrivateRoute element={<ViewUser username={username} />} />}
+          />
+          <Route
+            path="/knowledge-share/products/create-new/"
+            element={<PrivateRoute element={<Products username={username} />} />}
+          />
+          <Route
+            path="/knowledge-share/products/"
+            element={<PrivateRoute element={<ProductsTable username={username} />} />}
+          />
+          <Route
+            path="/knowledge-share/products/edit/:productId"
+            element={<PrivateRoute element={<EditProduct username={username} />} />}
+          />
+          <Route
+            path="/knowledge-share/products/orders/"
+            element={<PrivateRoute element={<OrdersTable username={username} />} />}
+          />
+          <Route
+            path="/knowledge-share/products/my-orders/"
+            element={<PrivateRoute element={<OrdersTable username={username} />} />}
           />
         </Routes>
       </AuthProvider>

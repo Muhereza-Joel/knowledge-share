@@ -7,6 +7,7 @@ const Categories = ({ showCreateCategory, showDeleteCategory, onDeleteCategory, 
   const [categories, setCategories] = useState([]);
   const [categoryName, setCategoryName] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
 
   useEffect(() => {
     fetchCategories();
@@ -72,6 +73,11 @@ const Categories = ({ showCreateCategory, showDeleteCategory, onDeleteCategory, 
     }
   };
 
+  const handleCategoryClick = (categoryId) => {
+    setSelectedCategoryId(categoryId);
+    onCategorySelect(categoryId);
+  };
+
   const filteredCategories = categories.filter((cat) =>
     cat.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -105,7 +111,7 @@ const Categories = ({ showCreateCategory, showDeleteCategory, onDeleteCategory, 
         </div>
       )}
       <h4 className="mt-4">
-        Existing Categories <span className="badge bg-dark">{categories.length}</span>
+        Existing Categories <span className="badge bg-success">{categories.length}</span>
       </h4>
       <input
         type="text"
@@ -119,18 +125,21 @@ const Categories = ({ showCreateCategory, showDeleteCategory, onDeleteCategory, 
           {filteredCategories.map((cat) => (
             <li
               key={cat.id}
-              className="list-group-item d-flex justify-content-between align-items-center p-1"
+              className={`list-group-item d-flex justify-content-between align-items-center p-1 ${selectedCategoryId === cat.id ? 'bg-success text-white' : ''}`}
+              onClick={() => handleCategoryClick(cat.id)} // Send category ID to parent
+              style={{ cursor: "pointer" }}
             >
               {cat.name}
-
-              {showDeleteCategory &&(
-                
-              <button
-                className="btn btn-link text-danger btn-sm"
-                onClick={() => handleDeleteCategory(cat.id)}
-              >
-                Remove Category
-              </button>
+              {showDeleteCategory && (
+                <button
+                  className="btn btn-link text-danger btn-sm"
+                  onClick={(e) => {
+                    e.stopPropagation(); // Prevent category click handler from firing
+                    handleDeleteCategory(cat.id);
+                  }}
+                >
+                  Remove Category
+                </button>
               )}
             </li>
           ))}

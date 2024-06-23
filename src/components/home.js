@@ -83,8 +83,7 @@ const Home = (props) => {
 
   const panelStyle = {
     minHeight: "90vh",
-    position: "sticky",
-    top: 0,
+    
   };
 
   const { questionData, lastUsedTagsData } = state;

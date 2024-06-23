@@ -104,7 +104,7 @@ const Home = (props) => {
 
                 <Nav.Item className="mt-3 text-end w-25">
                   <Nav.Link
-                    href={`/knowledge-share/${props.username}/questions/ask-question/`}
+                    href={`/knowledge-share/${cookieData.USERNAME_KEY}/questions/ask-question/`}
                     className="text-info px-2 fw-bold"
                   >
                     <button className="btn btn-sm btn-primary bg-success">
@@ -118,7 +118,7 @@ const Home = (props) => {
                 <QuestionCard
                   key={index}
                   data={question}
-                  currentUser={`${props.username}`}
+                  currentUser={`${cookieData.USERNAME_KEY}`}
                 />
               ))}
             </div>

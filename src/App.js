@@ -28,6 +28,7 @@ import ProductsTable from "./components/productsTable";
 import OrdersTable from "./components/ordersTable";
 import EditProduct from "./components/editProduct";
 import AddRecommendations from "./components/addRecommendations";
+import DrugRecommendations from "./components/drugRecommendations";
 
 const PrivateRoute = ({ element, path }) => {
   return isAuthenticated() ? (
@@ -120,6 +121,12 @@ const App = () => {
             path="/knowledge-share/:username/questions/ask-question/"
             element={
               <PrivateRoute element={<AskQuestion username={username} />} />
+            }
+          />
+          <Route
+            path="/knowledge-share/:username/questions/:questionId/recommendations/"
+            element={
+              <PrivateRoute element={<DrugRecommendations username={username} />} />
             }
           />
           <Route

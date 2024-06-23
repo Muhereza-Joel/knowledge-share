@@ -102,7 +102,7 @@ const QuestionMoment = (props) => {
       </div>
 
       {/* Modal backdrop */}
-      {showModal && <div className="modal-backdrop fade show" onClick={closeModal}></div>}
+      {showModal && <div className="modal-backdrop fade show w-100 h-100" onClick={closeModal}></div>}
     </div>
   );
 };

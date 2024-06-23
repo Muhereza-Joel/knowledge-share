@@ -40,7 +40,7 @@ const QuestionDetails = ({ username, questionDetails }) => {
   const style = {
     backgroundColor: "#f6f9ff",
     position: "relative",
-    height : "100vh"
+    height : "100%"
   };
 
   const quillEditorStyle = {
@@ -250,17 +250,22 @@ const QuestionDetails = ({ username, questionDetails }) => {
                       <Accordion.Header>Question Images</Accordion.Header>
                       <Accordion.Body>
                         <div className="card-columns">
+                          <div className="d-flex flex-row">
                           {images && images.length > 0 ? (
                             images.map((image, index) => (
-                              <ImageZoom
-                                key={index}
-                                imageUrl={image.url}
-                                altText={image.alt}
-                              />
-                            ))
-                          ) : (
-                            <p>No images available</p>
-                          )}
+                                <ImageZoom
+                                  key={index}
+                                  imageUrl={image.url}
+                                  altText={image.alt}
+                                  height={150}
+                                  width={150}
+                                />
+
+                              ))
+                            ) : (
+                              <p>No images available</p>
+                            )}
+                            </div>
                         </div>
                       </Accordion.Body>
                     </Accordion.Item>

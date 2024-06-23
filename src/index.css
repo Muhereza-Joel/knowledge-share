@@ -1,16 +1,17 @@
 body {
   margin: 0;
   font-family:'Poppins';
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   background-color: "#f6f9ff" !important;
   overflow-x: hidden;
+  height: 100%;
 }
+
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
 
 .sidebar {
   position: fixed;
@@ -19,7 +20,6 @@ code {
   width: 250px; 
   height: calc(100vh - 60px); 
   overflow-y: auto; 
-  background-color: #f6f9ff; 
   z-index: 1000;
 }
 

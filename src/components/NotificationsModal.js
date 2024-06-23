@@ -4,7 +4,7 @@ import moment from "moment";
 
 const NotificationOffcanvas = ({ notifications, show, handleClose }) => {
   return (
-    <Offcanvas show={show} onHide={handleClose} placement="start" className="notification-offcanvas">
+    <Offcanvas backdrop={false} show={show} onHide={handleClose} placement="start" className="w-25 h-100 notification-offcanvas">
       <Offcanvas.Header closeButton>
         <Offcanvas.Title>Your Notifications</Offcanvas.Title>
       </Offcanvas.Header>

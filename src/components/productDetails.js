@@ -20,9 +20,10 @@ const ProductDetails = ({ product, viewProduct, onPlaceOrder, onClose }) => {
 
   const handleShow = () => setShowModal(true);
 
+
   return (
     <>
-      <Modal show={showModal} size="xl" onHide={handleClose} backdrop="static">
+      <Modal show={showModal} size="xl" onHide={handleClose} backdrop="static" height='100'>
         <Modal.Header closeButton>
           <Modal.Title>{product.product_name}</Modal.Title>
         </Modal.Header>

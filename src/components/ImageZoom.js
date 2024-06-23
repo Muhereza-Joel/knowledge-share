@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Modal } from "react-bootstrap";
 
-const ImageZoom = ({ imageUrl, altText }) => {
+const ImageZoom = ({ imageUrl, altText, height, width, objectFit }) => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -13,13 +13,16 @@ const ImageZoom = ({ imageUrl, altText }) => {
         <img
           src={imageUrl}
           alt={altText}
-          className="img-fluid mx-3 mb-2"
+          height={height}
+          width={width}
+          objectFit={objectFit}
+          className="mx-3 mb-2"
           onClick={handleShow}
           style={{ cursor: "pointer" }}
         />
       </div>
 
-      <Modal show={show} onHide={handleClose} centered size="lg">
+      <Modal show={show} onHide={handleClose} centered size="md">
         <Modal.Body>
           <img
             src={imageUrl}

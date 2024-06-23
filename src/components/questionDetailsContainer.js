@@ -12,6 +12,12 @@ const QuestionDetailsContainer = ({ username }) => {
   // Use the `useParams` hook to get the parameters from the URL
   const { questionId } = useParams();
 
+  const style = {
+    backgroundColor: "#f6f9ff",
+    position: "relative",
+    height : "100%"
+  };
+
   useEffect(() => {
     const fetchQuestionDetails = async () => {
       try {
@@ -46,10 +52,13 @@ const QuestionDetailsContainer = ({ username }) => {
 
 
   return (
-    <QuestionDetails
-      username={username}
-      questionDetails={questionDetails}
-    />
+    <div style={style}>
+      <QuestionDetails
+        username={username}
+        questionDetails={questionDetails}
+      />
+
+    </div>
   );
 };
 

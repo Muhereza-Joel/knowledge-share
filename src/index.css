@@ -14,7 +14,7 @@ code {
 
 .sidebar {
   position: fixed;
-  top: 55px; 
+  top: 60px; 
   left: 0;
   width: 250px; 
   height: calc(100vh - 60px); 
@@ -91,6 +91,7 @@ code {
   max-height: 100%;
   overflow-y: auto;
 }
+
 
 
 

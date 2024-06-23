@@ -108,6 +108,10 @@ const Products = (props) => {
     }
   };
 
+  const handleCategorySelect = async (categoryId) => {
+    //Intentionaly left empty to suppress the callback error
+  }
+
   const style = {
     backgroundColor: "#f6f9ff",
     position: "relative",
@@ -131,7 +135,7 @@ const Products = (props) => {
           <hr />
           <div className="row">
             <div className="col-md-6">
-              <Categories showCreateCategory={true} showDeleteCategory={true}/>
+              <Categories showCreateCategory={true} showDeleteCategory={true} onCategorySelect={handleCategorySelect}/>
             </div>
             <div className="col-md-6">
               <h5 className="text-success">Create Product</h5>

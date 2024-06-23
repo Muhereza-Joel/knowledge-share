@@ -60,7 +60,9 @@ const TopBar = (props) => {
     zIndex: "3",
     position: "sticky",
     top: 0,
-    backgroundColor: "#f6f9ff",
+    backgroundColor: "#fff",
+    // backgroundColor: "#f6f9ff",
+    boxShadow: "0px 2px 20px rgba(1, 41, 112, 0.1)",
   };
 
   const notificationLinkStyle = {

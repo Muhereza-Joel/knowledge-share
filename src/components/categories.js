@@ -132,7 +132,7 @@ const Categories = ({ showCreateCategory, showDeleteCategory, onDeleteCategory, 
               {cat.name}
               {showDeleteCategory && (
                 <button
-                  className="btn btn-link text-danger btn-sm"
+                  className={`btn btn-link ${selectedCategoryId === cat.id ? 'text-light' : 'text-danger'}  btn-sm`}
                   onClick={(e) => {
                     e.stopPropagation(); // Prevent category click handler from firing
                     handleDeleteCategory(cat.id);

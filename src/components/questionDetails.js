@@ -5,12 +5,13 @@ import TopBar from "./topBar";
 import LeftSideBar from "./leftSideBar";
 import ReactQuill from "react-quill";
 import { ToastContainer, toast } from "react-toastify";
-import { Form, Button, Nav } from "react-bootstrap";
+import { Form, Button, Nav, Accordion } from "react-bootstrap";
 import Answer from "./answers";
 import API_BASE_URL from "./appConfig";
 import Cookies from "js-cookie";
 import DeleteConfirmationModal from "./DeleteConfirmationModal";
 import { Navigate, useNavigate } from "react-router-dom";
+import ImageZoom from "./ImageZoom"; // Import the ImageZoom component
 
 const QuestionDetails = ({ username, questionDetails }) => {
   const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
@@ -39,11 +40,12 @@ const QuestionDetails = ({ username, questionDetails }) => {
   const style = {
     backgroundColor: "#f6f9ff",
     position: "relative",
+    height : "100vh"
   };
 
   const quillEditorStyle = {
-    height: "200px",
-    marginBottom: "20px",
+    height: "50vh",
+    backgroundColor: "#f6f9ff",
     border: "1px",
   };
 
@@ -143,21 +145,21 @@ const QuestionDetails = ({ username, questionDetails }) => {
         <div className="col-sm-10">
           <div className="mt-0 p-2">
             <div className="row g-0">
-              <div className="col-lg-10">
-                <div>
+              <div className="col-lg-7">
+                <div className="">
                   <div
                     className="card p-3"
                     onMouseEnter={handleMouseEnter}
                     onMouseLeave={handleMouseLeave}
                   >
                     <div className="text-primary">
-                      <div className="d-flex flex-row">
-                        <div className="w-75">
+                      <div className="d-flex flex-row flex-wrap">
+                        <div className="w-50">
                           <p className="fw-bold text-secondary h5">
                             {questionTitle}
                           </p>
                         </div>
-                        <div className="w-25 text-end">
+                        <div className="w-50 text-end">
                           {cookieData.USERROLE_KEY === "admin" && (
                             <Button
                               className="btn btn-sm btn-danger mb-3"
@@ -239,47 +241,48 @@ const QuestionDetails = ({ username, questionDetails }) => {
                     draggable
                     pauseOnHover
                   />
-                  <Form onSubmit={handleAnswerSubmit}>
-                    <div className="h5 mt-4">Add Your Answer?</div>
-                    <Form.Control
-                      name="questionId"
-                      value={questionId}
-                      type="hidden"
-                    />
-                    <div className="px-0">
-                      <ReactQuill
-                        value={answerContent}
-                        onChange={handleAnswerChange}
-                        placeholder="Add your answer for this question"
-                        className="card"
-                        name="answer"
-                        required
-                        style={quillEditorStyle}
-                      />
-                      <Button
-                        className="btn btn-sm btn-secondary mb-3"
-                        type="submit"
-                      >
-                        Submit Answer
-                      </Button>
-                    </div>
-                  </Form>
                 </div>
               </div>
-              <div className="col-lg-2">
-                <div className="d-flex flex-column justify-content-center">
-                  {images &&
-                    images.length > 0 &&
-                    images.map((image, index) => (
-                      <div className="card mx-2 mb-3">
-                        <img
-                          key={index}
-                          src={image.url}
-                          alt={`Image ${index + 1}`}
-                          className="img-fluid mx-3 mb-2"
+              <div className="col-lg-5">
+                <div className="p-3">
+                  <Accordion defaultActiveKey="1" className="mt-0">
+                    <Accordion.Item eventKey="0">
+                      <Accordion.Header>Question Images</Accordion.Header>
+                      <Accordion.Body>
+                        <div className="card-columns">
+                          {images && images.length > 0 ? (
+                            images.map((image, index) => (
+                              <ImageZoom
+                                key={index}
+                                imageUrl={image.url}
+                                altText={image.alt}
+                              />
+                            ))
+                          ) : (
+                            <p>No images available</p>
+                          )}
+                        </div>
+                      </Accordion.Body>
+                    </Accordion.Item>
+                  </Accordion>
+                  <div className="card mt-2" style={quillEditorStyle}>
+                    <h6 className="fw-bold text-secondary">
+                      Add Your Answer
+                    </h6>
+                    <Form onSubmit={handleAnswerSubmit}>
+                      <Form.Group className="mb-3">
+                        <ReactQuill
+                          theme="snow"
+                          value={answerContent}
+                          onChange={handleAnswerChange}
+                          style={quillEditorStyle}
                         />
-                      </div>
-                    ))}
+                      </Form.Group>
+                      <Button type="submit" variant="success" className="mt-5" size="sm">
+                        Submit Answer
+                      </Button>
+                    </Form>
+                  </div>
                 </div>
               </div>
             </div>
@@ -288,8 +291,8 @@ const QuestionDetails = ({ username, questionDetails }) => {
       </div>
       <DeleteConfirmationModal
         show={showDeleteModal}
-        handleClose={() => setShowDeleteModal(false)}
-        handleDelete={handleDeleteConfirm}
+        onHide={() => setShowDeleteModal(false)}
+        onConfirm={handleDeleteConfirm}
       />
     </div>
   );

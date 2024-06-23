@@ -1,27 +1,25 @@
 import React, { useState, useEffect, memo } from "react";
 import "bootstrap/dist/css/bootstrap.css";
-import { Card, Placeholder,Nav } from "react-bootstrap";
+import { Card, Placeholder, Nav, Badge } from "react-bootstrap";
 import Tag from "./tag";
 import { useNavigate } from "react-router-dom";
 import QuestionMoment from "./questionMoment";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
+import QuestionActions from "./QuestionActions";
 
 const LoadingPlaceholder = () => (
-  
-    <Card className="p-4" style={{border:"none"}}>
-
-      <Placeholder as={Card.Text} animation="wave" >
-        <Placeholder xs={6} bg="secondary" />
-      </Placeholder>
-      <Placeholder as={Card.Text} animation="glow">
-        <Placeholder xs={7} bg="secondary" /> <Placeholder xs={4} /> <Placeholder xs={4} bg="secondary" />
-        <Placeholder xs={6} bg="secondary" /> <Placeholder xs={12} bg="secondary"/>
-      </Placeholder>
-      
-    </Card>
-    
+  <Card className="p-4" style={{ border: "none" }}>
+    <Placeholder as={Card.Text} animation="wave">
+      <Placeholder xs={6} bg="secondary" />
+    </Placeholder>
+    <Placeholder as={Card.Text} animation="glow">
+      <Placeholder xs={7} bg="secondary" /> <Placeholder xs={4} />{" "}
+      <Placeholder xs={4} bg="secondary" />
+      <Placeholder xs={6} bg="secondary" />{" "}
+      <Placeholder xs={12} bg="secondary" />
+    </Placeholder>
+  </Card>
 );
-
 
 const QuestionCard = (props) => {
   const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
@@ -38,7 +36,8 @@ const QuestionCard = (props) => {
     views,
     created_at,
     onQuestionClick,
-    avatarUrl
+    avatarUrl,
+    hasRecommendations, // New prop to indicate if recommendations exist
   } = props.data;
 
   const questionUrl = `/knowledge-share/${cookieData.USERNAME_KEY}/questions/${questionId}`;
@@ -62,12 +61,16 @@ const QuestionCard = (props) => {
     navigate(`/knowledge-share/${props.currentUser}/questions/${questionId}`);
   };
 
-  if(props.loading) {
-    return(
-        <LoadingPlaceholder/>       
-    )
-    
+  if (props.loading) {
+    return <LoadingPlaceholder />;
   }
+
+  const questionActionsStyle = {
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+    padding: "0px 10px",
+  };
 
   return (
     <div
@@ -76,18 +79,33 @@ const QuestionCard = (props) => {
         backgroundColor: isHovered ? "#f6f9ff" : "transparent",
         transition: "border 0.3s ease",
         border: "none",
-        borderRadius: "0px"
+        borderLeft: hasRecommendations ? "10px solid #d6749e" : "none",
+        borderBottomLeftRadius: 20,
+        borderRadius: "0px",
+        position: "relative", // Add this to position the icons
       }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      
+      {isHovered && (
+      <div className="question-actions" style={questionActionsStyle}>
+        <QuestionActions username={username} questionId={questionId} />
+      </div>
+
+      )}
+     
       <div className="row g-0">
         <div className="col-sm-2">
           <div className="d-flex flex-column">
-            <div><span className="fw-bold">{votes}</span> Votes</div>
-            <div><span className="fw-bold">{answers}</span> Answers</div>
-            <div><span className="fw-bold">{views}</span> Views</div>
+            <div>
+              <span className="fw-bold">{votes}</span> Votes
+            </div>
+            <div>
+              <span className="fw-bold">{answers}</span> Answers
+            </div>
+            <div>
+              <span className="fw-bold">{views}</span> Views
+            </div>
           </div>
         </div>
         <div className="col-sm-8">
@@ -98,17 +116,30 @@ const QuestionCard = (props) => {
                   className="fw-normal text-dark h5"
                   style={{
                     textDecoration: isHovered ? "underline" : "none",
-                    fontStyle: 'bold',
+                    fontStyle: "bold",
                     transition: "border 0.3s ease",
                   }}
                 >
                   {questionTitle}
                 </p>
               </Nav.Link>
+              {hasRecommendations && (
+                <a
+                  href={`/knowledge-share/${props.currentUser}/questions/${questionId}/recommendations/`}
+                  style={{
+                    textDecoration: "none",
+                    margin: 0,
+                    backgroundColor: "#fff",
+                    padding: 2,
+                  }}
+                >
+                  Click to view expert recommendations.
+                </a>
+              )}
             </Nav.Item>
           </div>
 
-          <div className="d-flex mt-2">
+          <div className="d-flex mt-2 flex-wrap">
             {tags && tags.length > 0 ? (
               tags.map((tag, index) => (
                 <Tag
@@ -125,8 +156,12 @@ const QuestionCard = (props) => {
         </div>
         <div className="col-sm-2">
           <div className="d-flex flex-column">
-           <QuestionMoment avatarUrl={avatarUrl}  username={username} created_at={created_at}/>
             
+            <QuestionMoment
+              avatarUrl={avatarUrl}
+              username={username}
+              created_at={created_at}
+            />
           </div>
         </div>
       </div>

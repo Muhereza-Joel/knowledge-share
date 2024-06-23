@@ -100,7 +100,7 @@ const Questions = (props) => {
             <div className="col-lg-3">
               <div
                 id="right-panel"
-                className="d-flex flex-column p-2 m-2"
+                className="card d-flex flex-column p-3 m-2"
                 style={panelStyle}
               >
                 <div className="card-title h6 mb-3">Popular Tags</div>

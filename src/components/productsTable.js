@@ -3,7 +3,7 @@ import TopBar from "./topBar";
 import LeftSideBar from "./leftSideBar";
 import { Table } from "react-bootstrap";
 import API_BASE_URL from "./appConfig";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "datatables.net-bs4/css/dataTables.bootstrap4.min.css";
@@ -182,6 +182,12 @@ const ProductsTable = (props) => {
     setSelectedProduct(null);
   };
 
+  const showToast = () =>{
+    //Called when order cart offcanvas closes.
+    toast.success("Order submitted successfully!");
+  }
+
+
   return (
     <div style={{ backgroundColor: "#f6f9ff", position: "relative" }}>
       <TopBar username={props.username} />
@@ -245,9 +251,21 @@ const ProductsTable = (props) => {
                 product={orderProduct} // Pass product data to OrderCart
                 show={true}
                 handleClose={handleCloseOrderCart} // Close OrderCart
+                showToast={showToast}
               />
             )}
           </div>
+          <ToastContainer
+          position="bottom-left"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
         </div>
       </div>
     </div>

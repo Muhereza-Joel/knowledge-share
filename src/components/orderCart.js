@@ -3,10 +3,13 @@ import { Button, Offcanvas, Form, Col, Row, Alert } from "react-bootstrap";
 import API_BASE_URL from "./appConfig";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Cookies from "js-cookie";
 
-const OrderCart = ({ product, show, handleClose }) => {
+const OrderCart = ({ product, show, handleClose, showToast }) => {
+
   const [quantity, setQuantity] = useState(1);
   const [amountDue, setAmountDue] = useState(product.price);
+  const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
 
   const handleQuantityChange = (event) => {
     const newQuantity = parseInt(event.target.value, 10);
@@ -28,21 +31,22 @@ const OrderCart = ({ product, show, handleClose }) => {
     }
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/v1/orders`, {
+      const response = await fetch(`${API_BASE_URL}/api/v1/orders/add`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           productId: product.id,
+          userId: cookieData.USERID_KEY,
           quantity,
           amountDue,
         }),
       });
 
       if (response.ok) {
-        toast.success("Order submitted successfully!");
         handleClose();
+        showToast();
       } else {
         console.error("Failed to submit order:", response.statusText);
         toast.error("Failed to submit order. Please try again.");

@@ -5,6 +5,8 @@ import API_BASE_URL from "./appConfig";
 import { useParams } from "react-router-dom";
 import ImageZoom from "./ImageZoom";
 import OrderCart from "./orderCart";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const DrugRecommendations = (props) => {
   const { questionId } = useParams();
@@ -53,6 +55,11 @@ const DrugRecommendations = (props) => {
     setShowOrderCart(false);
     setSelectedProduct(null);
   };
+
+  const showToast = () =>{
+    //Called when order cart offcanvas closes.
+    toast.success("Order submitted successfully!");
+  }
 
   const style = {
     backgroundColor: "#f6f9ff",
@@ -131,8 +138,19 @@ const DrugRecommendations = (props) => {
         </div>
       </div>
       {showOrderCart && (
-        <OrderCart show={showOrderCart} product={selectedProduct} handleClose={handleCloseOrderCart} />
+        <OrderCart showToast={showToast} show={showOrderCart} product={selectedProduct} handleClose={handleCloseOrderCart} />
       )}
+      <ToastContainer
+          position="bottom-left"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
     </div>
   );
 };

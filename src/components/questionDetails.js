@@ -296,8 +296,8 @@ const QuestionDetails = ({ username, questionDetails }) => {
       </div>
       <DeleteConfirmationModal
         show={showDeleteModal}
-        onHide={() => setShowDeleteModal(false)}
-        onConfirm={handleDeleteConfirm}
+        handleClose={() => setShowDeleteModal(false)}
+        handleDelete={handleDeleteConfirm}
       />
     </div>
   );

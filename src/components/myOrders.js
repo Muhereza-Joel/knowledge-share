@@ -10,7 +10,7 @@ import $ from "jquery";
 import "datatables.net-bs4";
 import API_BASE_URL from "./appConfig";
 
-const OrdersTable = (props) => {
+const MyOrders = (props) => {
   const [showModal, setShowModal] = useState(false);
   const [userId, setUserId] = useState(null);
   const [orders, setOrders] = useState([]);
@@ -28,7 +28,7 @@ const OrdersTable = (props) => {
         const userDataFromCookie = JSON.parse(userCookie);
 
         setRole(userDataFromCookie.role);
-        setUserId(userDataFromCookie.id);
+        setUserId(userDataFromCookie.USERID_KEY);
         setUsername(userDataFromCookie.username);
         setEmail(userDataFromCookie.email);
 
@@ -62,16 +62,26 @@ const OrdersTable = (props) => {
           {
             data: null,
             render: function (data, type, row) {
-              return `
+              if (row.status == "not-paid" && row.user_id == userDataFromCookie.USERID_KEY) {
+                return `
                   <div class="dropdown">
                     <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="actionDropdown${row.id}" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       Select Action
                     </button>
                     <div class="dropdown-menu" aria-labelledby="actionDropdown${row.id}">
-                      <a href="#cancel-order" class="dropdown-item cancel-order" data-id="${row.id}">Cancel Order</a>
+                      <a href="#pay-order" class="dropdown-item pay-order" data-id="${row.id}" data-amount="${row.amount}">Pay Out Order</a>
                     </div>
                   </div>
                 `;
+              } else {
+                return `
+                  <div class="dropdown">
+                    <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="actionDropdown${row.id}" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled>
+                      No Actions Available
+                    </button>
+                  </div>
+                `;
+              }
             },
           },
         ],
@@ -219,7 +229,7 @@ const OrdersTable = (props) => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/v1/orders/all`);
+      const response = await fetch(`${API_BASE_URL}/api/v1/orders/my-orders?id=${userDataFromCookie.USERID_KEY}`);
       if (response.ok) {
         const data = await response.json();
         const formattedData = data.map((order, index) => ({
@@ -275,8 +285,7 @@ const OrdersTable = (props) => {
                     <td>{order.quantity}</td>
                     <td>{order.amount}</td>
                     <td>{order.status}</td>
-                    <td>Actions</td>{" "}
-                    {/* Actions column handled by DataTables */}
+                    <td>Actions</td> {/* Actions column handled by DataTables */}
                   </tr>
                 ))}
               </tbody>
@@ -304,9 +313,7 @@ const OrdersTable = (props) => {
             <Spinner animation="border" role="status">
               <span className="visually-hidden">Loading...</span>
             </Spinner>
-            <span className="ms-3">
-              Please wait while we initiate your payment...
-            </span>
+            <span className="ms-3">Please wait while we initiate your payment...</span>
           </div>
         </Modal.Body>
       </Modal>
@@ -314,4 +321,4 @@ const OrdersTable = (props) => {
   );
 };
 
-export default OrdersTable;
+export default MyOrders;

@@ -29,6 +29,8 @@ import OrdersTable from "./components/ordersTable";
 import EditProduct from "./components/editProduct";
 import AddRecommendations from "./components/addRecommendations";
 import DrugRecommendations from "./components/drugRecommendations";
+import MakePayment from "./components/MakePayment";
+import MyOrders from "./components/myOrders";
 
 const PrivateRoute = ({ element, path }) => {
   return isAuthenticated() ? (
@@ -167,7 +169,15 @@ const App = () => {
           />
           <Route
             path="/knowledge-share/products/my-orders/"
-            element={<PrivateRoute element={<OrdersTable username={username} />} />}
+            element={<PrivateRoute element={<MyOrders username={username} />} />}
+          />
+          <Route
+            path="/knowledge-share/products/orders/makepayment"
+            element={<PrivateRoute element={<MakePayment username={username} />} />}
+          />
+          <Route
+            path="/knowledge-share/products/orders/payments/complete/"
+            element={<PrivateRoute element={<MakePayment username={username} />} />}
           />
         </Routes>
       </AuthProvider>

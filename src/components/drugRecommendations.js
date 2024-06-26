@@ -4,11 +4,14 @@ import LeftSideBar from "./leftSideBar";
 import API_BASE_URL from "./appConfig";
 import { useParams } from "react-router-dom";
 import ImageZoom from "./ImageZoom";
+import OrderCart from "./orderCart";
 
 const DrugRecommendations = (props) => {
   const { questionId } = useParams();
   const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [showOrderCart, setShowOrderCart] = useState(false);
 
   useEffect(() => {
     const fetchRecommendations = async () => {
@@ -31,6 +34,25 @@ const DrugRecommendations = (props) => {
 
     fetchRecommendations();
   }, [questionId]);
+
+  const handlePlaceOrder = async (productId) => {
+    try {
+      const response = await fetch(`http://localhost:3001/api/v1/products/all/${productId}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch product details");
+      }
+      const productDetails = await response.json();
+      setSelectedProduct(productDetails);
+      setShowOrderCart(true);
+    } catch (error) {
+      console.error("Error fetching product details:", error);
+    }
+  };
+
+  const handleCloseOrderCart = () => {
+    setShowOrderCart(false);
+    setSelectedProduct(null);
+  };
 
   const style = {
     backgroundColor: "#f6f9ff",
@@ -85,9 +107,9 @@ const DrugRecommendations = (props) => {
                                   )}
                                 </div>
                               </div>
-                              <p>Status: {product.status == 'available' ? (<span className="badge bg-success">Available For Purchase</span>) : (<span className="badge bg-danger">Not Available For Purchase</span>)}</p>
+                              <p>Status: {product.status === 'available' ? (<span className="badge bg-success">Available For Purchase</span>) : (<span className="badge bg-danger">Not Available For Purchase</span>)}</p>
                               
-                              <button className="btn btn-sm btn-primary" data-id={product.id}>Place Order</button>
+                              <button className="btn btn-sm btn-primary" onClick={() => handlePlaceOrder(product.id)}>Place Order</button>
                               <hr></hr>
                             </li>
                           ))
@@ -108,6 +130,9 @@ const DrugRecommendations = (props) => {
           </div>
         </div>
       </div>
+      {showOrderCart && (
+        <OrderCart show={showOrderCart} product={selectedProduct} handleClose={handleCloseOrderCart} />
+      )}
     </div>
   );
 };

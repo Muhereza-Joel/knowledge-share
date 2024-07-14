@@ -40,7 +40,7 @@ const QuestionDetails = ({ username, questionDetails }) => {
   const style = {
     backgroundColor: "#f6f9ff",
     position: "relative",
-    height : "100%"
+    height : "100vh"
   };
 
   const quillEditorStyle = {

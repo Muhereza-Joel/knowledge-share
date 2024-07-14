@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import "bootstrap/dist/css/bootstrap.css";
 import { Nav } from "react-bootstrap";
 import QuestionCard from "./questionCard";
@@ -9,20 +10,25 @@ import Cookies from "js-cookie";
 import TopBar from "./topBar";
 import LeftSideBar from "./leftSideBar";
 import NoUserQuestionsSVG from "./NoUserQuestionsSVG";
+import {
+  fetchMyQuestionsRequest,
+  fetchMyQuestionsSuccess,
+  fetchMyQuestionsFailure,
+  fetchMyAvatarRequest,
+  fetchMyAvatarSuccess,
+  fetchMyAvatarFailure,
+} from "../redux/actions";
 
 const MyQuestions = (props) => {
   const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
-  const [state, setState] = useState({
-    userId: cookieData.USERID_KEY,
-    questionData: [],
-    lastUsedTagsData: [],
-    loading: true,
-    error: null,
-  });
+  const dispatch = useDispatch();
+  const { questionData, lastUsedTagsData, avatarUrl, loading, error } = useSelector(
+    (state) => state
+  );
 
-  const [avatarUrl, setAvatarUrl] = useState("");
   useEffect(() => {
     const fetchAvatarUrl = async () => {
+      dispatch(fetchMyAvatarRequest());
       try {
         const response = await fetch(
           `${API_BASE_URL}/api/v1/auth/get-avator/${cookieData.USERID_KEY}`
@@ -31,7 +37,7 @@ const MyQuestions = (props) => {
         if (response.ok) {
           const avatarData = await response.json();
           if (Array.isArray(avatarData) && avatarData.length > 0) {
-            setAvatarUrl(avatarData[0].url);
+            dispatch(fetchMyAvatarSuccess({ avatarUrl: avatarData[0].url }));
           } else {
             console.error("Invalid avatar data structure");
           }
@@ -39,18 +45,21 @@ const MyQuestions = (props) => {
           console.error("Failed to fetch avatarUrl");
         }
       } catch (error) {
-        console.error("Error during fetch:", error);
+        dispatch(fetchMyAvatarFailure(error));
       }
     };
 
     fetchAvatarUrl();
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     const fetchData = async () => {
+      dispatch(fetchMyQuestionsRequest());
       try {
         const [questionsResponse, tagsResponse] = await Promise.all([
-          fetch(`${API_BASE_URL}/api/v1/questions/all/user/${cookieData.USERID_KEY}`),
+          fetch(
+            `${API_BASE_URL}/api/v1/questions/all/user/${cookieData.USERID_KEY}`
+          ),
           fetch(`${API_BASE_URL}/api/v1/tags/most-used-tags/`),
         ]);
 
@@ -64,24 +73,19 @@ const MyQuestions = (props) => {
           questionsResponse.json(),
           tagsResponse.json(),
         ]);
-
-        setState((prev) => ({
-          ...prev,
-          questionData: questionsData,
-          lastUsedTagsData: tagsData,
-          loading: false,
-        }));
+        dispatch(
+          fetchMyQuestionsSuccess({
+            questionData: questionsData,
+            lastUsedTagsData: tagsData,
+          })
+        );
       } catch (error) {
-        setState((prev) => ({
-          ...prev,
-          loading: false,
-          error: error.message,
-        }));
+        dispatch(fetchMyQuestionsFailure(error));
       }
     };
 
     fetchData();
-  }, [state.userId]); // Add dependencies as needed
+  }, [dispatch]); // Add dependencies as needed
 
   const panelStyle = {
     minHeight: "90vh",
@@ -92,9 +96,8 @@ const MyQuestions = (props) => {
   const style = {
     backgroundColor: "#f6f9ff",
     position: "relative",
+    height: "100%",
   };
-
-  const { questionData, lastUsedTagsData, loading } = state;
 
   return (
     <div style={style}>
@@ -131,7 +134,7 @@ const MyQuestions = (props) => {
                       </Nav.Item>
                     </div>
 
-                    { questionData.length === 0 ? (
+                    {questionData.length === 0 ? (
                       <NoUserQuestionsSVG />
                     ) : (
                       questionData.map((question, index) => (

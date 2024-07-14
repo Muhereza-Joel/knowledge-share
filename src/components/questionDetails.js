@@ -40,7 +40,8 @@ const QuestionDetails = ({ username, questionDetails }) => {
   const style = {
     backgroundColor: "#f6f9ff",
     position: "relative",
-    height : "100vh"
+    height: "calc(100vh - 0px)",
+    overflow: "auto" // Add overflow: auto to enable scrolling when content is too long
   };
 
   const quillEditorStyle = {

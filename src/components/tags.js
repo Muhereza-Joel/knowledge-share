@@ -1,41 +1,60 @@
-import React, { useState, useEffect, memo } from "react";
-import { Modal, Button, Form, Alert } from "react-bootstrap";
+// Tags.js
+import React, { useEffect, memo } from "react";
+import { Modal, Button, Form, Alert, Placeholder } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/css/bootstrap.css";
 import PopularTag from "./popularTag";
 import LeftSideBar from "./leftSideBar";
 import TopBar from "./topBar";
-import API_BASE_URL from "./appConfig";
+import { useSelector, useDispatch } from "react-redux";
 import Cookies from "js-cookie";
+import API_BASE_URL from "./appConfig";
+
+import {
+  fetchTags,
+  setFilteredTags,
+  setSearchTerm,
+  setNewTag,
+  setShowModal,
+  setValidationError,
+  setTagsData,
+  setError,
+  setSuccessMessage,
+} from "../redux/reducers/tagsSlice";
+
+const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
 
 const Tags = (props) => {
-  const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
-  const [tagsData, setTagsData] = useState([]);
-  const [filteredTags, setFilteredTags] = useState([]);
-  const [error, setError] = useState(null);
+  const dispatch = useDispatch();
+  const {
+    tagsData,
+    filteredTags,
+    searchTerm,
+    newTag,
+    showModal,
+    validationError,
+    error,
+    loading,
+  } = useSelector((state) => state.tags);
 
-  const [showModal, setShowModal] = useState(false);
-  const [newTag, setNewTag] = useState({ name: "", description: "" });
-
-  const [successMessage, setSuccessMessage] = useState("");
-  const [validationError, setValidationError] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
+  useEffect(() => {
+    dispatch(fetchTags());
+  }, [dispatch]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setNewTag((prevTag) => ({ ...prevTag, [name]: value }));
+    dispatch(setNewTag({ ...newTag, [name]: value }));
   };
 
   const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
+    dispatch(setSearchTerm(e.target.value));
   };
 
   const handleAddTag = async () => {
     try {
-      // Validate form fields
       if (!newTag.name || !newTag.description) {
-        setValidationError("All fields are required.");
+        dispatch(setValidationError("All fields are required."));
         return;
       }
 
@@ -53,70 +72,51 @@ const Tags = (props) => {
       }
 
       const data = await response.json();
-      setTagsData([...tagsData, data]);
+      dispatch(setTagsData([...tagsData, data]));
+      dispatch(setFilteredTags([...filteredTags, data]));
       toast.success("Tag added successfully!", {
         style: { backgroundColor: "#cce6e8", color: "#333" },
       });
       handleCloseModal();
     } catch (error) {
-      setError(error.message);
+      dispatch(setError(error.message));
     }
   };
 
   const handleUpdate = (newTagData) => {
     const index = tagsData.findIndex((tag) => tag.id === newTagData.id);
 
-    setTagsData((prevTags) => [
-      ...prevTags.slice(0, index),
-      newTagData,
-      ...prevTags.slice(index + 1),
-    ]);
+    dispatch(
+      setTagsData([
+        ...tagsData.slice(0, index),
+        newTagData,
+        ...tagsData.slice(index + 1),
+      ])
+    );
   };
 
   const handleDeleteTag = (tagId) => {
     const updatedTags = tagsData.filter((tag) => tag.id !== tagId);
-    setTagsData(updatedTags);
+    dispatch(setTagsData(updatedTags));
   };
 
   const handleShowModal = () => {
-    setShowModal(true);
-    setValidationError(null); // Reset validation errors when the modal is opened
+    dispatch(setShowModal(true));
+    dispatch(setValidationError(null));
   };
 
   const handleCloseModal = () => {
-    setShowModal(false);
-    setSuccessMessage(""); // Reset success message when the modal is closed
-    newTag.name = "";
-    newTag.description = "";
+    dispatch(setShowModal(false));
+    dispatch(setSuccessMessage(""));
+    dispatch(setNewTag({ name: "", description: "" }));
   };
 
   useEffect(() => {
-    const fetchTags = async () => {
-      try {
-        const response = await fetch(`${API_BASE_URL}/api/v1/tags/all/`);
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        setTagsData(data);
-        setFilteredTags(data); // Initialize filteredTags with all tags
-      } catch (error) {
-        setError(error.message);
-      }
-    };
-
-    fetchTags();
-  }, []);
-
-  useEffect(() => {
-    // Filter tags based on the search term
     const filtered = tagsData.filter((tag) =>
       tag.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
-    setFilteredTags(filtered);
-  }, [searchTerm, tagsData]);
+    dispatch(setFilteredTags(filtered));
+  }, [searchTerm, tagsData, dispatch]);
 
   const style = {
     backgroundColor: "#f6f9ff",
@@ -137,7 +137,7 @@ const Tags = (props) => {
             <div id="content-section">
               <div
                 id="middle-panel"
-                className=" p-2 m-2"
+                className="p-2 m-2"
                 style={{ minHeight: "90vh" }}
               >
                 <div className="d-flex mb-3">
@@ -171,21 +171,47 @@ const Tags = (props) => {
                 </div>
 
                 <div className="row g-0">
-                  {filteredTags.map((tag, index) => (
-                    <div className="col-lg-3" key={tag.id}>
-                      <div className="card p-3 m-2">
-                        <PopularTag
-                          key={tag.id}
-                          id={tag.id}
-                          title={tag.name}
-                          description={tag.description}
-                          username={props.username}
-                          onUpdate={handleUpdate}
-                          onDelete={handleDeleteTag}
-                        />
-                      </div>
-                    </div>
-                  ))}
+                  {loading
+                    ? Array(20)
+                        .fill()
+                        .map((_, index) => (
+                          <div className="col-lg-3" key={index}>
+                            <div className="card p-3 m-2">
+                              <Placeholder animation="glow">
+                                <Placeholder
+                                  className="my-2"
+                                  style={{ backgroundColor: "#d5e0eb" }}
+                                  xs={12}
+                                />
+                                <Placeholder
+                                  className="my-2"
+                                  style={{ backgroundColor: "#d5e0eb" }}
+                                  xs={10}
+                                />
+                                <Placeholder
+                                  className="my-2"
+                                  style={{ backgroundColor: "#d5e0eb" }}
+                                  xs={4}
+                                />
+                              </Placeholder>
+                            </div>
+                          </div>
+                        ))
+                    : filteredTags.map((tag, index) => (
+                        <div className="col-lg-3" key={tag.id}>
+                          <div className="card p-3 m-2">
+                            <PopularTag
+                              key={tag.id}
+                              id={tag.id}
+                              title={tag.name}
+                              description={tag.description}
+                              username={props.username}
+                              onUpdate={handleUpdate}
+                              onDelete={handleDeleteTag}
+                            />
+                          </div>
+                        </div>
+                      ))}
                 </div>
               </div>
             </div>

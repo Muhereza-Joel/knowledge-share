@@ -4,7 +4,9 @@ import {
   fetchDataRequest,
   fetchDataSuccess,
   fetchDataFailure,
-} from "../redux/actions";
+  addNewQuestion,
+  deleteQuestion,
+} from "../redux/reducers/questionSlice";
 import "bootstrap/dist/css/bootstrap.css";
 import QuestionCard from "./questionCard";
 import PopularTag from "./popularTag";
@@ -14,43 +16,52 @@ import API_BASE_URL from "./appConfig";
 import { Placeholder } from "react-bootstrap";
 
 const Questions = (props) => {
-  const state = useSelector((state) => state);
   const dispatch = useDispatch();
+  const questionData = useSelector((state) => state.questions.allQuestionData);
+  const popularTagsData = useSelector(
+    (state) => state.questions.allQuestionsPopularTagsData
+  );
+  const loading = useSelector((state) => state.questions.allQuestionsLoading);
+  const error = useSelector((state) => state.questions.allQuestionsError);
 
   useEffect(() => {
-    const fetchData = async () => {
-      dispatch(fetchDataRequest());
-      try {
-        const [questionsResponse, tagsResponse] = await Promise.all([
-          fetch(`${API_BASE_URL}/api/v1/questions/all/`),
-          fetch(`${API_BASE_URL}/api/v1/tags/popular-tags/`),
-        ]);
+    if (questionData.length === 0 || popularTagsData.length === 0) {
+      const fetchData = async () => {
+        dispatch(fetchDataRequest());
+        try {
+          const [questionsResponse, tagsResponse] = await Promise.all([
+            fetch(`${API_BASE_URL}/api/v1/questions/all/`),
+            fetch(`${API_BASE_URL}/api/v1/tags/popular-tags/`),
+          ]);
 
-        if (!questionsResponse.ok || !tagsResponse.ok) {
-          throw new Error(
-            `HTTP error! Questions Status: ${questionsResponse.status}, Tags Status: ${tagsResponse.status}`
+          if (!questionsResponse.ok || !tagsResponse.ok) {
+            throw new Error(
+              `HTTP error! Questions Status: ${questionsResponse.status}, Tags Status: ${tagsResponse.status}`
+            );
+          }
+
+          const [questionData, tagsData] = await Promise.all([
+            questionsResponse.json(),
+            tagsResponse.json(),
+          ]);
+
+          dispatch(
+            fetchDataSuccess({
+              allQuestionData: questionData,
+              allQuestionsPopularTagsData: tagsData,
+            })
           );
+        } catch (error) {
+          dispatch(fetchDataFailure(error.message));
+          console.error("Failed to fetch data:", error);
         }
+      };
 
-        const [questionsData, tagsData] = await Promise.all([
-          questionsResponse.json(),
-          tagsResponse.json(),
-        ]);
+      fetchData();
+    }
+  }, [dispatch]);
 
-        dispatch(
-          fetchDataSuccess({
-            questionData: questionsData,
-            popularTagsData: tagsData,
-          })
-        );
-      } catch (error) {
-        dispatch(fetchDataFailure(error));
-      }
-    };
-
-    fetchData();
-  }, [dispatch]); // Empty dependency array ensures the effect runs once on mount
-
+ 
   const panelStyle = {
     minHeight: "90vh",
   };
@@ -60,11 +71,9 @@ const Questions = (props) => {
     position: "relative",
   };
 
-  if (state.error) {
-    return <div>Error: {state.error.message}</div>;
+  if (error) {
+    return <div>Error: {error}</div>;
   }
-
-  const { questionData, popularTagsData } = state;
 
   return (
     <div style={style}>
@@ -76,25 +85,89 @@ const Questions = (props) => {
         <div className="col-lg-10">
           <div id="content-section" className="row g-0">
             <div className="col-lg-9">
-              {state.loading ? (
+              {loading ? (
                 <div>
                   <div>
-                      <Placeholder className="my-2" style={{ backgroundColor: '#d5e0eb' }} xs={12} />
-                      <Placeholder className="my-2" style={{ backgroundColor: '#d5e0eb' }} xs={10} />
-                      <Placeholder className="my-2" style={{ backgroundColor: '#d5e0eb' }} xs={8} />
-                      <Placeholder className="my-2" style={{ backgroundColor: '#d5e0eb' }} xs={6} />
-                      <Placeholder className="my-2" style={{ backgroundColor: '#d5e0eb' }} xs={4} />
-                      <Placeholder className="my-2" style={{ backgroundColor: '#d5e0eb' }} xs={2} />
-                      <Placeholder className="my-2" style={{ backgroundColor: '#d5e0eb' }} xs={12} />
-                      <Placeholder className="my-2" style={{ backgroundColor: '#d5e0eb' }} xs={10} />
-                      <Placeholder className="my-2" style={{ backgroundColor: '#d5e0eb' }} xs={8} />
-                      <Placeholder className="my-2" style={{ backgroundColor: '#d5e0eb' }} xs={6} />
-                      <Placeholder className="my-2" style={{ backgroundColor: '#d5e0eb' }} xs={4} />
-                      <Placeholder className="my-2" style={{ backgroundColor: '#d5e0eb' }} xs={2} />
-                      <Placeholder className="my-2" style={{ backgroundColor: '#d5e0eb' }} xs={12} />
-                      <Placeholder className="my-2" style={{ backgroundColor: '#d5e0eb' }} xs={10} />
-                      <Placeholder className="my-2" style={{ backgroundColor: '#d5e0eb' }} xs={8} />
-                      <Placeholder className="my-2" style={{ backgroundColor: '#d5e0eb' }} xs={6} />
+                    <Placeholder
+                      className="my-2"
+                      style={{ backgroundColor: "#d5e0eb" }}
+                      xs={12}
+                    />
+                    <Placeholder
+                      className="my-2"
+                      style={{ backgroundColor: "#d5e0eb" }}
+                      xs={10}
+                    />
+                    <Placeholder
+                      className="my-2"
+                      style={{ backgroundColor: "#d5e0eb" }}
+                      xs={8}
+                    />
+                    <Placeholder
+                      className="my-2"
+                      style={{ backgroundColor: "#d5e0eb" }}
+                      xs={6}
+                    />
+                    <Placeholder
+                      className="my-2"
+                      style={{ backgroundColor: "#d5e0eb" }}
+                      xs={4}
+                    />
+                    <Placeholder
+                      className="my-2"
+                      style={{ backgroundColor: "#d5e0eb" }}
+                      xs={2}
+                    />
+                    <Placeholder
+                      className="my-2"
+                      style={{ backgroundColor: "#d5e0eb" }}
+                      xs={12}
+                    />
+                    <Placeholder
+                      className="my-2"
+                      style={{ backgroundColor: "#d5e0eb" }}
+                      xs={10}
+                    />
+                    <Placeholder
+                      className="my-2"
+                      style={{ backgroundColor: "#d5e0eb" }}
+                      xs={8}
+                    />
+                    <Placeholder
+                      className="my-2"
+                      style={{ backgroundColor: "#d5e0eb" }}
+                      xs={6}
+                    />
+                    <Placeholder
+                      className="my-2"
+                      style={{ backgroundColor: "#d5e0eb" }}
+                      xs={4}
+                    />
+                    <Placeholder
+                      className="my-2"
+                      style={{ backgroundColor: "#d5e0eb" }}
+                      xs={2}
+                    />
+                    <Placeholder
+                      className="my-2"
+                      style={{ backgroundColor: "#d5e0eb" }}
+                      xs={12}
+                    />
+                    <Placeholder
+                      className="my-2"
+                      style={{ backgroundColor: "#d5e0eb" }}
+                      xs={10}
+                    />
+                    <Placeholder
+                      className="my-2"
+                      style={{ backgroundColor: "#d5e0eb" }}
+                      xs={8}
+                    />
+                    <Placeholder
+                      className="my-2"
+                      style={{ backgroundColor: "#d5e0eb" }}
+                      xs={6}
+                    />
                   </div>
                 </div>
               ) : (
@@ -113,7 +186,7 @@ const Questions = (props) => {
                         key={index}
                         data={question}
                         currentUser={`${props.username}`}
-                        loading={state.loading}
+                        loading={loading}
                       />
                     ))}
                   </div>

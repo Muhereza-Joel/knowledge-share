@@ -17,75 +17,83 @@ import {
   fetchMyAvatarRequest,
   fetchMyAvatarSuccess,
   fetchMyAvatarFailure,
-} from "../redux/actions";
+} from "../redux/reducers/myQuestionsSlice";
 
 const MyQuestions = (props) => {
   const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
   const dispatch = useDispatch();
-  const { questionData, lastUsedTagsData, avatarUrl, loading, error } = useSelector(
-    (state) => state
-  );
+  const {
+    myQuestionData,
+    lastUsedTagsData,
+    avatarUrl,
+    myQuestionsLoading,
+    myQuestionsError,
+  } = useSelector((state) => state.myQuestions);
 
   useEffect(() => {
-    const fetchAvatarUrl = async () => {
-      dispatch(fetchMyAvatarRequest());
-      try {
-        const response = await fetch(
-          `${API_BASE_URL}/api/v1/auth/get-avator/${cookieData.USERID_KEY}`
-        );
+    if (!avatarUrl) {
+      const fetchAvatarUrl = async () => {
+        dispatch(fetchMyAvatarRequest());
+        try {
+          const response = await fetch(
+            `${API_BASE_URL}/api/v1/auth/get-avator/${cookieData.USERID_KEY}`
+          );
 
-        if (response.ok) {
-          const avatarData = await response.json();
-          if (Array.isArray(avatarData) && avatarData.length > 0) {
-            dispatch(fetchMyAvatarSuccess({ avatarUrl: avatarData[0].url }));
+          if (response.ok) {
+            const avatarData = await response.json();
+            if (Array.isArray(avatarData) && avatarData.length > 0) {
+              dispatch(fetchMyAvatarSuccess({ avatarUrl: avatarData[0].url }));
+            } else {
+              console.error("Invalid avatar data structure");
+            }
           } else {
-            console.error("Invalid avatar data structure");
+            console.error("Failed to fetch avatarUrl");
           }
-        } else {
-          console.error("Failed to fetch avatarUrl");
+        } catch (error) {
+          dispatch(fetchMyAvatarFailure(error.message));
         }
-      } catch (error) {
-        dispatch(fetchMyAvatarFailure(error));
-      }
-    };
+      };
 
-    fetchAvatarUrl();
+      fetchAvatarUrl();
+    }
   }, [dispatch]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      dispatch(fetchMyQuestionsRequest());
-      try {
-        const [questionsResponse, tagsResponse] = await Promise.all([
-          fetch(
-            `${API_BASE_URL}/api/v1/questions/all/user/${cookieData.USERID_KEY}`
-          ),
-          fetch(`${API_BASE_URL}/api/v1/tags/most-used-tags/`),
-        ]);
+    if (myQuestionData.length === 0 || lastUsedTagsData.length === 0) {
+      const fetchData = async () => {
+        dispatch(fetchMyQuestionsRequest());
+        try {
+          const [questionsResponse, tagsResponse] = await Promise.all([
+            fetch(
+              `${API_BASE_URL}/api/v1/questions/all/user/${cookieData.USERID_KEY}`
+            ),
+            fetch(`${API_BASE_URL}/api/v1/tags/most-used-tags/`),
+          ]);
 
-        if (!questionsResponse.ok || !tagsResponse.ok) {
-          throw new Error(
-            `HTTP error! Questions Status: ${questionsResponse.status}, Tags Status: ${tagsResponse.status}`
+          if (!questionsResponse.ok || !tagsResponse.ok) {
+            throw new Error(
+              `HTTP error! Questions Status: ${questionsResponse.status}, Tags Status: ${tagsResponse.status}`
+            );
+          }
+
+          const [questionsData, tagsData] = await Promise.all([
+            questionsResponse.json(),
+            tagsResponse.json(),
+          ]);
+          dispatch(
+            fetchMyQuestionsSuccess({
+              myQuestionData: questionsData,
+              lastUsedTagsData: tagsData,
+            })
           );
+        } catch (error) {
+          dispatch(fetchMyQuestionsFailure(error.message));
         }
+      };
 
-        const [questionsData, tagsData] = await Promise.all([
-          questionsResponse.json(),
-          tagsResponse.json(),
-        ]);
-        dispatch(
-          fetchMyQuestionsSuccess({
-            questionData: questionsData,
-            lastUsedTagsData: tagsData,
-          })
-        );
-      } catch (error) {
-        dispatch(fetchMyQuestionsFailure(error));
-      }
-    };
-
-    fetchData();
-  }, [dispatch]); // Add dependencies as needed
+      fetchData();
+    }
+  }, [dispatch]);
 
   const panelStyle = {
     minHeight: "90vh",
@@ -134,14 +142,14 @@ const MyQuestions = (props) => {
                       </Nav.Item>
                     </div>
 
-                    {questionData.length === 0 ? (
+                    {myQuestionData.length === 0 ? (
                       <NoUserQuestionsSVG />
                     ) : (
-                      questionData.map((question, index) => (
+                      myQuestionData.map((question, index) => (
                         <QuestionCard
                           key={index}
                           data={question}
-                          currentUser={`${props.username}`}
+                          currentUser={props.username}
                         />
                       ))
                     )}
@@ -152,7 +160,7 @@ const MyQuestions = (props) => {
               <div className="col-lg-3">
                 <div id="right-panel" style={panelStyle}>
                   <ShortProfile
-                    username={`${props.username}`}
+                    username={props.username}
                     avatarUrl={avatarUrl}
                   />
 
@@ -168,7 +176,7 @@ const MyQuestions = (props) => {
                         id={tag.id}
                         title={tag.name}
                         description={tag.description}
-                        username={`${props.username}`}
+                        username={props.username}
                         showIcons={false}
                       />
                     ))}

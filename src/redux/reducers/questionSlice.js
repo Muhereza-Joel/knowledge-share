@@ -1,4 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import API_BASE_URL from "./../../components/appConfig";
 
 const questionSlice = createSlice({
   name: "questions",
@@ -28,9 +29,8 @@ const questionSlice = createSlice({
     },
     deleteQuestion(state, action) {
       state.allQuestionData = state.allQuestionData.filter(
-        question => question.questionId !== action.payload.id
+        (question) => question.questionId !== action.payload.id
       );
-     
     },
   },
 });
@@ -40,7 +40,49 @@ export const {
   fetchDataSuccess,
   fetchDataFailure,
   addNewQuestion,
-  deleteQuestion
+  deleteQuestion,
 } = questionSlice.actions;
+
+export const fetchQuestionsAndTags = createAsyncThunk(
+  "questions/fetchQuestionsAndTags",
+  async (_, { getState, dispatch }) => {
+    const state = getState();
+    const { allQuestionData, allQuestionsPopularTagsData } = state.questions;
+
+    // Check if data already exists in the store
+    if (allQuestionData.length > 0 && allQuestionsPopularTagsData.length > 0) {
+      return; // No need to fetch data
+    }
+
+    dispatch(fetchDataRequest());
+    try {
+      const [questionsResponse, tagsResponse] = await Promise.all([
+        fetch(`${API_BASE_URL}/api/v1/questions/all/`),
+        fetch(`${API_BASE_URL}/api/v1/tags/popular-tags/`),
+      ]);
+
+      if (!questionsResponse.ok || !tagsResponse.ok) {
+        throw new Error(
+          `HTTP error! Questions Status: ${questionsResponse.status}, Tags Status: ${tagsResponse.status}`
+        );
+      }
+
+      const [questionData, tagsData] = await Promise.all([
+        questionsResponse.json(),
+        tagsResponse.json(),
+      ]);
+
+      dispatch(
+        fetchDataSuccess({
+          allQuestionData: questionData,
+          allQuestionsPopularTagsData: tagsData,
+        })
+      );
+    } catch (error) {
+      dispatch(fetchDataFailure(error.message));
+      console.error("Failed to fetch data:", error);
+    }
+  }
+);
 
 export default questionSlice.reducer;

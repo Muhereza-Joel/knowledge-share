@@ -5,94 +5,26 @@ import { Nav } from "react-bootstrap";
 import QuestionCard from "./questionCard";
 import ShortProfile from "./shortProfile";
 import PopularTag from "./popularTag";
-import API_BASE_URL from "./appConfig";
-import Cookies from "js-cookie";
 import TopBar from "./topBar";
 import LeftSideBar from "./leftSideBar";
 import NoUserQuestionsSVG from "./NoUserQuestionsSVG";
 import {
-  fetchMyQuestionsRequest,
-  fetchMyQuestionsSuccess,
-  fetchMyQuestionsFailure,
-  fetchMyAvatarRequest,
-  fetchMyAvatarSuccess,
-  fetchMyAvatarFailure,
+  fetchMyQuestionsAndLastUsedTags,
+  fetchMyAvatorUrl,
 } from "../redux/reducers/myQuestionsSlice";
 
 const MyQuestions = (props) => {
-  const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
   const dispatch = useDispatch();
-  const {
-    myQuestionData,
-    lastUsedTagsData,
-    avatarUrl,
-    myQuestionsLoading,
-    myQuestionsError,
-  } = useSelector((state) => state.myQuestions);
+  const { myQuestionData, lastUsedTagsData, avatarUrl } = useSelector(
+    (state) => state.myQuestions
+  );
 
   useEffect(() => {
-    if (!avatarUrl) {
-      const fetchAvatarUrl = async () => {
-        dispatch(fetchMyAvatarRequest());
-        try {
-          const response = await fetch(
-            `${API_BASE_URL}/api/v1/auth/get-avator/${cookieData.USERID_KEY}`
-          );
-
-          if (response.ok) {
-            const avatarData = await response.json();
-            if (Array.isArray(avatarData) && avatarData.length > 0) {
-              dispatch(fetchMyAvatarSuccess({ avatarUrl: avatarData[0].url }));
-            } else {
-              console.error("Invalid avatar data structure");
-            }
-          } else {
-            console.error("Failed to fetch avatarUrl");
-          }
-        } catch (error) {
-          dispatch(fetchMyAvatarFailure(error.message));
-        }
-      };
-
-      fetchAvatarUrl();
-    }
+    dispatch(fetchMyAvatorUrl());
   }, [dispatch]);
 
   useEffect(() => {
-    if (myQuestionData.length === 0 || lastUsedTagsData.length === 0) {
-      const fetchData = async () => {
-        dispatch(fetchMyQuestionsRequest());
-        try {
-          const [questionsResponse, tagsResponse] = await Promise.all([
-            fetch(
-              `${API_BASE_URL}/api/v1/questions/all/user/${cookieData.USERID_KEY}`
-            ),
-            fetch(`${API_BASE_URL}/api/v1/tags/most-used-tags/`),
-          ]);
-
-          if (!questionsResponse.ok || !tagsResponse.ok) {
-            throw new Error(
-              `HTTP error! Questions Status: ${questionsResponse.status}, Tags Status: ${tagsResponse.status}`
-            );
-          }
-
-          const [questionsData, tagsData] = await Promise.all([
-            questionsResponse.json(),
-            tagsResponse.json(),
-          ]);
-          dispatch(
-            fetchMyQuestionsSuccess({
-              myQuestionData: questionsData,
-              lastUsedTagsData: tagsData,
-            })
-          );
-        } catch (error) {
-          dispatch(fetchMyQuestionsFailure(error.message));
-        }
-      };
-
-      fetchData();
-    }
+    dispatch(fetchMyQuestionsAndLastUsedTags());
   }, [dispatch]);
 
   const panelStyle = {

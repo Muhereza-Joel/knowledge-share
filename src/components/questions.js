@@ -1,18 +1,11 @@
 import React, { useState, useEffect, memo } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  fetchDataRequest,
-  fetchDataSuccess,
-  fetchDataFailure,
-  addNewQuestion,
-  deleteQuestion,
-} from "../redux/reducers/questionSlice";
+import { fetchQuestionsAndTags } from "../redux/reducers/questionSlice";
 import "bootstrap/dist/css/bootstrap.css";
 import QuestionCard from "./questionCard";
 import PopularTag from "./popularTag";
 import TopBar from "./topBar";
 import LeftSideBar from "./leftSideBar";
-import API_BASE_URL from "./appConfig";
 import { Placeholder } from "react-bootstrap";
 
 const Questions = (props) => {
@@ -25,43 +18,9 @@ const Questions = (props) => {
   const error = useSelector((state) => state.questions.allQuestionsError);
 
   useEffect(() => {
-    if (questionData.length === 0 || popularTagsData.length === 0) {
-      const fetchData = async () => {
-        dispatch(fetchDataRequest());
-        try {
-          const [questionsResponse, tagsResponse] = await Promise.all([
-            fetch(`${API_BASE_URL}/api/v1/questions/all/`),
-            fetch(`${API_BASE_URL}/api/v1/tags/popular-tags/`),
-          ]);
-
-          if (!questionsResponse.ok || !tagsResponse.ok) {
-            throw new Error(
-              `HTTP error! Questions Status: ${questionsResponse.status}, Tags Status: ${tagsResponse.status}`
-            );
-          }
-
-          const [questionData, tagsData] = await Promise.all([
-            questionsResponse.json(),
-            tagsResponse.json(),
-          ]);
-
-          dispatch(
-            fetchDataSuccess({
-              allQuestionData: questionData,
-              allQuestionsPopularTagsData: tagsData,
-            })
-          );
-        } catch (error) {
-          dispatch(fetchDataFailure(error.message));
-          console.error("Failed to fetch data:", error);
-        }
-      };
-
-      fetchData();
-    }
+    dispatch(fetchQuestionsAndTags());
   }, [dispatch]);
 
- 
   const panelStyle = {
     minHeight: "90vh",
   };

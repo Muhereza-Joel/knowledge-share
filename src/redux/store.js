@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
-import storageSession from 'redux-persist/lib/storage/session'; // Use session storage
+import storage from 'redux-persist/lib/storage'; // Use session storage
 import questionsReducer from './reducers/questionSlice';
 import myQuestionsReducer from './reducers/myQuestionsSlice';
 import tagsReducer from './reducers/tagsSlice';
@@ -9,7 +9,7 @@ import { thunk } from 'redux-thunk';
 // Configuration for redux-persist
 const persistConfig = {
   key: 'root',
-  storage: storageSession,
+  storage,
   whitelist: ['questions', 'myQuestions', 'tags'], // Reducers you want to persist
 };
 

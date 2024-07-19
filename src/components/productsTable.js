@@ -195,7 +195,7 @@ const ProductsTable = (props) => {
         <div className="col-sm-2">
           <LeftSideBar username={props.username} />
         </div>
-        <div className="col-sm-10 py-2 card mt-3">
+        <div className="col-sm-10 py-2 card mt-2">
           <div className="card-body">
             <h4 className="my-2">
               Available Products To Use For Recommendations

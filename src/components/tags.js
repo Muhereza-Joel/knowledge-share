@@ -199,7 +199,7 @@ const Tags = (props) => {
                         ))
                     : filteredTags.map((tag, index) => (
                         <div className="col-lg-3" key={tag.id}>
-                          <div className="card p-3 m-2">
+                          <div className="card p-3 m-1">
                             <PopularTag
                               key={tag.id}
                               id={tag.id}

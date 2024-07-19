@@ -61,8 +61,9 @@ const TopBar = (props) => {
     position: "sticky",
     top: 0,
     backgroundColor: "#fff",
-    // backgroundColor: "#f6f9ff",
-    boxShadow: "0px 2px 20px rgba(1, 41, 112, 0.1)",
+    backgroundColor: "#f6f9ff",
+    borderBottom: "1px solid #e5e5e5",
+    // boxShadow: "0px 2px 20px rgba(1, 41, 112, 0.1)",
   };
 
   const notificationLinkStyle = {

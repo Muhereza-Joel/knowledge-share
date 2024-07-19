@@ -53,7 +53,7 @@ const Users = (props) => {
 
         <div className="col-lg-3 py-4 px-2">
           
-          <Alert variant="success">
+          <Alert variant="light">
             <Alert.Heading>Expert Account Role.</Alert.Heading>
             <p>
               The expert account is used by experts to guide all users who post questions on this plartform, any user elevated to this 
@@ -62,7 +62,7 @@ const Users = (props) => {
             
           </Alert>
 
-          <Alert variant="info">
+          <Alert variant="light">
             <Alert.Heading>User Account Role.</Alert.Heading>
             <p>
               The user account is the default role for all users who post questions on this plartform. This role enables a user

@@ -131,7 +131,7 @@ const AddRecommendations = (props) => {
           <LeftSideBar username={props.username} />
         </div>
         <div className="col-sm-10">
-          <div className="card p-2">
+          <div className="card p-2 mt-2">
             <div className="alert alert-light p-3 m-0">
               To add recommendations click on the category to get list of
               products, then select the desired product after add usage

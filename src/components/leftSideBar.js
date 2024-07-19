@@ -13,10 +13,6 @@ const LeftSideBar = (props) => {
   const {activeLink} = useSelector((state) => state.ui);
   const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
 
-  useEffect(() => {
-    localStorage.setItem("activeLink", activeLink);
-  }, [activeLink]);
-
   const linkStyle = {
     backgroundColor: "#217537",
     color: "#fff",

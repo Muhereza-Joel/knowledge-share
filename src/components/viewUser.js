@@ -99,6 +99,8 @@ const ViewUser = (props) => {
   const style = {
     backgroundColor: "#f6f9ff",
     position: "relative",
+    height: "calc(100vh - 0px)",
+    overflow: "auto"
   };
 
   return (
@@ -111,22 +113,27 @@ const ViewUser = (props) => {
         <div className="col-lg-1"></div>
         <div className="col-lg-8">
           <div className="">
-            <div className="row g-0">
+            <div className="row g-2">
               <div
-                className="col-lg-5 card mt-4"
+                className="col-lg-5 card mt-3"
                 style={{ border: "none", backgroundColor: "#f6f9ff" }}
               >
-                <img
-                  src={avatarUrl || Avator}
-                  style={avatorStyle}
-                  className="rounded-circle"
-                  alt="avatar"
-                />
+                <div className="card">
+                  <div className="card-body">
+                    <img
+                      src={avatarUrl || Avator}
+                      style={avatorStyle}
+                      className="rounded-circle"
+                      alt="avatar"
+                    />
+
+                  </div>
+                </div>
               </div>
               <div className="col-lg-7">
                 <div
-                  className="card mt-4 p-4"
-                  style={{ border: "none", backgroundColor: "#f6f9ff" }}
+                  className="card mt-2 p-4"
+                  
                 >
                   <small className="fw-bold mb-2">Personal Information</small>
                   <label>Username:</label>

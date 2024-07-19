@@ -92,6 +92,13 @@ code {
   overflow-y: auto;
 }
 
+.notification-content::-webkit-scrollbar {
+  width: 12px; /* Width of the scrollbar */
+}
+.card {
+  border-radius: 0rem !important;
+}
+
 
 
 

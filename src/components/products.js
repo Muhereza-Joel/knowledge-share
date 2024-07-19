@@ -45,7 +45,10 @@ const Products = (props) => {
       return;
     }
     setImages([...images, ...files]);
-    setImagePreviews([...imagePreviews, ...files.map(file => URL.createObjectURL(file))]);
+    setImagePreviews([
+      ...imagePreviews,
+      ...files.map((file) => URL.createObjectURL(file)),
+    ]);
   };
 
   const removeImage = (index) => {
@@ -56,7 +59,14 @@ const Products = (props) => {
   };
 
   const validateForm = () => {
-    if (!productName || !productDescription || !price || !quantity || selectedCategories.length === 0 || images.length === 0) {
+    if (
+      !productName ||
+      !productDescription ||
+      !price ||
+      !quantity ||
+      selectedCategories.length === 0 ||
+      images.length === 0
+    ) {
       toast.error("All fields are required.", {
         style: { backgroundColor: "#cce6e8", color: "#333" },
       });
@@ -78,7 +88,10 @@ const Products = (props) => {
       images.forEach((image, index) => {
         formData.append("image", image);
       });
-      formData.append("categories", JSON.stringify(selectedCategories.map((category) => category.value)));
+      formData.append(
+        "categories",
+        JSON.stringify(selectedCategories.map((category) => category.value))
+      );
 
       const response = await fetch(`${API_BASE_URL}/api/v1/products/add`, {
         method: "POST",
@@ -110,7 +123,7 @@ const Products = (props) => {
 
   const handleCategorySelect = async (categoryId) => {
     //Intentionaly left empty to suppress the callback error
-  }
+  };
 
   const style = {
     backgroundColor: "#f6f9ff",
@@ -124,140 +137,169 @@ const Products = (props) => {
         <div className="col-lg-2">
           <LeftSideBar username={props.username} />
         </div>
-        <div className="col-lg-10 p-4 card mt-3">
-          <h4 className="my-2">Manage Your Products</h4>
-          <small>
-            Products created here are the ones added to drug recommendations and
-            inputs to questions asked on the platform. People will be able to
-            place orders on these items depending on their availability in the
-            stores.
-          </small>
-          <hr />
-          <div className="row">
+        <div className="col-lg-10 p-2 mt-0">
+          <div className="card">
+            <div className="card-body">
+              <h4 className="my-2">Manage Your Products</h4>
+              <small>
+                Products created here are the ones added to drug recommendations
+                and inputs to questions asked on the platform. People will be
+                able to place orders on these items depending on their
+                availability in the stores.
+              </small>
+            </div>
+          </div>
+          <div className="row g-2 mt-1">
             <div className="col-md-6">
-              <Categories showCreateCategory={true} showDeleteCategory={true} onCategorySelect={handleCategorySelect}/>
+              <div className="card">
+                <div className="card-body">
+                  <Categories
+                    showCreateCategory={true}
+                    showDeleteCategory={true}
+                    onCategorySelect={handleCategorySelect}
+                  />
+                </div>
+              </div>
             </div>
             <div className="col-md-6">
-              <h5 className="text-success">Create Product</h5>
-              <form
-                onSubmit={handleProductSubmit}
-                encType="multipart/form-data"
-              >
-                <div className="mb-3">
-                  <label htmlFor="productName" className="form-label">
-                    Product Name
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="productName"
-                    value={productName}
-                    onChange={(e) => setProductName(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="productDescription" className="form-label">
-                    Product Description
-                  </label>
-                  <ReactQuill
-                    theme="snow"
-                    value={productDescription}
-                    style={{ height: 200, marginBottom: 10 }}
-                    onChange={setProductDescription}
-                    required
-                  />
-                </div><br/><br/>
-                <div className="mb-3">
-                  <label htmlFor="price" className="form-label">
-                    Selling Price
-                  </label>
-                  <input
-                    type="number"
-                    className="form-control"
-                    id="price"
-                    value={price}
-                    onChange={(e) => setPrice(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="categories" className="form-label">
-                    Product Categories
-                  </label>
-                  <Select
-                    className="basic-multi-select"
-                    classNamePrefix="select"
-                    placeholder="Select Categories..."
-                    isMulti
-                    isSearchable
-                    name="categories"
-                    options={categories.map((cat) => ({
-                      value: cat.id,
-                      label: cat.name,
-                    }))}
-                    value={selectedCategories}
-                    onChange={setSelectedCategories}
-                    required
-                  />
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="quantity" className="form-label">
-                    Quantity
-                  </label>
-                  <input
-                    type="number"
-                    className="form-control"
-                    id="quantity"
-                    value={quantity}
-                    onChange={(e) => setQuantity(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="images" className="form-label">
-                    Product Images
-                  </label>
-                  <input
-                    type="file"
-                    className="form-control"
-                    id="images"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                    multiple
-                  />
-                  <div className="image-previews">
-                    {imagePreviews.map((preview, index) => (
-                      <div key={index} className="image-preview" style={{ position: "relative", display: "inline-block" }}>
-                        <img
-                          src={preview}
-                          alt="Product Preview"
-                          style={{ marginTop: "10px", width: "150px", height: "150px" }}
-                        />
-                        <button
-                          type="button"
-                          onClick={() => removeImage(index)}
-                          style={{
-                            position: "absolute",
-                            top: "5px",
-                            right: "5px",
-                            backgroundColor: "red",
-                            color: "white",
-                            border: "none",
-                            borderRadius: "50%",
-                            cursor: "pointer",
-                          }}
-                        >
-                          X
-                        </button>
+              <div className="card">
+                <div className="card-body">
+                  <h5 className="text-success">Create Product</h5>
+                  <form
+                    onSubmit={handleProductSubmit}
+                    encType="multipart/form-data"
+                  >
+                    <div className="mb-3">
+                      <label htmlFor="productName" className="form-label">
+                        Product Name
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="productName"
+                        value={productName}
+                        onChange={(e) => setProductName(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className="mb-3">
+                      <label htmlFor="productDescription" className="form-label">
+                        Product Description
+                      </label>
+                      <ReactQuill
+                        theme="snow"
+                        value={productDescription}
+                        style={{ height: 200, marginBottom: 10 }}
+                        onChange={setProductDescription}
+                        required
+                      />
+                    </div>
+                    <br />
+                    <br />
+                    <div className="mb-3">
+                      <label htmlFor="price" className="form-label">
+                        Selling Price
+                      </label>
+                      <input
+                        type="number"
+                        className="form-control"
+                        id="price"
+                        value={price}
+                        onChange={(e) => setPrice(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className="mb-3">
+                      <label htmlFor="categories" className="form-label">
+                        Product Categories
+                      </label>
+                      <Select
+                        className="basic-multi-select"
+                        classNamePrefix="select"
+                        placeholder="Select Categories..."
+                        isMulti
+                        isSearchable
+                        name="categories"
+                        options={categories.map((cat) => ({
+                          value: cat.id,
+                          label: cat.name,
+                        }))}
+                        value={selectedCategories}
+                        onChange={setSelectedCategories}
+                        required
+                      />
+                    </div>
+                    <div className="mb-3">
+                      <label htmlFor="quantity" className="form-label">
+                        Quantity
+                      </label>
+                      <input
+                        type="number"
+                        className="form-control"
+                        id="quantity"
+                        value={quantity}
+                        onChange={(e) => setQuantity(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className="mb-3">
+                      <label htmlFor="images" className="form-label">
+                        Product Images
+                      </label>
+                      <input
+                        type="file"
+                        className="form-control"
+                        id="images"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                        multiple
+                      />
+                      <div className="image-previews">
+                        {imagePreviews.map((preview, index) => (
+                          <div
+                            key={index}
+                            className="image-preview"
+                            style={{
+                              position: "relative",
+                              display: "inline-block",
+                            }}
+                          >
+                            <img
+                              src={preview}
+                              alt="Product Preview"
+                              style={{
+                                marginTop: "10px",
+                                width: "150px",
+                                height: "150px",
+                              }}
+                            />
+                            <button
+                              type="button"
+                              onClick={() => removeImage(index)}
+                              style={{
+                                position: "absolute",
+                                top: "5px",
+                                right: "5px",
+                                backgroundColor: "red",
+                                color: "white",
+                                border: "none",
+                                borderRadius: "50%",
+                                cursor: "pointer",
+                              }}
+                            >
+                              X
+                            </button>
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
+                    </div>
+                    <button type="submit" className="btn btn-success btn-sm">
+                      Submit
+                    </button>
+                  </form>
+
                 </div>
-                <button type="submit" className="btn btn-success btn-sm">
-                  Submit
-                </button>
-              </form>
+              </div>
             </div>
           </div>
           <ToastContainer

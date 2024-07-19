@@ -67,7 +67,7 @@ const DataTable = ({ data }) => {
   };
 
   return (
-    <div className="card py-4 px-2 mt-4 ms-2">
+    <div className="card py-2 px-0 mt-4 ms-2">
       <div className="container">
         <div className="">
           <div className="card-body">

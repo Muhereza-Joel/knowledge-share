@@ -2,10 +2,15 @@ import React, { useState, useEffect } from "react";
 import { Nav } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
 import Cookies from "js-cookie";
+import { useSelector, useDispatch } from "react-redux";
+
+import {
+  setActiveLink,
+} from "../redux/reducers/uiSlice";
 
 const LeftSideBar = (props) => {
-  const storedActiveLink = localStorage.getItem("activeLink") || "ask-question";
-  const [activeLink, setActiveLink] = useState(storedActiveLink);
+  const dispatch = useDispatch();
+  const {activeLink} = useSelector((state) => state.ui);
   const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
 
   useEffect(() => {
@@ -32,7 +37,7 @@ const LeftSideBar = (props) => {
           <Nav.Link
             href={`/knowledge-share/${cookieData.USERNAME_KEY}/questions/ask-question/`}
             className="px-3 fw-bold"
-            onClick={() => setActiveLink("ask-question")}
+            onClick={() => dispatch(setActiveLink("ask-question"))}
           >
             <i className="bi bi-question-circle-fill me-2"></i> Ask Question
           </Nav.Link>
@@ -47,7 +52,7 @@ const LeftSideBar = (props) => {
           <Nav.Link
             href={`/knowledge-share/${cookieData.USERNAME_KEY}/my-questions/`}
             className="px-3 fw-bold"
-            onClick={() => setActiveLink("my-questions")}
+            onClick={() => dispatch(setActiveLink("my-questions"))}
           >
             <i className="bi bi-journal-text me-2"></i> My Questions
           </Nav.Link>
@@ -62,7 +67,7 @@ const LeftSideBar = (props) => {
           <Nav.Link
             href={`/knowledge-share/${cookieData.USERNAME_KEY}/questions/`}
             className="px-3 fw-bold"
-            onClick={() => setActiveLink("all-questions")}
+            onClick={() => dispatch(setActiveLink("all-questions"))}
           >
             <i className="bi bi-list-ul me-2"></i> All Questions
           </Nav.Link>
@@ -77,7 +82,7 @@ const LeftSideBar = (props) => {
           <Nav.Link
             href={`/knowledge-share/${cookieData.USERNAME_KEY}/calendar/`}
             className="px-3 fw-bold"
-            onClick={() => setActiveLink("calendar")}
+            onClick={() => dispatch(setActiveLink("calendar"))}
           >
             <i className="bi bi-calendar3 me-2"></i> My Calendar
           </Nav.Link>
@@ -92,7 +97,7 @@ const LeftSideBar = (props) => {
           <Nav.Link
             href={`/knowledge-share/${cookieData.USERNAME_KEY}/tags/`}
             className="px-3 fw-bold"
-            onClick={() => setActiveLink("tags")}
+            onClick={() => dispatch(setActiveLink("tags"))}
           >
             <i className="bi bi-tags me-2"></i> Tags
           </Nav.Link>
@@ -109,7 +114,7 @@ const LeftSideBar = (props) => {
               <Nav.Link
                 href={`/knowledge-share/products/create-new/`}
                 className="px-3 fw-bold"
-                onClick={() => setActiveLink("create-products")}
+                onClick={() => dispatch(setActiveLink("create-products"))}
               >
                 <i className="bi bi-plus-circle-fill me-2"></i> Product Management
               </Nav.Link>
@@ -124,7 +129,7 @@ const LeftSideBar = (props) => {
               <Nav.Link
                 href={`/knowledge-share/products/`}
                 className="px-3 fw-bold"
-                onClick={() => setActiveLink("products")}
+                onClick={() => dispatch(setActiveLink("products"))}
               >
                 <i className="bi bi-cart4 me-2"></i> All Products
               </Nav.Link>
@@ -139,7 +144,7 @@ const LeftSideBar = (props) => {
               <Nav.Link
                 href={`/knowledge-share/products/orders/`}
                 className="px-3 fw-bold"
-                onClick={() => setActiveLink("orders")}
+                onClick={() => dispatch(setActiveLink("orders"))}
               >
                 <i className="bi bi-receipt me-2"></i> All Orders
               </Nav.Link>
@@ -158,7 +163,7 @@ const LeftSideBar = (props) => {
               <Nav.Link
                 href={`/knowledge-share/products/my-orders/`}
                 className="px-3 fw-bold"
-                onClick={() => setActiveLink("my-orders")}
+                onClick={() => dispatch(setActiveLink("my-orders"))}
               >
                 <i className="bi bi-bag-check me-2"></i> My Orders
               </Nav.Link>
@@ -177,7 +182,7 @@ const LeftSideBar = (props) => {
               <Nav.Link
                 href={`/knowledge-share/products/create-new/`}
                 className="px-3 fw-bold"
-                onClick={() => setActiveLink("create-products")}
+                onClick={() => dispatch(setActiveLink("create-products"))}
               >
                 <i className="bi bi-plus-circle-fill me-2"></i> Product Management
               </Nav.Link>
@@ -192,7 +197,7 @@ const LeftSideBar = (props) => {
               <Nav.Link
                 href={`/knowledge-share/products/`}
                 className="px-3 fw-bold"
-                onClick={() => setActiveLink("products")}
+                onClick={() => dispatch(setActiveLink("products"))}
               >
                 <i className="bi bi-cart4 me-2"></i> All Products
               </Nav.Link>
@@ -207,7 +212,7 @@ const LeftSideBar = (props) => {
               <Nav.Link
                 href={`/knowledge-share/products/orders/`}
                 className="px-3 fw-bold"
-                onClick={() => setActiveLink("orders")}
+                onClick={() => dispatch(setActiveLink("orders"))}
               >
                 <i className="bi bi-receipt me-2"></i> All Orders
               </Nav.Link>
@@ -222,7 +227,7 @@ const LeftSideBar = (props) => {
               <Nav.Link
                 href={`/knowledge-share/users/`}
                 className="px-3 fw-bold"
-                onClick={() => setActiveLink("users")}
+                onClick={() => dispatch(setActiveLink("users"))}
               >
                 <i className="bi bi-people me-2"></i> Platform Users
               </Nav.Link>

@@ -1,16 +1,18 @@
+import { combineReducers } from '@reduxjs/toolkit';
 import { configureStore } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage'; // Use session storage
+import storage from 'redux-persist/lib/storage/session'; // Use session storage
 import questionsReducer from './reducers/questionSlice';
 import myQuestionsReducer from './reducers/myQuestionsSlice';
 import tagsReducer from './reducers/tagsSlice';
+import uiReducer from './reducers/uiSlice';
 import { thunk } from 'redux-thunk';
 
 // Configuration for redux-persist
 const persistConfig = {
   key: 'root',
-  storage,
-  whitelist: ['questions', 'myQuestions', 'tags'], // Reducers you want to persist
+  storage: storage,
+  
 };
 
 // Combine reducers and apply persist configuration
@@ -18,6 +20,7 @@ const rootReducer = {
   questions: persistReducer(persistConfig, questionsReducer),
   myQuestions: persistReducer(persistConfig, myQuestionsReducer),
   tags: persistReducer(persistConfig, tagsReducer),
+  ui: persistReducer(persistConfig, uiReducer),
 };
 
 const store = configureStore({

@@ -197,7 +197,7 @@ const Calender = (props) => {
       end: info.event.end,
     });
 
-    console.log(updatedEvent);
+    
   };
 
   const handleEditEvent = () => {

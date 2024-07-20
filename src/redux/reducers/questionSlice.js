@@ -32,6 +32,21 @@ const questionSlice = createSlice({
         (question) => question.questionId !== action.payload.id
       );
     },
+    fetchQuestionsTaggedRequest(state) {
+      state.loading = true;
+      state.error = null;
+    },
+    fetchQuestionsTaggedSuccess(state, action) {
+      state.allQuestionsTaggedData = action.payload.allQuestionsTaggedData;
+      state.popularTagsData = action.payload.popularTagsData;
+      state.taggedTagData = action.payload.taggedTagData;
+      state.loading = false;
+    },
+    fetchQuestionsTaggedFailure(state, action) {
+      state.loading = false;
+      state.error = action.payload.error;
+    },
+
   },
 });
 
@@ -84,5 +99,6 @@ export const fetchQuestionsAndTags = createAsyncThunk(
     }
   }
 );
+
 
 export default questionSlice.reducer;

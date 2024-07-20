@@ -1,142 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.css";
-import { Nav } from "react-bootstrap";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchQuestionsTagged } from "../redux/reducers/questionsTaggedSlice";
 import QuestionCard from "./questionCard";
 import PopularTag from "./popularTag";
-import API_BASE_URL from "./appConfig";
-import Cookies from "js-cookie";
 import TopBar from "./topBar";
 import LeftSideBar from "./leftSideBar";
 import { useParams } from "react-router-dom";
 import NoQuestionsSVG from "./NoQuestionsSVG";
 
-
 const QuestionsTagged = (props) => {
+  const dispatch = useDispatch();
   const { tagId } = useParams();
-  const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
-  const [state, setState] = useState({
-    userId: cookieData.USERID_KEY,
-    questionData: [],
-    lastUsedTagsData: [],
-    tagName: "",
-    loading: true,
-    error: null,
-  });
 
-  const [avatarUrl, setAvatarUrl] = useState("");
-  useEffect(() => {
-    const fetchAvatarUrl = async () => {
-      try {
-        const response = await fetch(
-          `${API_BASE_URL}/api/v1/auth/get-avator/${cookieData.USERID_KEY}`
-        );
-
-        if (response.ok) {
-          const avatarData = await response.json();
-          if (Array.isArray(avatarData) && avatarData.length > 0) {
-            setAvatarUrl(avatarData[0].url);
-          } else {
-            console.error("Invalid avatar data structure");
-          }
-        } else {
-          console.error("Failed to fetch avatarUrl");
-        }
-      } catch (error) {
-        console.error("Error during fetch:", error);
-      }
-    };
-
-    fetchAvatarUrl();
-  }, []);
+  const {
+    allQuestionsTaggedData,
+    popularTagsData,
+    taggedTagData,
+    loading,
+    error,
+  } = useSelector((state) => state.questionsTagged);
 
   useEffect(() => {
-    const fetchPopularTags = async () => {
-      try {
-        const response = await fetch(
-          `${API_BASE_URL}/api/v1/tags/popular-tags/`
-        );
-
-        if (response.ok) {
-          const tagsData = await response.json();
-
-          setState((prev) => ({
-            ...prev,
-            lastUsedTagsData: tagsData, 
-          }));
-          
-        } else {
-          console.error("Failed to fetch avatarUrl");
-        }
-      } catch (error) {
-        console.error("Error during fetch:", error);
-      }
-    };
-
-    fetchPopularTags();
-  }, []);
-  
-
-  useEffect(() => {
-    const fetchTagDetails = async () => {
-      try {
-        const response = await fetch(
-          `${API_BASE_URL}/api/v1/tags/all/${tagId}`
-        );
-
-        if (response.ok) {
-          const tagData = await response.json();
-
-          setState((prev) => ({
-            ...prev,
-            tagName: tagData.name, 
-          }));
-          
-        } else {
-          console.error("Failed to fetch avatarUrl");
-        }
-      } catch (error) {
-        console.error("Error during fetch:", error);
-      }
-    };
-
-    fetchTagDetails();
-  }, []);
-
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [questionsResponse] =
-          await Promise.all([
-            fetch(`${API_BASE_URL}/api/v1/questions/tagged/${tagId}`),
-          ]);
-
-        if (!questionsResponse.ok ) {
-          throw new Error(
-            `HTTP error! Questions Status: ${questionsResponse.status}`
-          );
-        }
-
-        const [questionsData] = await Promise.all([
-          questionsResponse.json(),
-        ]);
-
-        setState((prev) => ({
-          ...prev,
-          questionData: questionsData,
-          loading: false,
-        }));
-      } catch (error) {
-        setState((prev) => ({
-          ...prev,
-          loading: false,
-          error: error.message,
-        }));
-      }
-    };
-
-    fetchData();
-  }, [tagId]); // Add dependencies as needed
+    dispatch(fetchQuestionsTagged(tagId));
+  }, [dispatch, tagId]);
 
   const panelStyle = {
     minHeight: "90vh",
@@ -148,8 +35,6 @@ const QuestionsTagged = (props) => {
     backgroundColor: "#f6f9ff",
     position: "relative",
   };
-
-  const { questionData, lastUsedTagsData, tagName } = state;
 
   return (
     <div style={style}>
@@ -170,15 +55,18 @@ const QuestionsTagged = (props) => {
                   style={panelStyle}
                 >
                   <div className="p-3">
-                    {questionData.length > 0 ? (
+                    {allQuestionsTaggedData &&
+                    allQuestionsTaggedData.length > 0 ? (
                       <>
                         <div className="d-flex align-items-center mb-3">
                           <div className="pt-2 w-75 h5 ms-3">
                             All Questions Tagged:{" "}
-                            <span className="badge bg-success">{tagName}</span>
+                            <span className="badge bg-success">
+                              {taggedTagData.name}
+                            </span>
                           </div>
                         </div>
-                        {questionData.map((question, index) => (
+                        {allQuestionsTaggedData.map((question, index) => (
                           <QuestionCard
                             key={index}
                             data={question}
@@ -189,7 +77,8 @@ const QuestionsTagged = (props) => {
                     ) : (
                       <div className="text-center">
                         <NoQuestionsSVG
-                          style={{ width: "200%", height: "200%" }} tagName={tagName}
+                          style={{ width: "200%", height: "200%" }}
+                          tagName={taggedTagData.name}
                         />
                       </div>
                     )}
@@ -201,10 +90,10 @@ const QuestionsTagged = (props) => {
                 <div id="right-panel" style={panelStyle}>
                   <div className="p-2 mt-0 mx-2">
                     <h6 className="fw-bold text-start text-secondary p-1">
-                      Popular Tag
+                      Popular Tags
                     </h6>
 
-                    {lastUsedTagsData.map((tag, index) => (
+                    {popularTagsData.map((tag, index) => (
                       <PopularTag
                         key={index}
                         id={tag.id}

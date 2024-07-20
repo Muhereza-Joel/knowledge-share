@@ -7,6 +7,7 @@ import myQuestionsReducer from './reducers/myQuestionsSlice';
 import tagsReducer from './reducers/tagsSlice';
 import uiReducer from './reducers/uiSlice';
 import calendarReducer from './reducers/calendarSlice';
+import questionsTaggedReducer from './reducers/questionsTaggedSlice';
 import { thunk } from 'redux-thunk';
 
 // Configuration for redux-persist
@@ -22,6 +23,7 @@ const rootReducer = {
   myQuestions: persistReducer(persistConfig, myQuestionsReducer),
   tags: persistReducer(persistConfig, tagsReducer),
   ui: persistReducer(persistConfig, uiReducer),
+  questionsTagged: questionsTaggedReducer,
   calendar: calendarReducer,
 };
 

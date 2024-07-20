@@ -54,6 +54,9 @@ const logout = () => {
   delete cookieData.USERROLE_KEY;
   delete cookieData.USERID_KEY;
   Cookies.set("knowledgeshare", JSON.stringify(cookieData));
+
+  sessionStorage.clear();
+  localStorage.clear();
 };
 
 export { isAuthenticated, login, logout };

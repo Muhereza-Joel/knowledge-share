@@ -22,7 +22,7 @@ const rootReducer = {
   myQuestions: persistReducer(persistConfig, myQuestionsReducer),
   tags: persistReducer(persistConfig, tagsReducer),
   ui: persistReducer(persistConfig, uiReducer),
-  calendar: persistReducer(persistConfig, calendarReducer),
+  calendar: calendarReducer,
 };
 
 const store = configureStore({

@@ -184,6 +184,23 @@ export const updateEvent = createAsyncThunk(
     const state = getState();
     const { updatedEvent, events } = state.calendar;
 
+    // Validate that the start date is not in the past
+    const currentDate = new Date().toISOString().split("T")[0]; // Get current date in "YYYY-MM-DD" format  
+    if (updatedEvent.start < currentDate) {
+      dispatch(
+        setError("Invalid start date. Please select a date in the future.")
+      );
+      return;
+    }
+
+    //validate that the end date is not before the start date
+    if (updatedEvent.end < updatedEvent.start) {
+      dispatch(
+        setError("Invalid end date. Please select a date after the start date.")
+      );
+      return;
+    }
+
     try {
       fetch(`${API_BASE_URL}/api/v1/events/update/${updatedEvent.id}`, {
         method: "PUT",

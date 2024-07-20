@@ -89,8 +89,11 @@ const Calender = (props) => {
 
   const handleEditEvent = () => {
     dispatch(updateEvent(selectedEvent.id, updatedEvent));
-    dispatch(setSelectedEvent(null));
-    dispatch(setShowEditModal(false));
+    if (success) {
+      dispatch(setSelectedEvent(null));
+      dispatch(setShowEditModal(false));
+    }
+    
   };
 
   const handleDeleteEvent = () => {

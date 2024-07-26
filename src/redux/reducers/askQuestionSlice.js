@@ -105,6 +105,7 @@ export const sendQuestionToSpacy = createAsyncThunk(
     const text = `${questionTitle}\n\n${description}`;
 
     try {
+      dispatch(setLoading(true));
       const response = await fetch(`${FLASK_BASE_URL}/api/v1/auto_tagging`, {
         method: "POST",
         headers: {
@@ -113,23 +114,20 @@ export const sendQuestionToSpacy = createAsyncThunk(
         body: JSON.stringify({ text: text }),
       });
       const data = await response.json();
-      const updatedSelectedTags = [
-        ...new Set([...selectedTags, ...data.map((item) => item.id)]),
-      ];
-
-      // Update selectedTagsData to ensure no duplicates based on the id property
-      const updatedSelectedTagsData = [
-        ...selectedTagsData,
-        ...data.filter(
-          (item) =>
-            !selectedTagsData.some(
-              (existingItem) => existingItem.id === item.id
-            )
-        ),
-      ];
+      // Create a Set to ensure unique tag IDs
+      const updatedSelectedTags = Array.from(
+        new Set([...data.map((item) => item.id)])
+      );
+      
+      const updatedSelectedTagsData = Array.from(
+        new Set([
+           ...data
+        ])
+      );
 
       dispatch(setSelectedTags(updatedSelectedTags));
       dispatch(setSelectedTagsData(updatedSelectedTagsData));
+      dispatch(setLoading(false));
     } catch (error) {
       dispatch(setError('Failed to get tag suggestions, Please try again later.'));
     }
@@ -171,6 +169,7 @@ export const submitQuestion = createAsyncThunk(
         dispatch(setSuggestedTags([]));
         dispatch(setSelectedTagsData([]));
         dispatch(setImages([]));
+        dispatch(setLoading(false));
       } else {
         dispatch(setError("Failed to submit question. Please try again."));
       }

@@ -39,6 +39,7 @@ const AskQuestion = (props) => {
     images,
     success,
     error,
+    loading,
   } = useSelector((state) => state.askQuestion);
 
   // Debounce the fetchSuggestedTags function to avoid rapid API calls
@@ -60,7 +61,7 @@ const AskQuestion = (props) => {
 
   const debouncedSendQuestionToSpacy = debounce(
     () => dispatch(sendQuestionToSpacy()),
-    1000
+    2000
   );
 
   const handleQuestionTitleChange = (value) => {
@@ -142,8 +143,14 @@ const AskQuestion = (props) => {
       return;
     }
 
-    dispatch(submitQuestion());
+    debouncedSubmit();
   };
+
+  //delay submission of question due to AI processing and image uploads
+  const debouncedSubmit = debounce(
+    () => dispatch(submitQuestion()),
+    2000
+  );
 
   useEffect(() => {
     if (error) {
@@ -214,11 +221,13 @@ const AskQuestion = (props) => {
                     AI-Enhanced Tags
                   </Form.Label>
                   <small className="text-muted">
-                    Our AI service analyzes your question to suggest the most relevant tags, making your question more discoverable.
-                    Tags also serve as keywords or labels that help categorize and enhance the discoverability of questions, making it easier for users to find relevant information.
+                    Our AI service analyzes your question to suggest the most
+                    relevant tags, making your question more discoverable. Tags
+                    also serve as keywords or labels that help categorize and
+                    enhance the discoverability of questions, making it easier
+                    for users to find relevant information.
                   </small>
-                  
-                  
+
                   {/* <Form.Control
                     className="mt-2 mb-3"
                     type="text"
@@ -230,69 +239,64 @@ const AskQuestion = (props) => {
                   {/* Display suggested tags below the search input */}
 
                   <div>
-                    {searchInput.length > 0 && (
-                      <div>
-                        {searchInput.length > 0 && (
-                          <div>
-                            {suggestedTags.map((tag) => (
-                              <span
-                                key={tag.id}
-                                className={`tag ${
-                                  selectedTags.includes(tag.id)
-                                    ? "selected"
-                                    : ""
-                                }`}
-                                onClick={() => handleTagClick(tag)}
-                                style={{
-                                  backgroundColor: selectedTags.includes(tag.id)
-                                    ? "#299ea6"
-                                    : "#666",
-                                  color: selectedTags.includes(tag.id)
-                                    ? "#fff"
-                                    : "#fff",
-                                  border: selectedTags.includes(tag.id)
-                                    ? "3px solid #299ea6"
-                                    : "3px solid #299ea6",
-                                  margin: "0px 3px",
-                                  padding: "0px 3px",
-                                  borderRadius: "10px",
-                                }}
-                              >
-                                <small>{tag.name}</small>
-                              </span>
-                            ))}
+                    <div>
+                      {searchInput.length > 0 && (
+                        <div>
+                          {suggestedTags.map((tag) => (
+                            <span
+                              key={tag.id}
+                              className={`tag ${
+                                selectedTags.includes(tag.id) ? "selected" : ""
+                              }`}
+                              onClick={() => handleTagClick(tag)}
+                              style={{
+                                backgroundColor: selectedTags.includes(tag.id)
+                                  ? "#299ea6"
+                                  : "#666",
+                                color: selectedTags.includes(tag.id)
+                                  ? "#fff"
+                                  : "#fff",
+                                border: selectedTags.includes(tag.id)
+                                  ? "3px solid #299ea6"
+                                  : "3px solid #299ea6",
+                                margin: "0px 3px",
+                                padding: "0px 3px",
+                                borderRadius: "10px",
+                              }}
+                            >
+                              <small>{tag.name}</small>
+                            </span>
+                          ))}
 
-                            {selectedTags.length === 0 && (
-                              <p
-                                style={{ color: "#FF0000", marginTop: "10px" }}
-                              >
-                                Please select at least one tag.
-                              </p>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    )}
+                          {selectedTags.length === 0 && (
+                            <p style={{ color: "#FF0000", marginTop: "10px" }}>
+                              Please select at least one tag.
+                            </p>
+                          )}
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   {/* Display selected tags in the div below the search input */}
 
                   {selectedTagsData.length > 0 && (
                     <>
-                    <div className="d-flex flex-column mt-4 alert alert-success">
-                      <Form.Label className="mt-0 mb-1 text-muted h5">
-                        Your Question Was Tagged With:
-                      </Form.Label>
-                      <div className="d-flex">
-                        {selectedTagsData.length > 0 ? (
-                          selectedTagsData.map((tag) => (
-                            <Tag key={tag.id} tagId={tag.id} text={tag.name} />
-                          ))
-                        ) : (
-                          <p>Loading tags...</p> // Placeholder for when data is not yet available
-                        )}
+                      <div className="d-flex flex-column mt-4 alert alert-success">
+                        <Form.Label className="mt-0 mb-1 text-muted h5">
+                          Your Question Was Tagged With:
+                        </Form.Label>
+                        <div className="d-flex">
+                          {selectedTagsData.map((tag) => (
+                            <Tag
+                              key={tag.id}
+                              tagId={tag.id}
+                              text={tag.name}
+                            />
+                          ))}
+                        </div>
+                        <p>{selectedTagsData.length === 0 && "Loading tags..."}</p>
                       </div>
-                    </div>
                     </>
                   )}
                 </Form.Group>
@@ -302,7 +306,13 @@ const AskQuestion = (props) => {
                   <Form.Label className="mt-3 mb-0 text-muted h4">
                     Add Images (up to five)
                   </Form.Label>
-                  <small className="text-muted">Our team of experts, alongside our AI service, relies on high-quality images to accurately detect and predict infections. Providing us with clear and detailed images enables us to deliver more precise and effective recommendations tailored to your needs.</small>
+                  <small className="text-muted">
+                    Our team of experts, alongside our AI service, relies on
+                    high-quality images to accurately detect and predict
+                    infections. Providing us with clear and detailed images
+                    enables us to deliver more precise and effective
+                    recommendations tailored to your needs.
+                  </small>
                   <br />
                   <Form.Control
                     type="file"
@@ -368,6 +378,7 @@ const AskQuestion = (props) => {
                     type="submit"
                     className="btn-sm mx-1"
                     variant="primary"
+                    disabled={loading}
                   >
                     Submit Your Question
                   </Button>

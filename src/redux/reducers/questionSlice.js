@@ -46,7 +46,6 @@ const questionSlice = createSlice({
       state.loading = false;
       state.error = action.payload.error;
     },
-
   },
 });
 
@@ -87,6 +86,11 @@ export const fetchQuestionsAndTags = createAsyncThunk(
         tagsResponse.json(),
       ]);
 
+      // Sort questionData by created_at in descending order
+      questionData.sort(
+        (a, b) => new Date(b.created_at) - new Date(a.created_at)
+      );
+
       dispatch(
         fetchDataSuccess({
           allQuestionData: questionData,
@@ -99,6 +103,5 @@ export const fetchQuestionsAndTags = createAsyncThunk(
     }
   }
 );
-
 
 export default questionSlice.reducer;

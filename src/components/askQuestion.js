@@ -11,33 +11,41 @@ import API_BASE_URL from "./appConfig";
 import Cookies from "js-cookie";
 import AskQuestionSVG from "./AskQuestonSVG";
 import { ToastContainer, toast } from "react-toastify";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  setQuestionTitle,
+  setDescription,
+  setSearchInput,
+  setSelectedTags,
+  setSelectedTagsData,
+  setImages,
+  fetchSuggestedTags,
+  sendQuestionToSpacy,
+  submitQuestion,
+  clearSuccess,
+  clearError,
+} from "../redux/reducers/askQuestionSlice";
 
 const AskQuestion = (props) => {
-  const [isQuestionSubmitted, setIsQuestionSubmitted] = useState(false);
-  const [questionTitle, setQuestionTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [searchInput, setSearchInput] = useState("");
-  const [suggestedTags, setSuggestedTags] = useState([]);
-  const [selectedTags, setSelectedTags] = useState([]);
-  const [selectedTagsData, setSelectedTagsData] = useState([]);
-  const [images, setImages] = useState([]);
-
-  const fetchSuggestedTags = async () => {
-    try {
-      const response = await fetch(
-        `${API_BASE_URL}/api/v1/tags/all?query=${searchInput}`
-      );
-      const data = await response.json();
-
-      const tagsWithIds = data.map((tag) => ({ id: tag.id, name: tag.name }));
-      setSuggestedTags(tagsWithIds);
-    } catch (error) {
-      console.error("Error fetching suggested tags:", error);
-    }
-  };
+  const dispatch = useDispatch();
+  const {
+    isQuestionSubmitted,
+    questionTitle,
+    description,
+    searchInput,
+    suggestedTags,
+    selectedTags,
+    selectedTagsData,
+    images,
+    success,
+    error,
+  } = useSelector((state) => state.askQuestion);
 
   // Debounce the fetchSuggestedTags function to avoid rapid API calls
-  const debouncedFetch = debounce(fetchSuggestedTags, 1000);
+  const debouncedFetch = debounce(
+    () => dispatch(fetchSuggestedTags(searchInput)),
+    1000
+  );
 
   useEffect(() => {
     if (searchInput.length > 0) {
@@ -48,34 +56,46 @@ const AskQuestion = (props) => {
     return () => {
       debouncedFetch.cancel();
     };
-  }, [searchInput, debouncedFetch]);
+  }, [dispatch, searchInput, debouncedFetch]);
+
+  const debouncedSendQuestionToSpacy = debounce(
+    () => dispatch(sendQuestionToSpacy()),
+    1000
+  );
 
   const handleQuestionTitleChange = (value) => {
-    setQuestionTitle(value);
+    dispatch(setQuestionTitle(value));
+    debouncedSendQuestionToSpacy();
   };
 
   const handleDescriptionChange = (value) => {
-    setDescription(value);
+    dispatch(setDescription(value));
+    debouncedSendQuestionToSpacy();
   };
 
   const handleSearchInputChange = (event) => {
     const inputValue = event.target.value;
-    setSearchInput(inputValue);
+    dispatch(setSearchInput(inputValue));
   };
 
   const handleTagClick = (tag) => {
     const tagId = tag.id;
 
     if (selectedTags.includes(tagId)) {
-      setSelectedTags(
-        selectedTags.filter((selectedTag) => selectedTag !== tagId)
+      dispatch(
+        setSelectedTags(
+          selectedTags.filter((selectedTag) => selectedTag !== tagId)
+        )
       );
-      setSelectedTagsData(
-        selectedTagsData.filter((selectedTag) => selectedTag.id !== tagId)
+
+      dispatch(
+        setSelectedTagsData(
+          selectedTagsData.filter((selectedTag) => selectedTag.id !== tagId)
+        )
       );
     } else {
-      setSelectedTags([...selectedTags, tagId]);
-      setSelectedTagsData([...selectedTagsData, tag]);
+      dispatch(setSelectedTags([...selectedTags, tagId]));
+      dispatch(setSelectedTagsData([...selectedTagsData, tag]));
     }
   };
 
@@ -89,13 +109,13 @@ const AskQuestion = (props) => {
     }
 
     // Update the images state with the selected files
-    setImages([...images, ...Array.from(files)]);
+    dispatch(setImages([...images, ...Array.from(files)]));
   };
 
   const handleRemoveImage = (index) => {
     const updatedImages = [...images];
     updatedImages.splice(index, 1);
-    setImages(updatedImages);
+    dispatch(setImages(updatedImages));
   };
 
   const quillEditorStyle = {
@@ -122,57 +142,28 @@ const AskQuestion = (props) => {
       return;
     }
 
-    const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
-    const userId = cookieData.USERID_KEY;
-    if (!userId) {
-      alert("User information not available. Please log in.");
-      return;
-    }
+    dispatch(submitQuestion());
+  };
 
-    // Prepare the data for submission
-    const formData = new FormData();
-    formData.append("questionTitle", questionTitle);
-    formData.append("description", description);
-    formData.append("tags", JSON.stringify(selectedTags));
-    formData.append("userId", userId);
-
-    // Append each image file to the form data
-    images.forEach((image, index) => {
-      formData.append(`images`, image);
-    });
-
-    try {
-      // Submit the form data to the server
-      const response = await fetch(`${API_BASE_URL}/api/v1/questions/add`, {
-        method: "POST",
-        body: formData,
+  useEffect(() => {
+    if (error) {
+      toast.error(error, {
+        style: { backgroundColor: "#ffc2c2", color: "#333" },
       });
 
-      if (response.ok) {
-        // Handle success (you may redirect or perform other actions)
-        toast.success("Question added successfully!", {
-          style: { backgroundColor: "#cce6e8", color: "#333" },
-        });
-
-        setIsQuestionSubmitted(true); // Update the state to indicate question submission
-
-        // Reset form inputs and state variables
-        setQuestionTitle("");
-        setDescription("");
-        setSearchInput("");
-        setSuggestedTags([]);
-        setSelectedTags([]);
-        setSelectedTagsData([]);
-        setImages([]);
-      } else {
-        // Handle error
-        alert("Failed to submit question. Please try again.");
-      }
-    } catch (error) {
-      console.error("Error submitting question:", error);
-      alert("An unexpected error occurred. Please try again later.");
+      dispatch(clearError());
     }
-  };
+  }, [error, dispatch]);
+
+  useEffect(() => {
+    if (success) {
+      toast.success(success, {
+        style: { backgroundColor: "#cce6e8", color: "#333" },
+      });
+
+      dispatch(clearSuccess());
+    }
+  }, [success, dispatch]);
 
   return (
     <div style={style}>
@@ -220,20 +211,22 @@ const AskQuestion = (props) => {
                 </Form.Group>
                 <Form.Group className="p-4 card mt-2">
                   <Form.Label className="mt-2 mb-0 text-muted h4">
-                    Associated Tags
+                    AI-Enhanced Tags
                   </Form.Label>
-                  <br></br>
-                  <small>
-                    Tags are used to classify and search for questions
+                  <small className="text-muted">
+                    Our AI service analyzes your question to suggest the most relevant tags, making your question more discoverable.
+                    Tags also serve as keywords or labels that help categorize and enhance the discoverability of questions, making it easier for users to find relevant information.
                   </small>
-                  <Form.Control
+                  
+                  
+                  {/* <Form.Control
                     className="mt-2 mb-3"
                     type="text"
-                    placeholder="Type in the tag name to bring the list of tags..."
+                    placeholder="Type here to get tag suggestions..."
                     name="title"
                     value={searchInput}
                     onChange={handleSearchInputChange}
-                  />
+                  /> */}
                   {/* Display suggested tags below the search input */}
 
                   <div>
@@ -285,16 +278,22 @@ const AskQuestion = (props) => {
                   {/* Display selected tags in the div below the search input */}
 
                   {selectedTagsData.length > 0 && (
+                    <>
                     <div className="d-flex flex-column mt-4 alert alert-success">
-                      <Form.Label className="mt-0 mb-1 text-muted h4">
-                        Tags you have selected
+                      <Form.Label className="mt-0 mb-1 text-muted h5">
+                        Your Question Was Tagged With:
                       </Form.Label>
                       <div className="d-flex">
-                        {selectedTagsData.map((tag) => (
-                          <Tag key={tag.id} text={tag.name} />
-                        ))}
+                        {selectedTagsData.length > 0 ? (
+                          selectedTagsData.map((tag) => (
+                            <Tag key={tag.id} tagId={tag.id} text={tag.name} />
+                          ))
+                        ) : (
+                          <p>Loading tags...</p> // Placeholder for when data is not yet available
+                        )}
                       </div>
                     </div>
+                    </>
                   )}
                 </Form.Group>
 
@@ -303,6 +302,8 @@ const AskQuestion = (props) => {
                   <Form.Label className="mt-3 mb-0 text-muted h4">
                     Add Images (up to five)
                   </Form.Label>
+                  <small className="text-muted">Our team of experts, alongside our AI service, relies on high-quality images to accurately detect and predict infections. Providing us with clear and detailed images enables us to deliver more precise and effective recommendations tailored to your needs.</small>
+                  <br />
                   <Form.Control
                     type="file"
                     accept="image/jpg"

@@ -1,17 +1,22 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Dropdown from "react-bootstrap/Dropdown";
 import { Nav } from "react-bootstrap";
 import { logout } from "../auth";
 import { useNavigate } from "react-router-dom";
-import  Avatar  from "../assets/images/avator.jpg";
+import Avatar from "../assets/images/avator.jpg";
 import API_BASE_URL from "./appConfig";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 
 const SplitDropdown = (props) => {
   const navigate = useNavigate();
   const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
 
   const [avatarUrl, setAvatarUrl] = useState("");
   useEffect(() => {
@@ -38,7 +43,6 @@ const SplitDropdown = (props) => {
 
     fetchAvatarUrl();
   }, []);
- 
 
   const handleLogout = () => {
     logout();
@@ -47,31 +51,47 @@ const SplitDropdown = (props) => {
 
   const navigateToProfile = () => {
     navigate(`/knowledge-share/${cookieData.USERNAME_KEY}/profile/`);
-  }
+  };
 
   const handleNavigatioToHome = () => {
     navigate(`/knowledge-share/${cookieData.USERNAME_KEY}/`);
-  }
+  };
 
   const avatorStyle = {
     width: "30px",
     height: "30px",
-    marginRight: "5px"
-  }
+    marginRight: "5px",
+  };
+
   return (
-    <Dropdown as={ButtonGroup}>
+    <Dropdown as={ButtonGroup} show={isDropdownOpen} onClick={toggleDropdown}>
       <Button
         variant="secondary"
-        style={{ backgroundColor: "#217537", border: "none", color: "white", marginTop:"-10px" }}
+        style={{
+          backgroundColor: "#217537",
+          border: "none",
+          color: "white",
+          marginTop: "-10px",
+        }}
         className="btn-sm fw-bold"
       >
-        <img src={avatarUrl || Avatar} className="rounded-circle" style={avatorStyle}/>{cookieData.USERNAME_KEY}
+        <img
+          src={avatarUrl || Avatar}
+          className="rounded-circle"
+          style={avatorStyle}
+        />
+        {cookieData.USERNAME_KEY}
       </Button>
 
       <Dropdown.Toggle
         split
         variant="secondary"
-        style={{ backgroundColor: "#217537", border: "none", color: "white", marginTop:"-10px" }}
+        style={{
+          backgroundColor: "#217537",
+          border: "none",
+          color: "white",
+          marginTop: "-10px",
+        }}
         id="dropdown-split-basic"
       />
 
@@ -89,33 +109,27 @@ const SplitDropdown = (props) => {
         </Dropdown.Item>
 
         <Dropdown.Item>
-          <h6 
+          <h6
             className="mx-2"
             onClick={navigateToProfile}
-            style={{cursor: "pointer"}}
+            style={{ cursor: "pointer" }}
           >
             Your Profile
           </h6>
         </Dropdown.Item>
 
         <Dropdown.Item>
-          <h6 
-            className="mx-2" 
-            style={{cursor: "pointer"}}
-          >
+          <h6 className="mx-2" style={{ cursor: "pointer" }}>
             Your Notifications
           </h6>
         </Dropdown.Item>
 
         <Dropdown.Item>
-          <h6 
-            className="mx-2" 
-            style={{cursor: "pointer"}}
-          >
+          <h6 className="mx-2" style={{ cursor: "pointer" }}>
             Account Settings
           </h6>
         </Dropdown.Item>
-       
+
         <Dropdown.Item>
           <h6
             className="mx-2"
@@ -125,8 +139,6 @@ const SplitDropdown = (props) => {
             Sign Out
           </h6>
         </Dropdown.Item>
-
-        
       </Dropdown.Menu>
     </Dropdown>
   );

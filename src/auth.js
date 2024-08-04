@@ -47,6 +47,8 @@ const login = async (email, password) => {
   }
 };
 
+const REDUX_PERSIST_KEY = "persist:root";
+
 const logout = () => {
   const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
   delete cookieData.TOKEN_KEY;
@@ -54,7 +56,7 @@ const logout = () => {
   delete cookieData.USERROLE_KEY;
   delete cookieData.USERID_KEY;
   Cookies.set("knowledgeshare", JSON.stringify(cookieData));
-
+  sessionStorage.removeItem(REDUX_PERSIST_KEY);
   sessionStorage.clear();
   localStorage.clear();
 };

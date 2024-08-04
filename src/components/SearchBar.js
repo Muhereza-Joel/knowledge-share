@@ -1,19 +1,20 @@
-import React, { useState, useEffect, memo } from "react";
+import React, { memo } from "react";
 import { Button } from "react-bootstrap";
 import Select from "react-select";
 import { useSelector, useDispatch } from "react-redux";
 import {
   setSearchQuery,
-  setSelectedFilter,
   searchData,
 } from "../redux/reducers/searchSlice";
+import { setSelectedSearchFilter } from "../redux/reducers/uiSlice";
 
 const SearchBar = () => {
   const dispatch = useDispatch();
-  const { query, selectedFilter, filterOptions } = useSelector((state) => state.search);
+  const { query} = useSelector((state) => state.search);
+  const { selectedSearchFilter, searchFilterOptions } = useSelector((state) => state.ui);
 
   const handleSearch = () => {
-    dispatch(searchData(query, selectedFilter.value));
+    dispatch(searchData(query, selectedSearchFilter.value));
   };
 
 
@@ -50,13 +51,13 @@ const SearchBar = () => {
         classNamePrefix="select"
         placeholder="Filter by"
         name="filter"
-        options={filterOptions}
-        value={selectedFilter}
-        onChange={(filter) => dispatch(setSelectedFilter(filter))}
+        options={searchFilterOptions}
+        value={selectedSearchFilter}
+        onChange={(filter) => dispatch(setSelectedSearchFilter(filter))}
         styles={{
           container: (provided) => ({
             ...provided,
-            width: "150px",
+            width: "200px",
             marginRight: "10px",
           }),
           control: (provided) => ({ ...provided, borderRadius: "20px" }),
@@ -65,7 +66,7 @@ const SearchBar = () => {
       <input
         type="text"
         className="form-control"
-        placeholder="Search KnowledgeShare"
+        placeholder="What are you looking for?"
         style={searchInputStyle}
         value={query}
         onChange={(e) => dispatch(setSearchQuery(e.target.value))}

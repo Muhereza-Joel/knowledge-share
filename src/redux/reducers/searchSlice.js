@@ -5,12 +5,6 @@ const searchSlice = createSlice({
   name: "search",
   initialState: {
     query: "",
-    selectedFilter: null,
-    filterOptions: [
-      { value: "questions", label: "Questions" },
-      { value: "products", label: "Products" },
-      { value: "tags", label: "Tags" },
-    ],
     searchResults: [],
     error: null,
     loading: false,
@@ -18,9 +12,6 @@ const searchSlice = createSlice({
   reducers: {
     setSearchQuery: (state, action) => {
       state.query = action.payload;
-    },
-    setSelectedFilter: (state, action) => {
-      state.selectedFilter = action.payload;
     },
     setSearchResults: (state, action) => {
       state.searchResults = action.payload;
@@ -31,7 +22,7 @@ const searchSlice = createSlice({
   },
 });
 
-export const { setSearchQuery, setSelectedFilter, setSearchResults, setError } =
+export const { setSearchQuery, setSearchResults, setError } =
   searchSlice.actions;
 
 export const searchData = (query, filter) => async (dispatch) => {

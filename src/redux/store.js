@@ -9,6 +9,7 @@ import uiReducer from "./reducers/uiSlice";
 import calendarReducer from "./reducers/calendarSlice";
 import questionsTaggedReducer from "./reducers/questionsTaggedSlice";
 import askQuestionReducer from "./reducers/askQuestionSlice";
+import searchReducer from "./reducers/searchSlice";
 import { thunk } from "redux-thunk";
 
 // Configuration for redux-persist
@@ -18,15 +19,16 @@ const persistConfig = {
 };
 
 // Combine reducers and apply persist configuration
-const rootReducer = {
+const rootReducer = combineReducers({
   questions: persistReducer(persistConfig, questionsReducer),
   myQuestions: persistReducer(persistConfig, myQuestionsReducer),
   tags: persistReducer(persistConfig, tagsReducer),
   ui: persistReducer(persistConfig, uiReducer),
-  questionsTagged: questionsTaggedReducer,
+  questionsTagged: persistReducer(persistConfig, questionsTaggedReducer),
   calendar: calendarReducer,
   askQuestion: askQuestionReducer,
-};
+  search: persistReducer(persistConfig, searchReducer),
+});
 
 const store = configureStore({
   reducer: rootReducer,

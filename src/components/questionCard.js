@@ -10,13 +10,13 @@ import QuestionActions from "./QuestionActions";
 const LoadingPlaceholder = () => (
   <Card className="p-4" style={{ border: "none" }}>
     <Placeholder as={Card.Text} animation="wave">
-      <Placeholder xs={6} bg="secondary" />
+      <Placeholder xs={6} style={{ backgroundColor: "#d5e0eb" }} />
     </Placeholder>
     <Placeholder as={Card.Text} animation="glow">
-      <Placeholder xs={7} bg="secondary" /> <Placeholder xs={4} />{" "}
-      <Placeholder xs={4} bg="secondary" />
-      <Placeholder xs={6} bg="secondary" />{" "}
-      <Placeholder xs={12} bg="secondary" />
+      <Placeholder xs={7} style={{ backgroundColor: "#d5e0eb" }} /> <Placeholder xs={4} style={{ backgroundColor: "#d5e0eb" }}/>{" "}
+      <Placeholder xs={4} style={{ backgroundColor: "#d5e0eb" }} />
+      <Placeholder xs={6} style={{ backgroundColor: "#d5e0eb" }} />{" "}
+      <Placeholder xs={12} style={{ backgroundColor: "#d5e0eb" }} />
     </Placeholder>
   </Card>
 );

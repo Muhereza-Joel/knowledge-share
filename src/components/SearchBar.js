@@ -1,7 +1,8 @@
-import React, { memo } from "react";
+import React, { memo, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import Select from "react-select";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
   setSearchQuery,
   searchData,
@@ -9,12 +10,14 @@ import {
 import { setSelectedSearchFilter } from "../redux/reducers/uiSlice";
 
 const SearchBar = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { query} = useSelector((state) => state.search);
+  const { query,searchResults, loading} = useSelector((state) => state.search);
   const { selectedSearchFilter, searchFilterOptions } = useSelector((state) => state.ui);
 
   const handleSearch = () => {
     dispatch(searchData(query, selectedSearchFilter.value));
+    navigate("/knowledge-share/search-results/");
   };
 
 

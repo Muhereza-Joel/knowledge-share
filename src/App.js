@@ -36,6 +36,7 @@ import MyOrders from "./components/myOrders";
 import { io } from "socket.io-client";
 import { useSelector, useDispatch } from "react-redux";
 import { addNewQuestion, deleteQuestion } from "./redux/reducers/questionSlice";
+import SearchPage from "./components/searchPage";
 
 const PrivateRoute = ({ element, path }) => {
   return isAuthenticated() ? (
@@ -266,6 +267,13 @@ const App = () => {
               path="/knowledge-share/products/orders/payments/complete/"
               element={
                 <PrivateRoute element={<MakePayment username={username} />} />
+              }
+            />
+            <Route
+              key="search-results-page"
+              path="/knowledge-share/search-results/"
+              element={
+                <PrivateRoute element={<SearchPage username={username} />} />
               }
             />
           </Routes>

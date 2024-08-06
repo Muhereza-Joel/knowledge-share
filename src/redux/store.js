@@ -27,7 +27,7 @@ const rootReducer = combineReducers({
   questionsTagged: persistReducer(persistConfig, questionsTaggedReducer),
   calendar: calendarReducer,
   askQuestion: askQuestionReducer,
-  search: persistReducer(persistConfig, searchReducer),
+  search: searchReducer,
 });
 
 const store = configureStore({

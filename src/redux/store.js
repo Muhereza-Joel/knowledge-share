@@ -10,6 +10,7 @@ import calendarReducer from "./reducers/calendarSlice";
 import questionsTaggedReducer from "./reducers/questionsTaggedSlice";
 import askQuestionReducer from "./reducers/askQuestionSlice";
 import searchReducer from "./reducers/searchSlice";
+import notificationsReducer from "./reducers/notificationsSlice";
 import { thunk } from "redux-thunk";
 
 // Configuration for redux-persist
@@ -28,6 +29,7 @@ const rootReducer = combineReducers({
   calendar: calendarReducer,
   askQuestion: askQuestionReducer,
   search: searchReducer,
+  notifications: notificationsReducer,
 });
 
 const store = configureStore({

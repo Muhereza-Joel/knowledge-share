@@ -11,26 +11,37 @@ import questionsTaggedReducer from "./reducers/questionsTaggedSlice";
 import askQuestionReducer from "./reducers/askQuestionSlice";
 import searchReducer from "./reducers/searchSlice";
 import notificationsReducer from "./reducers/notificationsSlice";
+import userReducer from "./reducers/userSlice";
 import { thunk } from "redux-thunk";
+import { RESET_STORE } from './actions/actions';
 
 // Configuration for redux-persist
 const persistConfig = {
   key: "root",
   storage: storage,
+  whitelist: ["questions", "myQuestions", "tags", "ui", "user"],
 };
 
 // Combine reducers and apply persist configuration
-const rootReducer = combineReducers({
+const appReducer = combineReducers({
   questions: persistReducer(persistConfig, questionsReducer),
   myQuestions: persistReducer(persistConfig, myQuestionsReducer),
   tags: persistReducer(persistConfig, tagsReducer),
   ui: persistReducer(persistConfig, uiReducer),
-  questionsTagged: persistReducer(persistConfig, questionsTaggedReducer),
+  user: persistReducer(persistConfig , userReducer),
+  notifications: (persistConfig, notificationsReducer),
+  questionsTagged: questionsTaggedReducer,
   calendar: calendarReducer,
   askQuestion: askQuestionReducer,
   search: searchReducer,
-  notifications: notificationsReducer,
 });
+
+const rootReducer = (state, action) => {
+  if (action.type === RESET_STORE) {
+    state = undefined; // Reset the state to undefined
+  }
+  return appReducer(state, action);
+};
 
 const store = configureStore({
   reducer: rootReducer,

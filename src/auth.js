@@ -1,6 +1,5 @@
 // auth.js
 import Cookies from "js-cookie";
-import { useAuth } from "./AuthContext";
 import API_BASE_URL from "./components/appConfig";
 const TOKEN_KEY = "authToken";
 const USERNAME_KEY = "username"; // New key for storing the username in localStorage
@@ -37,9 +36,9 @@ const login = async (email, password) => {
         })
       );
 
-      return { success: true, username: result.username };
+      return { success: true, username: result.username, id: result.id, role: result.role };
     } else {
-      return { success: false, username: null };
+      return { success: false, username: null, id: null, role: null };
     }
   } catch (error) {
     console.error("Error:", error);
@@ -51,11 +50,11 @@ const REDUX_PERSIST_KEY = "persist:root";
 
 const logout = () => {
   const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
-  delete cookieData.TOKEN_KEY;
-  delete cookieData.USERNAME_KEY;
-  delete cookieData.USERROLE_KEY;
-  delete cookieData.USERID_KEY;
-  Cookies.set("knowledgeshare", JSON.stringify(cookieData));
+  Cookies.remove(TOKEN_KEY);
+  Cookies.remove(USERNAME_KEY);
+  Cookies.remove(USERROLE_KEY);
+  Cookies.remove(USERID_KEY);
+  Cookies.set("knowledgeshare", JSON.stringify({}));
   sessionStorage.removeItem(REDUX_PERSIST_KEY);
   sessionStorage.clear();
   localStorage.clear();

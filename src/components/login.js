@@ -4,9 +4,9 @@ import "bootstrap/dist/css/bootstrap.css";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { Nav } from "react-bootstrap";
-import { isAuthenticated, login } from "../auth";
-import Cookies from 'js-cookie';
-import logo from "../assets/images/logo.png"
+import { login } from "../auth";
+import Cookies from "js-cookie";
+import logo from "../assets/images/logo.png";
 
 const Login = () => {
   const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
@@ -24,7 +24,8 @@ const Login = () => {
   });
 
   useEffect(() => {
-    const storedFormValues = JSON.parse(localStorage.getItem("loginFormValues")) || {};
+    const storedFormValues =
+      JSON.parse(localStorage.getItem("loginFormValues")) || {};
     const { errors, rememberMe, ...rest } = storedFormValues;
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -91,6 +92,7 @@ const Login = () => {
           username: authenticationResult.username,
         }));
 
+
         setTimeout(() => {
           setFormData((prevFormData) => ({
             ...prevFormData,
@@ -112,19 +114,24 @@ const Login = () => {
 
   if (formData.redirectToDashboard) {
     navigate(`/knowledge-share/${cookieData.USERNAME_KEY}`);
-  } 
+  }
   return (
     <div style={style}>
       <div className="d-flex flex-column align-items-center justify-content-center">
         <div className="d-flex mb-4">
-          <img src={logo} width={100} height={100}/>
+          <img src={logo} width={100} height={100} />
         </div>
         <h3 className="text-dark mb-1"> KnowledgeShare</h3>
         <span className="text-dark mb-3">
           Uganda's Number One Agricultural Resource Center
         </span>
       </div>
-      <Form style={{border: "1px solid #217537"}} className="card p-3" onSubmit={handleSubmit} noValidate>
+      <Form
+        style={{ border: "1px solid #217537" }}
+        className="card p-3"
+        onSubmit={handleSubmit}
+        noValidate
+      >
         <h5 className="text-dark text-center mb-4">Login To Your Account</h5>
         <Form.Group className="mb-3 mt-3" controlId="formBasicEmail">
           <Form.Label className="text-dark">
@@ -138,7 +145,7 @@ const Login = () => {
             onBlur={handleBlur}
             value={formData.email}
             required
-            style={{border: "1px solid #217537"}}
+            style={{ border: "1px solid #217537" }}
           />
           {formData.errors.email && (
             <small className="text-danger">{formData.errors.email}</small>
@@ -155,7 +162,7 @@ const Login = () => {
             onBlur={handleBlur}
             value={formData.password}
             required
-            style={{border: "1px solid #217537"}}
+            style={{ border: "1px solid #217537" }}
           />
           {formData.errors.password && (
             <small className="text-danger">{formData.errors.password}</small>
@@ -179,7 +186,10 @@ const Login = () => {
         <Nav.Item className="d-flex align-items-center mt-3">
           If you don't have an account click
           <small>
-            <Nav.Link href="/knowledge-share/auth/register/" className="text-info px-2">
+            <Nav.Link
+              href="/knowledge-share/auth/register/"
+              className="text-info px-2"
+            >
               here
             </Nav.Link>
           </small>

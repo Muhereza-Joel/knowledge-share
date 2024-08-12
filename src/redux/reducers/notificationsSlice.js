@@ -42,10 +42,10 @@ const notificationsSlice = createSlice({
 
 export const fetchNewQuestionNotifications = createAsyncThunk(
     "notifications/fetchNewQuestionNotifications",
-    async (_, {getState, dispatch}) => {
+    async (userId, {getState, dispatch}) => {
         try {
             dispatch(fetchNotificationsRequest());
-            const response = await fetch(`${API_BASE_URL}/api/v1/questions/notifications/${cookieData.USERID_KEY}`);
+            const response = await fetch(`${API_BASE_URL}/api/v1/questions/notifications/${userId}`);
             const data = await response.json();
             dispatch(setNewQuestionNotifications(data.filter(notification => notification.isSeen === 0)));
             dispatch(setLoading(false));

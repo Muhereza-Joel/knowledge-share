@@ -10,7 +10,7 @@ import Answer from "./answers";
 import API_BASE_URL from "./appConfig";
 import Cookies from "js-cookie";
 import DeleteConfirmationModal from "./DeleteConfirmationModal";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ImageZoom from "./ImageZoom"; // Import the ImageZoom component
 
 const QuestionDetails = ({ username, questionDetails }) => {
@@ -41,7 +41,7 @@ const QuestionDetails = ({ username, questionDetails }) => {
     backgroundColor: "#f6f9ff",
     position: "relative",
     height: "calc(100vh - 0px)",
-    overflow: "auto" // Add overflow: auto to enable scrolling when content is too long
+    overflow: "auto", // Add overflow: auto to enable scrolling when content is too long
   };
 
   const quillEditorStyle = {
@@ -124,8 +124,12 @@ const QuestionDetails = ({ username, questionDetails }) => {
         toast.success("Question deleted successfully!", {
           style: { backgroundColor: "#cce6e8", color: "#333" },
         });
-        setShowDeleteModal(false); 
-        setTimeout(() => navigate(`/knowledge-share/${cookieData.USERNAME_KEY}/questions/`), 2000);
+        setShowDeleteModal(false);
+        setTimeout(
+          () =>
+            navigate(`/knowledge-share/${cookieData.USERNAME_KEY}/questions/`),
+          2000
+        );
       } else {
         console.error("Failed to delete question:", response.statusText);
       }
@@ -171,12 +175,16 @@ const QuestionDetails = ({ username, questionDetails }) => {
                             </Button>
                           )}
                           {cookieData.USERROLE_KEY === "expert" && (
-                             <Nav.Link
-                             href={`/knowledge-share/${username}/questions/recommendations/create/${questionId}`}
-                             className="px-3"
-                           >
-                              <button className="btn btn-success btn-sm">Add Recommendations</button>
-                           </Nav.Link>
+                            <button
+                              className="btn btn-success btn-sm"
+                              onClick={() =>
+                                navigate(
+                                  `/knowledge-share/${username}/questions/recommendations/create/${questionId}`
+                                )
+                              }
+                            >
+                              Add Recommendations
+                            </button>
                           )}
                         </div>
                       </div>
@@ -252,8 +260,8 @@ const QuestionDetails = ({ username, questionDetails }) => {
                       <Accordion.Body>
                         <div className="card-columns">
                           <div className="d-flex flex-row">
-                          {images && images.length > 0 ? (
-                            images.map((image, index) => (
+                            {images && images.length > 0 ? (
+                              images.map((image, index) => (
                                 <ImageZoom
                                   key={index}
                                   imageUrl={image.url}
@@ -261,20 +269,17 @@ const QuestionDetails = ({ username, questionDetails }) => {
                                   height={150}
                                   width={150}
                                 />
-
                               ))
                             ) : (
                               <p>No images available</p>
                             )}
-                            </div>
+                          </div>
                         </div>
                       </Accordion.Body>
                     </Accordion.Item>
                   </Accordion>
                   <div className="card mt-2" style={quillEditorStyle}>
-                    <h6 className="fw-bold text-secondary">
-                      Add Your Answer
-                    </h6>
+                    <h6 className="fw-bold text-secondary">Add Your Answer</h6>
                     <Form onSubmit={handleAnswerSubmit}>
                       <Form.Group className="mb-3">
                         <ReactQuill
@@ -284,7 +289,12 @@ const QuestionDetails = ({ username, questionDetails }) => {
                           style={quillEditorStyle}
                         />
                       </Form.Group>
-                      <Button type="submit" variant="success" className="mt-5" size="sm">
+                      <Button
+                        type="submit"
+                        variant="success"
+                        className="mt-5"
+                        size="sm"
+                      >
                         Submit Answer
                       </Button>
                     </Form>

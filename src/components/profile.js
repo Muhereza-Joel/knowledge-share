@@ -6,13 +6,17 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import API_BASE_URL from "./appConfig";
 import Cookies from "js-cookie";
-
+import { useSelector, useDispatch } from "react-redux";
+import { fetchUserProfile } from "../redux/reducers/userSlice";
 
 const Profile = (props) => {
+  const dispatch = useDispatch();
+  const { isEditingProfile, isEditingProfilePassword } = useSelector((state) => state.ui);
   const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
   const [isEditing, setIsEditing] = useState();
   const [isEditPassword, setIsEditingPassword] = useState();
   const [avatarUrl, setAvatarUrl] = useState("");
+  const { id, username } = useSelector((state) => state.user);
 
   const [formData, setFormData] = useState({
     username: "",
@@ -62,9 +66,9 @@ const Profile = (props) => {
     fetchProfileData();
   }, []);
 
-
   useEffect(() => {
     const fetchAvatarUrl = async () => {
+      
       try {
         const response = await fetch(
           `${API_BASE_URL}/api/v1/auth/get-avator/${cookieData.USERID_KEY}`
@@ -190,7 +194,7 @@ const Profile = (props) => {
                 <input
                   type="text"
                   name="username"
-                  value={formData.username}
+                  value={username}
                   disabled={!isEditing}
                   onChange={handleInputChange}
                   className="form-control mb-3"

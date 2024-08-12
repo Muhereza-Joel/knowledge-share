@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
 import { Nav } from "react-bootstrap";
 import QuestionCard from "./questionCard";
@@ -14,17 +15,20 @@ import {
 } from "../redux/reducers/myQuestionsSlice";
 
 const MyQuestions = (props) => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { myQuestionData, lastUsedTagsData, avatarUrl } = useSelector(
     (state) => state.myQuestions
   );
+
+  const { id, avator } = useSelector((state) => state.user);
 
   useEffect(() => {
     dispatch(fetchMyAvatorUrl());
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(fetchMyQuestionsAndLastUsedTags());
+    dispatch(fetchMyQuestionsAndLastUsedTags(id));
   }, [dispatch]);
 
   const panelStyle = {
@@ -63,14 +67,18 @@ const MyQuestions = (props) => {
                       <div className="pt-2 w-75 h4">All Questions By You</div>
 
                       <Nav.Item className="mt-3 text-end w-25">
-                        <Nav.Link
-                          href={`/knowledge-share/${props.username}/questions/ask-question/`}
+                        <h6
+                          onClick={() =>
+                            navigate(
+                              `/knowledge-share/${props.username}/questions/ask-question/`
+                            )
+                          }
                           className="text-info px-2 fw-bold"
                         >
                           <button className="btn btn-sm btn-primary bg-success">
                             Ask Question ?
                           </button>
-                        </Nav.Link>
+                        </h6>
                       </Nav.Item>
                     </div>
 
@@ -91,10 +99,7 @@ const MyQuestions = (props) => {
 
               <div className="col-lg-3">
                 <div id="right-panel" style={panelStyle}>
-                  <ShortProfile
-                    username={props.username}
-                    avatarUrl={avatarUrl}
-                  />
+                  <ShortProfile username={props.username} avatarUrl={avator} />
 
                   <div className="p-2 mt-0 mx-2">
                     <hr />

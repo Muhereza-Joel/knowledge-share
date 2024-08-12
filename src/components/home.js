@@ -6,8 +6,12 @@ import ShortProfile from "./shortProfile";
 import PopularTag from "./popularTag";
 import API_BASE_URL from "./appConfig";
 import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Home = (props) => {
+  const {avator} = useSelector((state) => state.user);
+  const navigate = useNavigate();
   const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
   const [state, setState] = useState({
     userId: cookieData.USERID_KEY,
@@ -17,32 +21,6 @@ const Home = (props) => {
     error: null,
   });
 
-  const [avatarUrl, setAvatarUrl] = useState("");
-  useEffect(() => {
-    const fetchAvatarUrl = async () => {
-      try {
-        const response = await fetch(
-          `${API_BASE_URL}/api/v1/auth/get-avator/${cookieData.USERID_KEY}`
-        );
-
-        if (response.ok) {
-          const avatarData = await response.json();
-          if (Array.isArray(avatarData) && avatarData.length > 0) {
-            setAvatarUrl(avatarData[0].url);
-          } else {
-            console.error("Invalid avatar data structure");
-          }
-        } else {
-          console.error("Failed to fetch avatarUrl");
-        }
-      } catch (error) {
-        console.error("Error during fetch:", error);
-      }
-    };
-
-    fetchAvatarUrl();
-  }, []);
- 
 
   useEffect(() => {
     const fetchData = async () => {
@@ -83,34 +61,32 @@ const Home = (props) => {
 
   const panelStyle = {
     minHeight: "90vh",
-    
   };
 
   const { questionData, lastUsedTagsData } = state;
 
-  
   return (
     <div>
       <div id="content-section" className="row g-0">
         <div className="col-lg-9">
-          <div
-            id="middle-panel"
-            className="card p-0 mt-2"
-            style={panelStyle}
-          >
+          <div id="middle-panel" className="card p-0 mt-2" style={panelStyle}>
             <div className="p-3">
               <div className="d-flex align-items-center mb-3">
                 <div className="pt-2 w-75 h4">Top 100 Recent Questions</div>
 
                 <Nav.Item className="mt-3 text-end w-25">
-                  <Nav.Link
-                    href={`/knowledge-share/${cookieData.USERNAME_KEY}/questions/ask-question/`}
+                  <h6
+                    onClick={() =>
+                      navigate(
+                        `/knowledge-share/${cookieData.USERNAME_KEY}/questions/ask-question/`
+                      )
+                    }
                     className="text-info px-2 fw-bold"
                   >
                     <button className="btn btn-sm btn-primary bg-success">
                       Ask Question ?
                     </button>
-                  </Nav.Link>
+                  </h6>
                 </Nav.Item>
               </div>
 
@@ -127,7 +103,10 @@ const Home = (props) => {
 
         <div className="col-lg-3">
           <div id="right-panel" style={panelStyle}>
-            <ShortProfile username={`${props.username}`} avatarUrl={avatarUrl} />
+            <ShortProfile
+              username={`${props.username}`}
+              avatarUrl={avator}
+            />
 
             <div className="p-2 mt-0 mx-2">
               <hr />

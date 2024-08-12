@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Nav, Modal, Button, Form, Alert, ModalBody } from "react-bootstrap";
-import { ToastContainer, toast } from "react-toastify";
+import { Modal, Button, Form, Alert } from "react-bootstrap";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
@@ -16,6 +17,7 @@ const PopularTag = ({
   onUpdate,
   showIcons = true,
 }) => {
+  const navigate = useNavigate();
   const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
   const [isHovered, setIsHovered] = useState(false);
   const [showIconsState, setShowIconsState] = useState(showIcons);
@@ -206,21 +208,24 @@ const PopularTag = ({
         </div>
         <div className="col-sm-10">
           <div className="d-flex flex-column">
-            <Nav.Item>
-              <Nav.Link
-                href={`/knowledge-share/${cookieData.USERNAME_KEY}/tags/${id}`}
+            <h6
+              style={{ cursor: "pointer" }}
+              onClick={() =>
+                navigate(
+                  `/knowledge-share/${cookieData.USERNAME_KEY}/tags/${id}`
+                )
+              }
+            >
+              <span
+                className="fw-bold"
+                style={{
+                  textDecoration: isHovered ? "underline" : "none",
+                  transition: "border 0.3s ease",
+                }}
               >
-                <span
-                  className="fw-bold"
-                  style={{
-                    textDecoration: isHovered ? "underline" : "none",
-                    transition: "border 0.3s ease",
-                  }}
-                >
-                  {truncateText(title, 15)}
-                </span>
-              </Nav.Link>
-            </Nav.Item>
+                {truncateText(title, 15)}
+              </span>
+            </h6>
             <p className="text-secondary">{truncateText(description, 60)}</p>
           </div>
         </div>

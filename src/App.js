@@ -5,7 +5,6 @@ import {
   Routes,
   Navigate,
 } from "react-router-dom";
-
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import Register from "./components/register";
 import Login from "./components/login";
@@ -49,17 +48,17 @@ const PrivateRoute = ({ element, path }) => {
 const App = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
-  const [username, setUsername] = useState(null);
   const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
   const usernameFromCookie = cookieData.USERNAME_KEY;
 
+  const {username} = useSelector(state => state.user);
+
   useEffect(() => {
-    setUsername(usernameFromCookie);
     setLoading(false);
   }, [usernameFromCookie]);
 
   const handleLogout = () => {
-    setUsername(null);
+    dispatch({ type: "LOGOUT" });
   };
 
   useEffect(() => {

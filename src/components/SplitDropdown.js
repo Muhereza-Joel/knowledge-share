@@ -8,8 +8,11 @@ import { useNavigate } from "react-router-dom";
 import Avatar from "../assets/images/avator.jpg";
 import API_BASE_URL from "./appConfig";
 import Cookies from "js-cookie";
+import { useDispatch } from "react-redux";
+import { resetStore } from "./../redux/actions/actions";
 
 const SplitDropdown = (props) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -46,6 +49,7 @@ const SplitDropdown = (props) => {
 
   const handleLogout = () => {
     logout();
+    dispatch(resetStore());
     navigate("/logout");
   };
 

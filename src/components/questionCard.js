@@ -1,6 +1,6 @@
 import React, { useState, useEffect, memo } from "react";
 import "bootstrap/dist/css/bootstrap.css";
-import { Card, Placeholder, Nav, Badge } from "react-bootstrap";
+import { Card, Placeholder } from "react-bootstrap";
 import Tag from "./tag";
 import { useNavigate } from "react-router-dom";
 import QuestionMoment from "./questionMoment";
@@ -13,7 +13,8 @@ const LoadingPlaceholder = () => (
       <Placeholder xs={6} style={{ backgroundColor: "#d5e0eb" }} />
     </Placeholder>
     <Placeholder as={Card.Text} animation="glow">
-      <Placeholder xs={7} style={{ backgroundColor: "#d5e0eb" }} /> <Placeholder xs={4} style={{ backgroundColor: "#d5e0eb" }}/>{" "}
+      <Placeholder xs={7} style={{ backgroundColor: "#d5e0eb" }} />{" "}
+      <Placeholder xs={4} style={{ backgroundColor: "#d5e0eb" }} />{" "}
       <Placeholder xs={4} style={{ backgroundColor: "#d5e0eb" }} />
       <Placeholder xs={6} style={{ backgroundColor: "#d5e0eb" }} />{" "}
       <Placeholder xs={12} style={{ backgroundColor: "#d5e0eb" }} />
@@ -88,12 +89,11 @@ const QuestionCard = (props) => {
       onMouseLeave={handleMouseLeave}
     >
       {isHovered && (
-      <div className="question-actions" style={questionActionsStyle}>
-        <QuestionActions username={username} questionId={questionId} />
-      </div>
-
+        <div className="question-actions" style={questionActionsStyle}>
+          <QuestionActions username={username} questionId={questionId} />
+        </div>
       )}
-     
+
       <div className="row g-0">
         <div className="col-sm-2">
           <div className="d-flex flex-column">
@@ -110,22 +110,26 @@ const QuestionCard = (props) => {
         </div>
         <div className="col-sm-8">
           <div className="text-primary">
-            <Nav.Item className="mt-3">
-              <Nav.Link href={questionUrl} onClick={handleClick}>
-                <p
-                  className="fw-normal text-dark h5"
-                  style={{
-                    textDecoration: isHovered ? "underline" : "none",
-                    fontStyle: "bold",
-                    transition: "border 0.3s ease",
-                  }}
-                >
-                  {questionTitle}
-                </p>
-              </Nav.Link>
+            <h6
+              className="mt-3"
+              onClick={handleClick}
+              style={{ cursor: "pointer" }}
+            >
+              <p
+                className="fw-normal text-dark h5"
+                style={{
+                  textDecoration: isHovered ? "underline" : "none",
+                  fontStyle: "bold",
+                  transition: "border 0.3s ease",
+                }}
+              >
+                {questionTitle}
+              </p>
+
               {hasRecommendations && (
-                <a
-                  href={`/knowledge-share/${props.currentUser}/questions/${questionId}/recommendations/`}
+                <h6
+                 onClick={() => navigate(`/knowledge-share/${props.currentUser}/questions/${questionId}/recommendations/`)}
+                  
                   style={{
                     textDecoration: "none",
                     margin: 0,
@@ -134,9 +138,9 @@ const QuestionCard = (props) => {
                   }}
                 >
                   Click to view expert recommendations.
-                </a>
+                </h6>
               )}
-            </Nav.Item>
+            </h6>
           </div>
 
           <div className="d-flex mt-2 flex-wrap">
@@ -156,7 +160,6 @@ const QuestionCard = (props) => {
         </div>
         <div className="col-sm-2">
           <div className="d-flex flex-column">
-            
             <QuestionMoment
               avatarUrl={avatarUrl}
               username={username}

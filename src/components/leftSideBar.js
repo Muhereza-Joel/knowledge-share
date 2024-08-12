@@ -1,16 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { Nav } from "react-bootstrap";
+import React from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import Cookies from "js-cookie";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
-import {
-  setActiveLink,
-} from "../redux/reducers/uiSlice";
+import { setActiveLink } from "../redux/reducers/uiSlice";
 
 const LeftSideBar = (props) => {
   const dispatch = useDispatch();
-  const {activeLink} = useSelector((state) => state.ui);
+  const navigate = useNavigate();
+  const { activeLink } = useSelector((state) => state.ui);
   const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
 
   const linkStyle = {
@@ -19,215 +18,223 @@ const LeftSideBar = (props) => {
     borderRadius: "0px 50px 50px 0px",
     boxShadow: "0px 0px 5px 3px rgba(0,0,0,0.1)",
     padding: "13px 0 13px 0",
+    cursor: "pointer",
   };
+
 
   return (
     <div className="sidebar">
       <div className="d-flex flex-column pe-4 mt-2">
-        <Nav.Item
-          className={`d-flex align-items-center mt-3 ${
+        <h6
+          className={`d-flex align-items-center mt-3 ps-4 ${
             activeLink === "ask-question" ? "active" : ""
           }`}
           style={activeLink === "ask-question" ? linkStyle : {}}
+          onClick={() =>
+            dispatch(
+              setActiveLink("ask-question"),
+              navigate(
+                `/knowledge-share/${cookieData.USERNAME_KEY}/questions/ask-question/`
+              )
+            )
+          }
         >
-          <Nav.Link
-            href={`/knowledge-share/${cookieData.USERNAME_KEY}/questions/ask-question/`}
-            className="px-3 fw-bold"
-            onClick={() => dispatch(setActiveLink("ask-question"))}
-          >
-            <i className="bi bi-question-circle-fill me-2"></i> Ask Question
-          </Nav.Link>
-        </Nav.Item>
+          <i className="bi bi-question-circle-fill me-2"></i> Ask Question
+        </h6>
 
-        <Nav.Item
-          className={`d-flex align-items-center mt-3 ${
+        <h6
+          className={`d-flex align-items-center mt-3 ps-4 ${
             activeLink === "my-questions" ? "active" : ""
           }`}
           style={activeLink === "my-questions" ? linkStyle : {}}
+          onClick={() =>
+            dispatch(
+              setActiveLink("my-questions"),
+              navigate(
+                `/knowledge-share/${cookieData.USERNAME_KEY}/my-questions/`
+              )
+            )
+          }
         >
-          <Nav.Link
-            href={`/knowledge-share/${cookieData.USERNAME_KEY}/my-questions/`}
-            className="px-3 fw-bold"
-            onClick={() => dispatch(setActiveLink("my-questions"))}
-          >
-            <i className="bi bi-journal-text me-2"></i> My Questions
-          </Nav.Link>
-        </Nav.Item>
+          <i className="bi bi-journal-text me-2"></i> My Questions
+        </h6>
 
-        <Nav.Item
-          className={`d-flex align-items-center mt-3 ${
+        <h6
+          className={`d-flex align-items-center mt-3 ps-4 ${
             activeLink === "all-questions" ? "active" : ""
           }`}
           style={activeLink === "all-questions" ? linkStyle : {}}
+          onClick={() =>
+            dispatch(
+              setActiveLink("all-questions"),
+              navigate(`/knowledge-share/${cookieData.USERNAME_KEY}/questions/`)
+            )
+          }
         >
-          <Nav.Link
-            href={`/knowledge-share/${cookieData.USERNAME_KEY}/questions/`}
-            className="px-3 fw-bold"
-            onClick={() => dispatch(setActiveLink("all-questions"))}
-          >
-            <i className="bi bi-list-ul me-2"></i> All Questions
-          </Nav.Link>
-        </Nav.Item>
+          <i className="bi bi-journals me-2"></i> All Questions
+        </h6>
 
-        <Nav.Item
-          className={`d-flex align-items-center mt-3 ${
+        <h6
+          className={`d-flex align-items-center mt-3 ps-4 ${
             activeLink === "calendar" ? "active" : ""
           }`}
           style={activeLink === "calendar" ? linkStyle : {}}
+          onClick={() =>
+            dispatch(
+              setActiveLink("calendar"),
+              navigate(`/knowledge-share/${cookieData.USERNAME_KEY}/calendar/`)
+            )
+          }
         >
-          <Nav.Link
-            href={`/knowledge-share/${cookieData.USERNAME_KEY}/calendar/`}
-            className="px-3 fw-bold"
-            onClick={() => dispatch(setActiveLink("calendar"))}
-          >
-            <i className="bi bi-calendar3 me-2"></i> My Calendar
-          </Nav.Link>
-        </Nav.Item>
+          <i className="bi bi-calendar3 me-2"></i> My Calendar
+        </h6>
 
-        <Nav.Item
-          className={`d-flex align-items-center mt-3 ${
+        <h6
+          className={`d-flex align-items-center mt-3 ps-4 ${
             activeLink === "tags" ? "active" : ""
           }`}
           style={activeLink === "tags" ? linkStyle : {}}
+          onClick={() =>
+            dispatch(
+              setActiveLink("tags"),
+              navigate(`/knowledge-share/${cookieData.USERNAME_KEY}/tags/`)
+            )
+          }
         >
-          <Nav.Link
-            href={`/knowledge-share/${cookieData.USERNAME_KEY}/tags/`}
-            className="px-3 fw-bold"
-            onClick={() => dispatch(setActiveLink("tags"))}
-          >
-            <i className="bi bi-tags me-2"></i> Tags
-          </Nav.Link>
-        </Nav.Item>
+          <i className="bi bi-tags me-2"></i> Tags
+        </h6>
 
         {cookieData.USERROLE_KEY === "expert" && (
           <>
-            <Nav.Item
-              className={`d-flex align-items-center mt-3 ${
+            <h6
+              className={`d-flex align-items-center mt-3 ps-4 ${
                 activeLink === "create-products" ? "active" : ""
               }`}
               style={activeLink === "create-products" ? linkStyle : {}}
+              onClick={() =>
+                dispatch(
+                  setActiveLink("create-products"),
+                  navigate(`/knowledge-share/products/create-new/`)
+                )
+              }
             >
-              <Nav.Link
-                href={`/knowledge-share/products/create-new/`}
-                className="px-3 fw-bold"
-                onClick={() => dispatch(setActiveLink("create-products"))}
-              >
-                <i className="bi bi-plus-circle-fill me-2"></i> Product Management
-              </Nav.Link>
-            </Nav.Item>
+              <i className="bi bi-plus-circle-fill me-2"></i> Product Management
+            </h6>
 
-            <Nav.Item
-              className={`d-flex align-items-center mt-3 ${
+            <h6
+              className={`d-flex align-items-center mt-3 ps-4 ${
                 activeLink === "products" ? "active" : ""
               }`}
               style={activeLink === "products" ? linkStyle : {}}
+              onClick={() =>
+                dispatch(
+                  setActiveLink("products"),
+                  navigate(`/knowledge-share/products/`)
+                )
+              }
             >
-              <Nav.Link
-                href={`/knowledge-share/products/`}
-                className="px-3 fw-bold"
-                onClick={() => dispatch(setActiveLink("products"))}
-              >
-                <i className="bi bi-cart4 me-2"></i> All Products
-              </Nav.Link>
-            </Nav.Item>
+              <i className="bi bi-cart4 me-2"></i> All Products
+            </h6>
 
-            <Nav.Item
-              className={`d-flex align-items-center mt-3 ${
+            <h6
+              className={`d-flex align-items-center mt-3 ps-4 ${
                 activeLink === "orders" ? "active" : ""
               }`}
               style={activeLink === "orders" ? linkStyle : {}}
+              onClick={() =>
+                dispatch(
+                  setActiveLink("orders"),
+                  navigate(`/knowledge-share/products/orders/`)
+                )
+              }
             >
-              <Nav.Link
-                href={`/knowledge-share/products/orders/`}
-                className="px-3 fw-bold"
-                onClick={() => dispatch(setActiveLink("orders"))}
-              >
-                <i className="bi bi-receipt me-2"></i> All Orders
-              </Nav.Link>
-            </Nav.Item>
+              <i className="bi bi-receipt me-2"></i> All Orders
+            </h6>
           </>
         )}
 
         {cookieData.USERROLE_KEY === "user" && (
           <>
-            <Nav.Item
-              className={`d-flex align-items-center mt-3 ${
+            <h6
+              className={`d-flex align-items-center mt-3 ps-4 ${
                 activeLink === "my-orders" ? "active" : ""
               }`}
               style={activeLink === "my-orders" ? linkStyle : {}}
+              onClick={() =>
+                dispatch(
+                  setActiveLink("my-orders"),
+                  navigate(
+                    `/knowledge-share/products/my-orders/`
+                  )
+                )
+              }
             >
-              <Nav.Link
-                href={`/knowledge-share/products/my-orders/`}
-                className="px-3 fw-bold"
-                onClick={() => dispatch(setActiveLink("my-orders"))}
-              >
-                <i className="bi bi-bag-check me-2"></i> My Orders
-              </Nav.Link>
-            </Nav.Item>
+              <i className="bi bi-bag-check me-2"></i> My Orders
+            </h6>
           </>
         )}
 
         {cookieData.USERROLE_KEY === "admin" && (
           <>
-            <Nav.Item
-              className={`d-flex align-items-center mt-3 ${
+            <h6
+              className={`d-flex align-items-center mt-3 ps-4 ${
                 activeLink === "create-products" ? "active" : ""
               }`}
               style={activeLink === "create-products" ? linkStyle : {}}
+              onClick={() =>
+                dispatch(
+                  setActiveLink("create-products"),
+                  navigate(`/knowledge-share/products/create-new/`)
+                )
+              }
             >
-              <Nav.Link
-                href={`/knowledge-share/products/create-new/`}
-                className="px-3 fw-bold"
-                onClick={() => dispatch(setActiveLink("create-products"))}
-              >
-                <i className="bi bi-plus-circle-fill me-2"></i> Product Management
-              </Nav.Link>
-            </Nav.Item>
+              <i className="bi bi-plus-circle-fill me-2"></i> Product Management
+            </h6>
 
-            <Nav.Item
-              className={`d-flex align-items-center mt-3 ${
+            <h6
+              className={`d-flex align-items-center mt-3 ps-4 ${
                 activeLink === "products" ? "active" : ""
               }`}
               style={activeLink === "products" ? linkStyle : {}}
+              onClick={() =>
+                dispatch(
+                  setActiveLink("products"),
+                  navigate(`/knowledge-share/products/`)
+                )
+              }
             >
-              <Nav.Link
-                href={`/knowledge-share/products/`}
-                className="px-3 fw-bold"
-                onClick={() => dispatch(setActiveLink("products"))}
-              >
-                <i className="bi bi-cart4 me-2"></i> All Products
-              </Nav.Link>
-            </Nav.Item>
+              <i className="bi bi-cart4 me-2"></i> All Products
+            </h6>
 
-            <Nav.Item
-              className={`d-flex align-items-center mt-3 ${
+            <h6
+              className={`d-flex align-items-center mt-3 ps-4 ${
                 activeLink === "orders" ? "active" : ""
               }`}
               style={activeLink === "orders" ? linkStyle : {}}
+              onClick={() =>
+                dispatch(
+                  setActiveLink("orders"),
+                  navigate(`/knowledge-share/products/orders/`)
+                )
+              }
             >
-              <Nav.Link
-                href={`/knowledge-share/products/orders/`}
-                className="px-3 fw-bold"
-                onClick={() => dispatch(setActiveLink("orders"))}
-              >
-                <i className="bi bi-receipt me-2"></i> All Orders
-              </Nav.Link>
-            </Nav.Item>
+              <i className="bi bi-receipt me-2"></i> All Orders
+            </h6>
 
-            <Nav.Item
-              className={`d-flex align-items-center mt-3 ${
+            <h6
+              className={`d-flex align-items-center mt-3 ps-4 ${
                 activeLink === "users" ? "active" : ""
               }`}
               style={activeLink === "users" ? linkStyle : {}}
+              onClick={() =>
+                dispatch(
+                  setActiveLink("users"),
+                  navigate(`/knowledge-share/users/`)
+                )
+              }
             >
-              <Nav.Link
-                href={`/knowledge-share/users/`}
-                className="px-3 fw-bold"
-                onClick={() => dispatch(setActiveLink("users"))}
-              >
-                <i className="bi bi-people me-2"></i> Platform Users
-              </Nav.Link>
-            </Nav.Item>
+              <i className="bi bi-people me-2"></i> Platform Users
+            </h6>
           </>
         )}
       </div>

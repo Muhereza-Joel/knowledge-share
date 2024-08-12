@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import { Nav } from "react-bootstrap";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
 const Tag = ({ text, tagId, username }) => {
+  const navigate = useNavigate();
   const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
   const [isHovered, setIsHovered] = useState(false);
 
@@ -22,20 +24,23 @@ const Tag = ({ text, tagId, username }) => {
 
   return (
     <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-      <Nav.Item>
-        <Nav.Link href={`/knowledge-share/${cookieData.USERNAME_KEY}/tags/${tagId}`}>
-          <span
-            className="badge mx-1 text-dark"
-            style={{
-              border: "3px solid #217537",
-              // backgroundColor: isHovered ? "#888" : "#217537",
-              transition: "border 0.3s ease",
-            }}
-          >
-            {text}
-          </span>
-        </Nav.Link>
-      </Nav.Item>
+      <h6
+        style={{ cursor: "pointer" }}
+        onClick={() =>
+          navigate(`/knowledge-share/${cookieData.USERNAME_KEY}/tags/${tagId}`)
+        }
+      >
+        <span
+          className="badge mx-1 text-dark"
+          style={{
+            border: "3px solid #217537",
+            // backgroundColor: isHovered ? "#888" : "#217537",
+            transition: "border 0.3s ease",
+          }}
+        >
+          {text}
+        </span>
+      </h6>
     </div>
   );
 };

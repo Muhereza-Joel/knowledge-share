@@ -9,10 +9,11 @@ import NotificationsModal from "./NotificationsModal";
 import SearchBar from "./SearchBar";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  fetchNewQuestionNotifications,
   markNewQuestionNotificationSeen,
   setShowNotifications,
+  fetchNewQuestionNotifications,
 } from "../redux/reducers/notificationsSlice";
+import { fetchUserProfile } from "../redux/reducers/userSlice";
 
 const TopBar = (props) => {
   const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
@@ -22,9 +23,9 @@ const TopBar = (props) => {
     (state) => state.notifications
   );
 
-  //Should fetch notifications on page load, doesn't need dependency array
   useEffect(() => {
-    dispatch(fetchNewQuestionNotifications());
+    dispatch(fetchUserProfile(cookieData.USERID_KEY));
+    dispatch(fetchNewQuestionNotifications(cookieData.USERID_KEY));
   }, []);
 
   const handleNotificationsClick = () => {

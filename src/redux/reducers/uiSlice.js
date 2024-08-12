@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+
 const uiSlice = createSlice({
   name: "ui",
   initialState: {
@@ -12,6 +13,8 @@ const uiSlice = createSlice({
       { value: "products", label: "Search Products" },
       { value: "tags", label: "Search Tags" },
     ],
+    isEditingProfile: false,
+    isEditingProfilePassword: false,
   },
   reducers: {
     setShowSidebar: (state, action) => {
@@ -26,6 +29,12 @@ const uiSlice = createSlice({
     setSelectedSearchFilter: (state, action) => {
       state.selectedSearchFilter = action.payload;
     },
+    setIsEditingProfile: (state, action) => {
+      state.isEditingProfile = action.payload;
+    },
+    setIsEditingProfilePassword: (state, action) => {
+      state.isEditingProfilePassword = action.payload;
+    },
   },
 });
 
@@ -34,5 +43,7 @@ export const {
   setShowMobileSidebar,
   setActiveLink,
   setSelectedSearchFilter,
+  setIsEditingProfile,
+  setIsEditingProfilePassword,
 } = uiSlice.actions;
 export default uiSlice.reducer;

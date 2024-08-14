@@ -8,44 +8,19 @@ import { useNavigate } from "react-router-dom";
 import Avatar from "../assets/images/avator.jpg";
 import API_BASE_URL from "./appConfig";
 import Cookies from "js-cookie";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { resetStore } from "./../redux/actions/actions";
 
 const SplitDropdown = (props) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { id, avator, username} = useSelector((state) => state.user);
   const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
-
-  const [avatarUrl, setAvatarUrl] = useState("");
-  useEffect(() => {
-    const fetchAvatarUrl = async () => {
-      try {
-        const response = await fetch(
-          `${API_BASE_URL}/api/v1/auth/get-avator/${cookieData.USERID_KEY}`
-        );
-
-        if (response.ok) {
-          const avatarData = await response.json();
-          if (Array.isArray(avatarData) && avatarData.length > 0) {
-            setAvatarUrl(avatarData[0].url);
-          } else {
-            console.error("Invalid avatar data structure");
-          }
-        } else {
-          console.error("Failed to fetch avatarUrl");
-        }
-      } catch (error) {
-        console.error("Error during fetch:", error);
-      }
-    };
-
-    fetchAvatarUrl();
-  }, []);
 
   const handleLogout = () => {
     logout();
@@ -54,11 +29,11 @@ const SplitDropdown = (props) => {
   };
 
   const navigateToProfile = () => {
-    navigate(`/knowledge-share/${cookieData.USERNAME_KEY}/profile/`);
+    navigate(`/knowledge-share/${username}/profile/`);
   };
 
   const handleNavigatioToHome = () => {
-    navigate(`/knowledge-share/${cookieData.USERNAME_KEY}/`);
+    navigate(`/knowledge-share/${username}/`);
   };
 
   const avatorStyle = {
@@ -80,7 +55,7 @@ const SplitDropdown = (props) => {
         className="btn-sm fw-bold"
       >
         <img
-          src={avatarUrl || Avatar}
+          src={avator || Avatar}
           className="rounded-circle"
           style={avatorStyle}
         />

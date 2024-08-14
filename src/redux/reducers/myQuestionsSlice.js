@@ -51,7 +51,15 @@ export const {
 
 export const fetchMyQuestionsAndLastUsedTags = createAsyncThunk(
   "myQuestions/fetchMyQuestionsAndLastUsedTags",
-  async (userId, { dispatch }) => {
+  async (userId, { dispatch, getState }) => {
+    const state = getState();
+    const { myQuestionData } = state.myQuestions;
+
+    // Check if myQuestionData is empty
+    if (myQuestionData.length > 0) {
+      return; // No need to fetch data
+    }
+
     dispatch(fetchMyQuestionsRequest());
     try {
       const [questionsResponse, tagsResponse] = await Promise.all([
@@ -81,29 +89,5 @@ export const fetchMyQuestionsAndLastUsedTags = createAsyncThunk(
   }
 );
 
-export const fetchMyAvatorUrl = createAsyncThunk(
-  "myQuestions/fetchMyAvatorUrl",
-  async (userId, { dispatch }) => {
-    dispatch(fetchMyAvatarRequest());
-    try {
-      const response = await fetch(
-        `${API_BASE_URL}/api/v1/auth/get-avator/${userId}`
-      );
-
-      if (response.ok) {
-        const avatarData = await response.json();
-        if (Array.isArray(avatarData) && avatarData.length > 0) {
-          dispatch(fetchMyAvatarSuccess({ avatarUrl: avatarData[0].url }));
-        } else {
-          console.error("Invalid avatar data structure");
-        }
-      } else {
-        console.error("Failed to fetch avatarUrl");
-      }
-    } catch (error) {
-      dispatch(fetchMyAvatarFailure(error.message));
-    }
-  }
-);
 
 export default myQuestionsSlice.reducer;

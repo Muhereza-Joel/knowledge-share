@@ -71,7 +71,19 @@ const userSlice = createSlice({
 
 export const fetchUserProfile = createAsyncThunk(
   "user/fetchUserProfile",
-  async (userId, {dispatch }) => {
+  async (userId, { dispatch, getState }) => {
+    const state = getState();
+    const user = state.user;
+
+    // Check if user data is already present in the store
+    if (user.id === userId) {
+      return;
+    }
+
+    if (!userId) {
+      return;
+    }
+
     dispatch(fetchDataRequest());
     try {
       // Fetch avatar URL
@@ -113,10 +125,10 @@ export const fetchUserProfile = createAsyncThunk(
             url: avatarUrl,
             email: profileData.email,
             gender: profileData.gender,
-            dateOfBirth: dateOnly,
+            dob: dateOnly,
             country: profileData.country,
             city: profileData.city,
-            phoneNumber: profileData.phone_number,
+            phone_number: profileData.phone_number,
             password: profileData.password,
             created_at: profileData.created_at,
             updated_at: profileData.updated_at,

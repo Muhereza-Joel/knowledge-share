@@ -15,82 +15,9 @@ const Profile = (props) => {
   const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
   const [isEditing, setIsEditing] = useState();
   const [isEditPassword, setIsEditingPassword] = useState();
-  const [avatarUrl, setAvatarUrl] = useState("");
-  const { id, username } = useSelector((state) => state.user);
+  const { id, avator, username, fullname, dateOfBirth, phoneNumber, email, gender, homeCountry, city, password } = useSelector((state) => state.user);
+  const [formData, setFormData] = useState({})
 
-  const [formData, setFormData] = useState({
-    username: "",
-    fullname: "",
-    email: "",
-    gender: "",
-    dateOfBirth: "",
-    homeCountry: "",
-    city: "",
-    phoneNumber: "",
-    password: "",
-  });
-
-  useEffect(() => {
-    const fetchProfileData = async () => {
-      try {
-        const response = await fetch(
-          `${API_BASE_URL}/api/v1/auth/profile/${cookieData.USERID_KEY}`
-        );
-
-        if (response.ok) {
-          const profileDataArray = await response.json();
-          if (Array.isArray(profileDataArray) && profileDataArray.length > 0) {
-            const profileData = profileDataArray[0];
-
-            // Extract only the date part from the dob property
-            const dateOnly = profileData.dob ? profileData.dob.substring(0, 10) : null;
-            
-            setFormData({
-              username: profileData.username,
-              fullname: profileData.fullname,
-              email: profileData.email,
-              gender: profileData.gender,
-              dateOfBirth: dateOnly,
-              homeCountry: profileData.country,
-              city: profileData.city,
-              phoneNumber: profileData.phone_number,
-              password: profileData.password,
-            });
-          }
-        }
-      } catch (error) {
-        console.error("Error during fetch:", error);
-      }
-    };
-
-    fetchProfileData();
-  }, []);
-
-  useEffect(() => {
-    const fetchAvatarUrl = async () => {
-      
-      try {
-        const response = await fetch(
-          `${API_BASE_URL}/api/v1/auth/get-avator/${cookieData.USERID_KEY}`
-        );
-
-        if (response.ok) {
-          const avatarData = await response.json();
-          if (Array.isArray(avatarData) && avatarData.length > 0) {
-            setAvatarUrl(avatarData[0].url);
-          } else {
-            console.error("Invalid avatar data structure");
-          }
-        } else {
-          console.error("Failed to fetch avatarUrl");
-        }
-      } catch (error) {
-        console.error("Error during fetch:", error);
-      }
-    };
-
-    fetchAvatarUrl();
-  }, []);
 
   const handleEditClick = async () => {
     setIsEditing(!isEditing);
@@ -167,7 +94,7 @@ const Profile = (props) => {
               className="col-lg-5 card mt-4"
               style={{ border: "none", backgroundColor: "#f6f9ff" }}
             >
-              <ShortProfile username={props.username} avatarUrl={avatarUrl} />
+              <ShortProfile username={props.username} avatarUrl={avator} />
               <div className="text-center mt-4">
                 <button
                   onClick={handleEditClick}
@@ -204,7 +131,7 @@ const Profile = (props) => {
                 <input
                   type="text"
                   name="fullname"
-                  value={formData.fullname}
+                  value={fullname}
                   disabled={!isEditing}
                   onChange={handleInputChange}
                   className="form-control mb-3"
@@ -214,7 +141,7 @@ const Profile = (props) => {
                 <input
                   type="email"
                   name="email"
-                  value={formData.email}
+                  value={email}
                   onChange={handleInputChange}
                   disabled={!isEditing}
                   className="form-control mb-3"
@@ -226,14 +153,14 @@ const Profile = (props) => {
                     <input
                       type="text"
                       name="phoneNumber"
-                      value={formData.phoneNumber}
+                      value={phoneNumber}
                       disabled={!isEditing}
                       onChange={handleInputChange}
                       className="form-control mb-3"
                     />
                     <label>Gender:</label>
                     <select
-                      value={formData.gender}
+                      value={gender}
                       name="gender"
                       onChange={(e) => handleInputChange(e)}
                       disabled={!isEditing}
@@ -250,7 +177,7 @@ const Profile = (props) => {
                     <input
                       type={!isEditing ? "text" : "date"}
                       name="dateOfBirth"
-                      value={formData.dateOfBirth}
+                      value={dateOfBirth}
                       onChange={handleInputChange}
                       disabled={!isEditing}
                       className="form-control mb-3"
@@ -264,7 +191,7 @@ const Profile = (props) => {
                     <input
                       type="text"
                       name="homeCountry"
-                      value={formData.homeCountry}
+                      value={homeCountry}
                       onChange={handleInputChange}
                       disabled={!isEditing}
                       className="form-control mb-3"
@@ -276,7 +203,7 @@ const Profile = (props) => {
                     <input
                       type="text"
                       name="city"
-                      value={formData.city}
+                      value={city}
                       onChange={handleInputChange}
                       disabled={!isEditing}
                       className="form-control mb-3"
@@ -293,7 +220,7 @@ const Profile = (props) => {
                 <label>Password:</label>
                 <input
                   type="text"
-                  value={props.password}
+                  value={password}
                   disabled={!isEditPassword}
                   className="form-control mb-3"
                 />

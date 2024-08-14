@@ -11,7 +11,6 @@ import LeftSideBar from "./leftSideBar";
 import NoUserQuestionsSVG from "./NoUserQuestionsSVG";
 import {
   fetchMyQuestionsAndLastUsedTags,
-  fetchMyAvatorUrl,
 } from "../redux/reducers/myQuestionsSlice";
 
 const MyQuestions = (props) => {
@@ -23,9 +22,6 @@ const MyQuestions = (props) => {
 
   const { id, avator } = useSelector((state) => state.user);
 
-  useEffect(() => {
-    dispatch(fetchMyAvatorUrl());
-  }, [dispatch]);
 
   useEffect(() => {
     dispatch(fetchMyQuestionsAndLastUsedTags(id));

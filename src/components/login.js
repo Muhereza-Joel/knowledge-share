@@ -7,7 +7,6 @@ import { Nav } from "react-bootstrap";
 import { login } from "../auth";
 import Cookies from "js-cookie";
 import logo from "../assets/images/logo.png";
-
 const Login = () => {
   const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
   const navigate = useNavigate();
@@ -91,7 +90,6 @@ const Login = () => {
           isLoggedIn: true,
           username: authenticationResult.username,
         }));
-
 
         setTimeout(() => {
           setFormData((prevFormData) => ({

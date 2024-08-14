@@ -1,6 +1,7 @@
 import React from "react";
 import { Offcanvas, Button, Alert } from "react-bootstrap";
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
 
 const NotificationOffcanvas = ({
   notifications,
@@ -8,6 +9,7 @@ const NotificationOffcanvas = ({
   handleClose,
   handleNotificationClick,
 }) => {
+  const navigate = useNavigate();
   return (
     <Offcanvas
       backdrop={false}
@@ -22,7 +24,9 @@ const NotificationOffcanvas = ({
       <Offcanvas.Body>
         <div className="notification-content">
           <div className="card">
-            <div className="card-title ms-3 mt-1 fw-bold">New Questions Notifications</div>
+            <div className="card-title ms-3 mt-1 fw-bold">
+              New Questions Notifications
+            </div>
             <div className="card-body">
               {notifications.length === 0 && (
                 <div className="text-muted">
@@ -34,18 +38,21 @@ const NotificationOffcanvas = ({
                   {notifications.map((notification) => (
                     <div key={notification.notificationId}>
                       <Alert variant="light" className="px-2 py-1">
-                        <a
-                          href={notification.questionUrl}
-                          onClick={() =>
-                            handleNotificationClick(notification.notificationId)
-                          }
+                        <h6
+                          style={{ cursor: "pointer" }}
+                          onClick={() => {
+                            handleNotificationClick(
+                              notification.notificationId
+                            );
+                            navigate(notification.questionUrl);
+                          }}
                           className="text-decoration-none"
                         >
                           {notification.notificationMessage} by{" "}
                           <span className="text-success">
                             {notification.notifierUsername}
                           </span>
-                        </a>
+                        </h6>
                         <span className="text-muted">
                           {" "}
                           - {moment(notification.createdAt).fromNow()}

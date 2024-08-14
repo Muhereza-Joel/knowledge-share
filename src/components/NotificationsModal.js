@@ -42,9 +42,9 @@ const NotificationOffcanvas = ({
                           style={{ cursor: "pointer" }}
                           onClick={() => {
                             handleNotificationClick(
-                              notification.notificationId
+                              notification.notificationId,
+                              notification.questionUrl
                             );
-                            navigate(notification.questionUrl);
                           }}
                           className="text-decoration-none"
                         >

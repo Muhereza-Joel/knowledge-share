@@ -45,7 +45,7 @@ const QuestionDetails = ({ username, questionDetails }) => {
   };
 
   const quillEditorStyle = {
-    height: "50vh",
+    height: "40vh",
     backgroundColor: "#f6f9ff",
     border: "1px",
   };
@@ -253,10 +253,10 @@ const QuestionDetails = ({ username, questionDetails }) => {
                 </div>
               </div>
               <div className="col-lg-5">
-                <div className="p-3">
+                <div className="px-3">
                   <Accordion defaultActiveKey="1" className="mt-0">
                     <Accordion.Item eventKey="0">
-                      <Accordion.Header>Question Images</Accordion.Header>
+                      <Accordion.Header>Attached Images</Accordion.Header>
                       <Accordion.Body>
                         <div className="card-columns">
                           <div className="d-flex flex-row">

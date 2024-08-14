@@ -73,7 +73,7 @@ export const fetchNewQuestionNotifications = createAsyncThunk(
 
 export const markNewQuestionNotificationSeen = createAsyncThunk(
   "notifications/markNewQuestionNotificationSeen",
-  async (notificationId, { dispatch }) => {
+  async (validNotificationId, { dispatch }) => {
     try {
       await fetch(`${API_BASE_URL}/api/v1/questions/notifications/mark-seen/`, {
         method: "PUT",
@@ -81,11 +81,11 @@ export const markNewQuestionNotificationSeen = createAsyncThunk(
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          notificationId: notificationId,
+          notificationId: validNotificationId,
           userId: cookieData.USERID_KEY,
         }),
       });
-      dispatch(setNewQuestionNotificationSeen(notificationId));
+      dispatch(setNewQuestionNotificationSeen(validNotificationId));
     } catch (error) {
       throw new Error("Error marking notification as seen: " + error);
     }

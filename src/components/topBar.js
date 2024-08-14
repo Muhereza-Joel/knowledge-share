@@ -17,6 +17,7 @@ import { fetchUserProfile } from "../redux/reducers/userSlice";
 
 const TopBar = (props) => {
   const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
+  const {id } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { newQuestionNotifications, showNotifications } = useSelector(
@@ -36,10 +37,11 @@ const TopBar = (props) => {
     dispatch(setShowNotifications(false));
   };
 
-  const handleNotificationClick = async (notificationId) => {
-    const validNotificationId =
-      sanitizeAndValidateNotificationId(notificationId);
-    dispatch(markNewQuestionNotificationSeen(validNotificationId));
+  const handleNotificationClick = async (notificationId, questionUrl) => {
+    const validNotificationId = sanitizeAndValidateNotificationId(notificationId);
+    dispatch(markNewQuestionNotificationSeen(validNotificationId, id));
+    dispatch(setShowNotifications(false));
+    setTimeout(() => {navigate(questionUrl)}, 100)
   };
 
   const sanitizeAndValidateNotificationId = (notificationId) => {

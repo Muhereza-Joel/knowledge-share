@@ -14,6 +14,7 @@ import {
   fetchNewQuestionNotifications,
 } from "../redux/reducers/notificationsSlice";
 import { fetchUserProfile } from "../redux/reducers/userSlice";
+import { setActiveLink } from "../redux/reducers/uiSlice";
 
 const TopBar = (props) => {
   const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
@@ -41,6 +42,7 @@ const TopBar = (props) => {
     const validNotificationId = sanitizeAndValidateNotificationId(notificationId);
     dispatch(markNewQuestionNotificationSeen(validNotificationId, id));
     dispatch(setShowNotifications(false));
+    dispatch(setActiveLink("notifications"));
     setTimeout(() => {navigate(questionUrl)}, 100)
   };
 
@@ -109,6 +111,7 @@ const TopBar = (props) => {
           className="mx-2"
           style={{ marginTop: "-5px", cursor: "pointer" }}
           onClick={() => {
+            dispatch(setActiveLink("messages"));
             navigate(`/knowledge-share/${cookieData.USERNAME_KEY}/messages/`);
           }}
         >

@@ -41,7 +41,7 @@ const QuestionCard = (props) => {
     hasRecommendations, // New prop to indicate if recommendations exist
   } = props.data;
 
-  const questionUrl = `/knowledge-share/${cookieData.USERNAME_KEY}/questions/${questionId}`;
+  const tagsToShow = 4;
 
   useEffect(() => {
     // Clean up the hover state when unmounting
@@ -129,18 +129,11 @@ const QuestionCard = (props) => {
           </div>
 
           <div className="d-flex mt-2 flex-wrap">
-            {tags && tags.length > 0 ? (
-              tags.map((tag, index) => (
-                <Tag
-                  key={index}
-                  text={tag.name}
-                  tagId={tag.id}
-                  username={username}
-                />
-              ))
-            ) : (
-              <span>No tags available</span>
-            )}
+            <TagDisplay
+              tags={tags}
+              tagsToShow={tagsToShow}
+              username={username}
+            />
           </div>
           {hasRecommendations && (
             <h6
@@ -175,6 +168,30 @@ const QuestionCard = (props) => {
           </div>
         </div>
       </div>
+    </div>
+  );
+};
+
+const TagDisplay = ({ tags, tagsToShow, username }) => {
+  return (
+    <div className="d-flex mt-2 flex-wrap">
+      {tags && tags.length > 0 ? (
+        <>
+          {tags.slice(0, tagsToShow).map((tag, index) => (
+            <Tag
+              key={index}
+              text={tag.name}
+              tagId={tag.id}
+              username={username}
+            />
+          ))}
+          {tags.length > tagsToShow && (
+            <span>+{tags.length - tagsToShow} more</span>
+          )}
+        </>
+      ) : (
+        <span>No tags available</span>
+      )}
     </div>
   );
 };

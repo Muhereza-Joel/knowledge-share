@@ -4,66 +4,53 @@ import { Nav } from "react-bootstrap";
 import QuestionCard from "./questionCard";
 import ShortProfile from "./shortProfile";
 import PopularTag from "./popularTag";
-import API_BASE_URL from "./appConfig";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchRecentQuestions } from "../redux/reducers/recentQuestionsSlice";
+import Pagination from "./pagination";
 
 const Home = (props) => {
-  const {avator} = useSelector((state) => state.user);
-  const navigate = useNavigate();
   const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
-  const [state, setState] = useState({
-    userId: cookieData.USERID_KEY,
-    questionData: [],
-    lastUsedTagsData: [],
-    loading: true,
-    error: null,
-  });
+  const dispatch = useDispatch();
+  const { avator } = useSelector((state) => state.user);
+  const { loading, error, questionData, lastUsedTagsData } = useSelector(
+    (state) => state.recentQuestions
+  );
+  const navigate = useNavigate();
+  const [currentPage, setCurrentPage] = useState(1);
+  const questionsPerPage = 50;
+  const totalPages = Math.ceil(questionData.length / questionsPerPage);
 
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const currentQuestions = questionData.slice(
+    (currentPage - 1) * questionsPerPage,
+    currentPage * questionsPerPage
+  );
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [questionsResponse, tagsResponse] = await Promise.all([
-          fetch(`${API_BASE_URL}/api/v1/questions/recent`),
-          fetch(`${API_BASE_URL}/api/v1/tags/most-used-tags/`),
-        ]);
-
-        if (!questionsResponse.ok || !tagsResponse.ok) {
-          throw new Error(
-            `HTTP error! Questions Status: ${questionsResponse.status}, Tags Status: ${tagsResponse.status}`
-          );
-        }
-
-        const [questionsData, tagsData] = await Promise.all([
-          questionsResponse.json(),
-          tagsResponse.json(),
-        ]);
-
-        setState((prev) => ({
-          ...prev,
-          questionData: questionsData,
-          lastUsedTagsData: tagsData,
-          loading: false,
-        }));
-      } catch (error) {
-        setState((prev) => ({
-          ...prev,
-          loading: false,
-          error: error.message,
-        }));
-      }
-    };
-
-    fetchData();
-  }, [state.userId]); // Add dependencies as needed
+    dispatch(fetchRecentQuestions());
+  }, [dispatch]); // Add dependencies as needed
 
   const panelStyle = {
     minHeight: "90vh",
   };
 
-  const { questionData, lastUsedTagsData } = state;
 
   return (
     <div>
@@ -72,7 +59,7 @@ const Home = (props) => {
           <div id="middle-panel" className="card p-0 mt-2" style={panelStyle}>
             <div className="p-3">
               <div className="d-flex align-items-center mb-3">
-                <div className="pt-2 w-75 h4">Top 100 Recent Questions</div>
+                <div className="pt-2 w-75 h4">Top {questionData.length} Recent Questions</div>
 
                 <Nav.Item className="mt-3 text-end w-25">
                   <h6
@@ -90,23 +77,32 @@ const Home = (props) => {
                 </Nav.Item>
               </div>
 
-              {questionData.map((question, index) => (
+              {currentQuestions.map((question, index) => (
                 <QuestionCard
                   key={index}
                   data={question}
                   currentUser={`${cookieData.USERNAME_KEY}`}
                 />
               ))}
+
+              <div className="d-flex justify-content-center mt-4">
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={handlePageChange}
+                  onPreviousPage={handlePreviousPage}
+                  onNextPage={handleNextPage}
+                  onFetchMoreData={(page) => {}} 
+                  // onFetchMoreData={(page) => dispatch(fetchMoreQuestions(page))} 
+                />
+              </div>
             </div>
           </div>
         </div>
 
         <div className="col-lg-3">
           <div id="right-panel" style={panelStyle}>
-            <ShortProfile
-              username={`${props.username}`}
-              avatarUrl={avator}
-            />
+            <ShortProfile username={`${props.username}`} avatarUrl={avator} />
 
             <div className="p-2 mt-0 mx-2">
               <hr />

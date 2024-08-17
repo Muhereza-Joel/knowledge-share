@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import Avatar from "../assets/images/avator.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import { resetStore } from "./../redux/actions/actions";
+import { setActiveLink } from "../redux/reducers/uiSlice";
 
 const SplitDropdown = (props) => {
   const dispatch = useDispatch();
@@ -27,10 +28,12 @@ const SplitDropdown = (props) => {
 
   const navigateToProfile = () => {
     navigate(`/knowledge-share/${username}/profile/`);
+    dispatch(setActiveLink("profile"));
   };
 
   const handleNavigatioToHome = () => {
     navigate(`/knowledge-share/${username}/`);
+    dispatch(setActiveLink("home"));
   };
 
   const avatorStyle = {

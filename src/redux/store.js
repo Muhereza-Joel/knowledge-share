@@ -12,6 +12,7 @@ import askQuestionReducer from "./reducers/askQuestionSlice";
 import searchReducer from "./reducers/searchSlice";
 import notificationsReducer from "./reducers/notificationsSlice";
 import userReducer from "./reducers/userSlice";
+import recentQuestionsReducer from "./reducers/recentQuestionsSlice";
 import { thunk } from "redux-thunk";
 import { RESET_STORE } from './actions/actions';
 
@@ -19,7 +20,7 @@ import { RESET_STORE } from './actions/actions';
 const persistConfig = {
   key: "root",
   storage: storage,
-  whitelist: ["questions", "myQuestions", "tags", "ui", "user"],
+  whitelist: ["questions", "myQuestions", "recentQuestions", "tags", "ui", "user"],
 };
 
 // Combine reducers and apply persist configuration
@@ -30,6 +31,7 @@ const appReducer = combineReducers({
   ui: persistReducer(persistConfig, uiReducer),
   user: persistReducer(persistConfig , userReducer),
   notifications: (persistConfig, notificationsReducer),
+  recentQuestions: persistReducer(persistConfig, recentQuestionsReducer),
   questionsTagged: questionsTaggedReducer,
   calendar: calendarReducer,
   askQuestion: askQuestionReducer,

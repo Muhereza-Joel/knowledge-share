@@ -9,9 +9,8 @@ import PopularTag from "./popularTag";
 import TopBar from "./topBar";
 import LeftSideBar from "./leftSideBar";
 import NoUserQuestionsSVG from "./NoUserQuestionsSVG";
-import {
-  fetchMyQuestionsAndLastUsedTags,
-} from "../redux/reducers/myQuestionsSlice";
+import Pagination from "./pagination";
+import { fetchMyQuestionsAndLastUsedTags } from "../redux/reducers/myQuestionsSlice";
 
 const MyQuestions = (props) => {
   const navigate = useNavigate();
@@ -22,6 +21,30 @@ const MyQuestions = (props) => {
 
   const { id, avator } = useSelector((state) => state.user);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const questionsPerPage = 50;
+  const totalPages = Math.ceil(myQuestionData.length / questionsPerPage);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const currentQuestions = myQuestionData.slice(
+    (currentPage - 1) * questionsPerPage,
+    currentPage * questionsPerPage
+  );
 
   useEffect(() => {
     dispatch(fetchMyQuestionsAndLastUsedTags(id));
@@ -81,7 +104,7 @@ const MyQuestions = (props) => {
                     {myQuestionData.length === 0 ? (
                       <NoUserQuestionsSVG />
                     ) : (
-                      myQuestionData.map((question, index) => (
+                      currentQuestions.map((question, index) => (
                         <QuestionCard
                           key={index}
                           data={question}
@@ -89,6 +112,18 @@ const MyQuestions = (props) => {
                         />
                       ))
                     )}
+
+                    <div className="d-flex justify-content-center mt-4">
+                      <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={handlePageChange}
+                        onPreviousPage={handlePreviousPage}
+                        onNextPage={handleNextPage}
+                        onFetchMoreData={(page) => {}}
+                        // onFetchMoreData={(page) => dispatch(fetchMoreQuestions(page))}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>

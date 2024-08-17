@@ -3,23 +3,30 @@ import { Button } from "react-bootstrap";
 import Select from "react-select";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import {
-  setSearchQuery,
-  searchData,
-} from "../redux/reducers/searchSlice";
+import { setSearchQuery, searchData } from "../redux/reducers/searchSlice";
 import { setSelectedSearchFilter } from "../redux/reducers/uiSlice";
 
 const SearchBar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { query,searchResults, loading} = useSelector((state) => state.search);
-  const { selectedSearchFilter, searchFilterOptions } = useSelector((state) => state.ui);
+  const { query, searchResults, loading } = useSelector(
+    (state) => state.search
+  );
+  const { selectedSearchFilter, searchFilterOptions } = useSelector(
+    (state) => state.ui
+  );
 
   const handleSearch = () => {
     dispatch(searchData(query, selectedSearchFilter.value));
     navigate("/knowledge-share/search-results/");
   };
 
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      dispatch(searchData(query, selectedSearchFilter.value));
+      navigate("/knowledge-share/search-results/");
+    }
+  };
 
   const containerStyle = {
     display: "flex",
@@ -74,6 +81,7 @@ const SearchBar = () => {
         style={searchInputStyle}
         value={query}
         onChange={(e) => dispatch(setSearchQuery(e.target.value))}
+        onKeyPress={handleKeyPress}
       />
       <Button style={searchButtonStyle} onClick={handleSearch}>
         Search

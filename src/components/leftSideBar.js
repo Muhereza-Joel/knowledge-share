@@ -13,7 +13,7 @@ const LeftSideBar = (props) => {
   const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
 
   const linkStyle = {
-    backgroundColor: "#217537",
+    backgroundColor: "#28a745",
     color: "#fff",
     borderRadius: "0px 50px 50px 0px",
     boxShadow: "0px 0px 5px 3px rgba(0,0,0,0.1)",

@@ -105,8 +105,8 @@ const PopularTag = ({
   const letterStyle = {
     width: 50,
     height: 50,
-    border: `4px solid ${isHovered ? "#299ea6" : "transparent"}`,
-    backgroundColor: "#217537",
+    border: `4px solid ${isHovered ? "#cce6e8" : "transparent"}`,
+    backgroundColor: "#28a745",
     // backgroundColor: "#cce6e8",
     display: "flex",
     alignItems: "center",

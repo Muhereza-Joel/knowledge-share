@@ -43,7 +43,8 @@ const SearchBar = () => {
   const searchButtonStyle = {
     marginLeft: "10px",
     borderRadius: "20px",
-    backgroundColor: "#217537",
+    // backgroundColor: "#217537",
+    backgroundColor: "#28a745",
     borderColor: "#28a745",
   };
 

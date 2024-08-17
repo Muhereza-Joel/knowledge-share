@@ -1,18 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import Avator from "../assets/images/avator.jpg";
 import { Button } from "react-bootstrap";
 import { BsUpload } from "react-icons/bs";
-import { BiSolidSave } from "react-icons/bi"
+import { BiSolidSave } from "react-icons/bi";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import API_BASE_URL from "./appConfig";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  handleAvatorChange,
+  clearSuccess,
+  clearError,
+} from "../redux/reducers/userSlice";
 
 const ShortProfile = (props) => {
+  const dispatch = useDispatch();
   const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
+  const { success, error } = useSelector((state) => state.user);
   const [selectedFile, setSelectedFile] = useState(null);
   const [displayedImage, setDisplayedImage] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
 
   const style = {
     width: "100% !important",
@@ -43,40 +52,24 @@ const ShortProfile = (props) => {
     }
   };
 
-  const handleAvatarChange = async () => {
-    if (selectedFile) {
-      const formData = new FormData();
-      formData.append("avatar", selectedFile);
-      formData.append("userId", cookieData.USERID_KEY);
+  useEffect(() => {
+    if (success) {
+      toast.success(success, {
+        style: { backgroundColor: "#cce6e8", color: "#333" },
+      });
 
-      // Make a fetch request to your backend to save the photo
-      try {
-        const response = await fetch(
-          `${API_BASE_URL}/api/v1/auth/change-avator`,
-          {
-            method: "POST",
-            body: formData,
-          }
-        );
-
-        if (response.ok) {
-          const newAvatarUrl = await response.json();
-          // Save the URL to localStorage
-          localStorage.setItem("avatarUrl", newAvatarUrl.url);
-
-          toast.success("Prifile picture changed, successfully", {
-            style: { backgroundColor: "#cce6e8", color: "#333" },
-          });
-        } else {
-          toast.error("Failed to change profile picture", {
-            style: { backgroundColor: "#fcd0d0", color: "#333" },
-          });
-        }
-      } catch (error) {
-        console.error("Error during fetch:", error);
-      }
+      dispatch(clearSuccess());
     }
-  };
+  }, [success, dispatch]);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error, {
+        style: { backgroundColor: "#fcd0d0", color: "#333" },
+      });
+      dispatch(clearError());
+    }
+  }, [error, dispatch]);
 
   const { avatarUrl } = props;
 
@@ -120,8 +113,11 @@ const ShortProfile = (props) => {
             >
               <BsUpload />
             </Button>
-            <Button variant="success my-2" onClick={handleAvatarChange}>
-              <BiSolidSave title="Save Photo" style={{fontSize: 25}}/>
+            <Button
+              variant="success my-2"
+              onClick={() => dispatch(handleAvatorChange(selectedFile))}
+            >
+              <BiSolidSave title="Save Photo" style={{ fontSize: 25 }} />
             </Button>
           </div>
         </div>

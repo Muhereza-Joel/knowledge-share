@@ -80,7 +80,7 @@ const QuestionCard = (props) => {
         backgroundColor: isHovered ? "#f6f9ff" : "transparent",
         transition: "border 0.3s ease",
         border: "none",
-        borderLeft: hasRecommendations ? "10px solid #d6749e" : "none",
+        borderLeft: hasRecommendations ? "5px solid #28a745" : "none",
         borderBottomLeftRadius: 20,
         borderRadius: "0px",
         position: "relative", // Add this to position the icons
@@ -125,21 +125,6 @@ const QuestionCard = (props) => {
               >
                 {questionTitle}
               </p>
-
-              {hasRecommendations && (
-                <h6
-                 onClick={() => navigate(`/knowledge-share/${props.currentUser}/questions/${questionId}/recommendations/`)}
-                  
-                  style={{
-                    textDecoration: "none",
-                    margin: 0,
-                    backgroundColor: "#fff",
-                    padding: 2,
-                  }}
-                >
-                  Click to view expert recommendations.
-                </h6>
-              )}
             </h6>
           </div>
 
@@ -157,6 +142,28 @@ const QuestionCard = (props) => {
               <span>No tags available</span>
             )}
           </div>
+          {hasRecommendations && (
+            <h6
+              onClick={() =>
+                navigate(
+                  `/knowledge-share/${props.currentUser}/questions/${questionId}/recommendations/`
+                )
+              }
+              style={{
+                textDecoration: "none",
+                margin: 0,
+                backgroundColor: "#fefefe",
+                border: `4px solid ${isHovered ? "#cce6e8" : "transparent"}`,
+                padding: "3px 15px",
+                cursor: "pointer",
+                borderRadius: 50,
+                color: "#18a145",
+                width: "50%",
+              }}
+            >
+              View recommendations.
+            </h6>
+          )}
         </div>
         <div className="col-sm-2">
           <div className="d-flex flex-column">

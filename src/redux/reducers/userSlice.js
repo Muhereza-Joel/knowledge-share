@@ -22,6 +22,7 @@ const userSlice = createSlice({
     updatedAt: "",
     loading: false,
     error: null,
+    success: null,
   },
   reducers: {
     fetchDataRequest(state) {
@@ -49,25 +50,103 @@ const userSlice = createSlice({
       state.loading = false;
       state.error = action.payload.error;
     },
+    setSuccess(state, action) {
+      state.loading = false;
+      state.success = action.payload;
+    },
+    updateAvator(state, action) {
+      state.avator = action.payload;
+    },
+    clearSuccess: (state) => {
+      state.success = null;
+    },
+    setError(state, action) {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    clearError: (state) => {
+      state.error = null;
+    },
     updateUserData(state, action) {
-      state.id = action.payload.id;
-      state.username = action.payload.username;
-      state.email = action.payload.email;
-      state.role = action.payload.role;
-      state.fullname = action.payload.fullname;
-      state.dateOfBirth = action.payload;
-      state.gender = action.payload.gender;
-      state.homeCountry = action.payload.country;
-      state.city = action.payload.city;
-      state.avator = action.payload.url;
-      state.phoneNumber = action.payload.phone_number;
-      state.password = action.payload.password;
-      state.createdAt = action.payload.created_at;
-      state.updatedAt = action.payload.updated_at;
+      Object.keys(action.payload).forEach((key) => {
+        if (state.hasOwnProperty(key)) {
+          state[key] = action.payload[key];
+        }
+      });
       state.loading = false;
     },
   },
 });
+
+export const handleAvatorChange = createAsyncThunk(
+  "user/handleAvatorChange",
+  async (selectedFile, { dispatch, getState }) => {
+    try {
+      if (selectedFile) {
+        const formData = new FormData();
+        formData.append("avatar", selectedFile);
+        formData.append("userId", cookieData.USERID_KEY);
+
+        // Make a fetch request to your backend to save the photo
+        try {
+          const response = await fetch(
+            `${API_BASE_URL}/api/v1/auth/change-avator`,
+            {
+              method: "POST",
+              body: formData,
+            }
+          );
+
+          if (response.ok) {
+            const newAvatarUrl = await response.json();
+
+            dispatch(updateAvator(newAvatarUrl.url));
+            dispatch(setSuccess("Prifile picture changed, successfully"));
+          } else {
+            dispatch(setError("Failed to change profile picture"));
+          }
+        } catch (error) {
+          console.error("Error during fetch:", error);
+        }
+      }
+    } catch (error) {}
+  }
+);
+
+export const handleProfileUpdate = createAsyncThunk(
+  "user/handleProfileUpdate",
+  async (formData, { dispatch, getState }) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/v1/auth/profile`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: formData.username,
+          fullname: formData.fullname,
+          email: formData.email,
+          gender: formData.gender,
+          dateOfBirth: formData.dateOfBirth,
+          homeCountry: formData.homeCountry,
+          city: formData.city,
+          phoneNumber: formData.phoneNumber,
+          userId: cookieData.USERID_KEY,
+        }),
+      });
+
+      if (response.ok) {
+        dispatch(setSuccess("Profile updated successfully"));
+      } else {
+    
+        dispatch(setError("Failed to update profile"));
+      }
+    } catch (error) {
+      console.error("Error during profile update:", error);
+      dispatch(setError("Failed to update profile"));
+    }
+  }
+);
 
 export const fetchUserProfile = createAsyncThunk(
   "user/fetchUserProfile",
@@ -150,6 +229,11 @@ export const {
   fetchDataSuccess,
   fetchDataFailure,
   updateUserData,
+  setSuccess,
+  clearSuccess,
+  setError,
+  clearError,
+  updateAvator,
 } = userSlice.actions;
 
 export default userSlice.reducer;

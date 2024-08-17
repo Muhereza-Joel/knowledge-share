@@ -7,73 +7,80 @@ import "react-toastify/dist/ReactToastify.css";
 import API_BASE_URL from "./appConfig";
 import Cookies from "js-cookie";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchUserProfile } from "../redux/reducers/userSlice";
+import {
+  updateUserData,
+  clearSuccess,
+  clearError,
+  handleProfileUpdate,
+} from "../redux/reducers/userSlice";
 
 const Profile = (props) => {
   const dispatch = useDispatch();
-  const { isEditingProfile, isEditingProfilePassword } = useSelector((state) => state.ui);
   const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
   const [isEditing, setIsEditing] = useState();
-  const [isEditPassword, setIsEditingPassword] = useState();
-  const { id, avator, username, fullname, dateOfBirth, phoneNumber, email, gender, homeCountry, city, password } = useSelector((state) => state.user);
-  const [formData, setFormData] = useState({})
+  const {
+    id,
+    avator,
+    username,
+    fullname,
+    dateOfBirth,
+    phoneNumber,
+    email,
+    gender,
+    homeCountry,
+    city,
+    success,
+    error,
+  } = useSelector((state) => state.user);
 
+  const [formData, setFormData] = useState({
+    username: "",
+    fullname: "",
+    email: "",
+    gender: "",
+    dateOfBirth: "",
+    homeCountry: "",
+    city: "",
+    phoneNumber: "",
+  });
+
+  useEffect(() => {
+    setFormData({
+      username: username,
+      fullname: fullname,
+      email: email,
+      gender: gender,
+      dateOfBirth: dateOfBirth,
+      homeCountry: homeCountry,
+      city: city,
+      phoneNumber: phoneNumber,
+    });
+  }, [
+    username,
+    fullname,
+    email,
+    gender,
+    dateOfBirth,
+    homeCountry,
+    city,
+    phoneNumber,
+  ]);
 
   const handleEditClick = async () => {
     setIsEditing(!isEditing);
-
     if (isEditing) {
-      try {
-        const response = await fetch(
-          `${API_BASE_URL}/api/v1/auth/profile`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-              // Add any other headers needed for authentication
-            },
-            body: JSON.stringify({
-              username: formData.username,
-              fullname: formData.fullname,
-              email: formData.email,
-              gender: formData.gender,
-              dateOfBirth: formData.dateOfBirth,
-              homeCountry: formData.homeCountry,
-              city: formData.city,
-              phoneNumber: formData.phoneNumber,
-              userId: cookieData.USERID_KEY,
-            }),
-          }
-        );
-
-        if (response.ok) {
-          const {message} = response;
-          toast.success(`Profile updated successfully`, {
-            style: { backgroundColor: "#cce6e8", color: "#333" },
-          });
-          setIsEditing(false);
-        } else {
-          const {message} = response;
-          toast.error(`Failed to update profile`, {
-            style: { backgroundColor: "#fcd0d0", color: "#333" },
-          });
-        }
-      } catch (error) {
-        console.error("Error during profile update:", error);
-      }
+      dispatch(handleProfileUpdate(formData));
     }
-  };
-
-  const handleEditPasswordClick = () => {
-    setIsEditingPassword(!isEditPassword);
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
+    const updatedFormData = {
+      ...formData,
       [name]: value,
-    }));
+    };
+    setFormData(updatedFormData);
+    dispatch(updateUserData(updatedFormData));
   };
 
   const style = {
@@ -91,7 +98,7 @@ const Profile = (props) => {
         <div className="col-lg-8">
           <div className="row g-0">
             <div
-              className="col-lg-5 card mt-4"
+              className="col-lg-4 card mt-4"
               style={{ border: "none", backgroundColor: "#f6f9ff" }}
             >
               <ShortProfile username={props.username} avatarUrl={avator} />
@@ -102,36 +109,38 @@ const Profile = (props) => {
                 >
                   {isEditing ? "Save Changes" : "Edit Profile"}
                 </button>
-
-                <button
-                  onClick={handleEditPasswordClick}
-                  className="btn btn-primary btn-sm mx-2"
-                >
-                  {isEditPassword ? "Save Changes" : "Change Password"}
-                </button>
               </div>
             </div>
-            <div className="col-lg-7">
+            <div className="col-lg-8">
               <div
                 className="card mt-4 p-4"
                 style={{ border: "none", backgroundColor: "#f6f9ff" }}
               >
                 <small className="fw-bold mb-2">Personal Information</small>
+                <div className="alert alert-info">
+                  This is your public profile, make it vivid enough and
+                  appealing to your followers.
+                </div>
+
                 <label>Username:</label>
                 <input
                   type="text"
                   name="username"
-                  value={username}
+                  value={formData.username}
                   disabled={!isEditing}
                   onChange={handleInputChange}
-                  className="form-control mb-3"
+                  className="form-control "
                 />
+
+                <small className="text-secondary mb-3">
+                  This username cannot be changed, its unique to you.
+                </small>
 
                 <label>Full Name:</label>
                 <input
                   type="text"
                   name="fullname"
-                  value={fullname}
+                  value={formData.fullname}
                   disabled={!isEditing}
                   onChange={handleInputChange}
                   className="form-control mb-3"
@@ -141,7 +150,7 @@ const Profile = (props) => {
                 <input
                   type="email"
                   name="email"
-                  value={email}
+                  value={formData.email}
                   onChange={handleInputChange}
                   disabled={!isEditing}
                   className="form-control mb-3"
@@ -153,14 +162,14 @@ const Profile = (props) => {
                     <input
                       type="text"
                       name="phoneNumber"
-                      value={phoneNumber}
+                      value={formData.phoneNumber}
                       disabled={!isEditing}
                       onChange={handleInputChange}
                       className="form-control mb-3"
                     />
                     <label>Gender:</label>
                     <select
-                      value={gender}
+                      value={formData.gender}
                       name="gender"
                       onChange={(e) => handleInputChange(e)}
                       disabled={!isEditing}
@@ -177,7 +186,7 @@ const Profile = (props) => {
                     <input
                       type={!isEditing ? "text" : "date"}
                       name="dateOfBirth"
-                      value={dateOfBirth}
+                      value={formData.dateOfBirth}
                       onChange={handleInputChange}
                       disabled={!isEditing}
                       className="form-control mb-3"
@@ -191,7 +200,7 @@ const Profile = (props) => {
                     <input
                       type="text"
                       name="homeCountry"
-                      value={homeCountry}
+                      value={formData.homeCountry}
                       onChange={handleInputChange}
                       disabled={!isEditing}
                       className="form-control mb-3"
@@ -203,27 +212,13 @@ const Profile = (props) => {
                     <input
                       type="text"
                       name="city"
-                      value={city}
+                      value={formData.city}
                       onChange={handleInputChange}
                       disabled={!isEditing}
                       className="form-control mb-3"
                     />
                   </div>
                 </div>
-              </div>
-
-              <div
-                className="card mt-0 p-4"
-                style={{ border: "none", backgroundColor: "#f6f9ff" }}
-              >
-                <small className="fw-bold mb-2">Account Information</small>
-                <label>Password:</label>
-                <input
-                  type="text"
-                  value={password}
-                  disabled={!isEditPassword}
-                  className="form-control mb-3"
-                />
               </div>
 
               <ToastContainer

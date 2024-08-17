@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Dropdown from "react-bootstrap/Dropdown";
@@ -6,16 +6,13 @@ import { Nav } from "react-bootstrap";
 import { logout } from "../auth";
 import { useNavigate } from "react-router-dom";
 import Avatar from "../assets/images/avator.jpg";
-import API_BASE_URL from "./appConfig";
-import Cookies from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { resetStore } from "./../redux/actions/actions";
 
 const SplitDropdown = (props) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { id, avator, username} = useSelector((state) => state.user);
-  const cookieData = JSON.parse(Cookies.get("knowledgeshare") || "{}");
+  const { avator, username} = useSelector((state) => state.user);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const toggleDropdown = () => {
@@ -47,7 +44,7 @@ const SplitDropdown = (props) => {
       <Button
         variant="secondary"
         style={{
-          backgroundColor: "#217537",
+          backgroundColor: "#28a745",
           border: "none",
           color: "white",
           marginTop: "-10px",
@@ -59,7 +56,7 @@ const SplitDropdown = (props) => {
           className="rounded-circle"
           style={avatorStyle}
         />
-        {cookieData.USERNAME_KEY}
+        {username}
       </Button>
 
       <Dropdown.Toggle
@@ -78,7 +75,6 @@ const SplitDropdown = (props) => {
         <Dropdown.Item>
           <Nav.Item>
             <Nav.Link
-              href={`/knowledge-share/${cookieData.USERNAME_KEY}/`}
               className="text-info px-2 fw-bold text-dark"
               onClick={handleNavigatioToHome}
             >
